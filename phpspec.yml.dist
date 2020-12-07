@@ -1,0 +1,6 @@
+suites:
+    main:
+        namespace: MonsieurBiz\SyliusShippingSlotPlugin
+        psr4_prefix: MonsieurBiz\SyliusShippingSlotPlugin
+        src_path: src
+        spec_path: tests

@@ -1,0 +1,3 @@
+monsieurbiz_shipping_slot_admin:
+    resource: "@MonsieurBizSyliusShippingSlotPlugin/Resources/config/routing/admin.yaml"
+    prefix: /%sylius_admin.path_name%
