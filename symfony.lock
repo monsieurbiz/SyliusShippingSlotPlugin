@@ -384,6 +384,9 @@
     "monolog/monolog": {
         "version": "2.1.1"
     },
+    "monsieurbiz/sylius-settings-plugin": {
+        "version": "v0.1.0-rc.7"
+    },
     "myclabs/deep-copy": {
         "version": "1.10.1"
     },
