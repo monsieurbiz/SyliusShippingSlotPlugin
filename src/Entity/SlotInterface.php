@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
-use Sylius\Component\Resource\Model\ResourceInterface;
 use DateTimeInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TimestampableInterface;
 
 interface SlotInterface extends ResourceInterface, TimestampableInterface
@@ -44,7 +44,7 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     /**
      * Set slot timestamp.
      *
-     * @param string $timestamp
+     * @param DateTimeInterface $timestamp
      */
     public function setTimestamp(DateTimeInterface $timestamp): void;
 
