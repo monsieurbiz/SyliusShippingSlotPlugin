@@ -1,0 +1,36 @@
+MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig:
+    properties:
+        name:
+            -   NotBlank:
+                    groups: [monsieurbiz]
+            -   Length:
+                    min: 2
+                    max: 255
+                    groups: [monsieurbiz]
+        preparationDelay:
+            -   NotBlank:
+                    groups: [monsieurbiz]
+            -   GreaterThan:
+                    value: 0
+                    groups: [monsieurbiz]
+        pickupDelay:
+            -   NotBlank:
+                    groups: [monsieurbiz]
+            -   GreaterThan:
+                    value: 0
+                    groups: [monsieurbiz]
+        durationRange:
+            -   NotBlank:
+                    groups: [monsieurbiz]
+            -   GreaterThan:
+                    value: 0
+                    groups: [monsieurbiz]
+        availableSpots:
+            -   NotBlank:
+                    groups: [monsieurbiz]
+            -   GreaterThan:
+                    value: 0
+                    groups: [monsieurbiz]
+        color:
+            -   NotBlank:
+                    groups: [monsieurbiz]
