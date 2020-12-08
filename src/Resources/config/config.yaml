@@ -1,3 +1,9 @@
 imports:
     - { resource: 'app/doctrine_migrations.yaml' }
     - { resource: 'sylius/resource.yaml' }
+
+sylius_shipping:
+    resources:
+        shipping_method:
+            classes:
+                model: MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethod
