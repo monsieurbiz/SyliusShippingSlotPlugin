@@ -17,3 +17,8 @@ services:
         arguments:
             $dataClass: '%monsieurbiz_shipping_slot.model.shipping_slot_config.class%'
             $validationGroups: ['monsieurbiz']
+
+    # Fixtures
+    MonsieurBiz\SyliusShippingSlotPlugin\Fixture\ShippingSlotConfigFixture:
+        arguments:
+            $exampleFactory: '@MonsieurBiz\SyliusShippingSlotPlugin\Fixture\Factory\ShippingSlotConfigFixtureFactory'
