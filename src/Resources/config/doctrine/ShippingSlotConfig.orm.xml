@@ -6,7 +6,7 @@
             <generator strategy="AUTO"/>
         </id>
         <field name="name" column="name" type="string" length="255" nullable="true" />
-        <field name="rrules" column="rrules" type="simple_array" nullable="true" />
+        <field name="rrules" column="rrules" type="json" nullable="true" />
         <field name="preparationDelay" column="preparation_delay" type="integer" nullable="true" />
         <field name="pickupDelay" column="pickup_delay" type="integer" nullable="true" />
         <field name="durationRange" column="duration_range" type="integer" nullable="true" />
