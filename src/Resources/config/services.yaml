@@ -6,6 +6,7 @@ services:
 
     MonsieurBiz\SyliusShippingSlotPlugin\:
         resource: '../../*'
+        exclude: '../../{Entity,Migrations}'
 
     MonsieurBiz\SyliusShippingSlotPlugin\Controller\:
         resource: '../../Controller'
