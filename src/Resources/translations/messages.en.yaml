@@ -1,9 +1,12 @@
 monsieurbiz_shipping_slot:
   ui:
     shipping_slot_configs: Shipping slot configuration
+    shipping_slot_config: Shipping slot configuration
     manage_shipping_slot_config: Manage your shipping slot configuration
     new_shipping_slot_config: New shipping slot configuration
     edit_shipping_slot_config: Edit shipping slot configuration
+    no_shipping_slot_config: No slot configuration for this method
+    use_shipping_slot_configuration: Use a shipping slot configuration if you want to display to your customers a calendar with available dates and times to retrieve their package.
     form:
       name: Configuration's name
       rrules: Recurrence rules
@@ -12,3 +15,4 @@ monsieurbiz_shipping_slot:
       duration_range: Duration range of the slot (In minutes)
       available_spots: Available spots in a slot
       color: Color
+      shipping_slot_config: Slot configuration for shipping method

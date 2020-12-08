@@ -1,9 +1,12 @@
 monsieurbiz_shipping_slot:
   ui:
     shipping_slot_configs: Configuration des crénaux de livraison
+    shipping_slot_config: Configuration des crénaux de livraison
     manage_shipping_slot_config: Configurez la gestion de vos créneaux de livraison
     new_shipping_slot_config: Nouvelle configuration de créneaux
     edit_shipping_slot_config: Éditer une configuration de créneaux
+    no_shipping_slot_config: Pas de créneaux de livraison pour ce mode
+    use_shipping_slot_configuration: Utilisez une configuration de créneaux de livraison pour afficher à vos client un calendrier avec les créneaux disponibles pour leurs colis.
     form:
       name: Nom de la configuration
       rrules: Règles de récurrence
@@ -12,3 +15,4 @@ monsieurbiz_shipping_slot:
       duration_range: Durée du créneau (En minutes)
       available_spots: Nombre de places par créneaux
       color: Couleur
+      shipping_slot_config: Configuration de crénaux pour ce mode de livraison
