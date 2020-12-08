@@ -32,6 +32,20 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     public function setId(int $id): void;
 
     /**
+     * Get shipping config name
+     * 
+     * @return string|null
+     */
+    public function getName(): ?string;
+
+    /**
+     * Set shipping config name
+     * 
+     * @param string $name
+     */ 
+    public function setName(string $name): void;
+
+    /**
      * Get the list of RRULES for this config
      * 
      * @return string[]|null

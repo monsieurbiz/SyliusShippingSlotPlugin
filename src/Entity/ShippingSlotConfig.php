@@ -16,6 +16,7 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 class ShippingSlotConfig implements ShippingSlotConfigInterface
 {
     private ?int $id;
+    private ?string $name;
     private ?array $rrules;
     private ?int $preparationDelay;
     private ?int $pickupDelay;
@@ -37,6 +38,22 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     /**
