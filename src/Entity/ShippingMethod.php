@@ -30,7 +30,7 @@ class ShippingMethod extends SyliusShippingMethod implements ShippingMethodInter
     /**
      * {@inheritDoc}
      */
-    public function setShippingSlotConfig(ShippingSlotConfig $shippingSlotConfig) : void
+    public function setShippingSlotConfig(ShippingSlotConfig $shippingSlotConfig): void
     {
         $this->shippingSlotConfig = $shippingSlotConfig;
     }

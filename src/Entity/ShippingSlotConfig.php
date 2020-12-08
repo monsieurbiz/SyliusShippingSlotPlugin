@@ -107,7 +107,7 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getDurationRange() : ?int
+    public function getDurationRange(): ?int
     {
         return $this->durationRange;
     }
@@ -130,7 +130,7 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
 
     /**
      * {@inheritdoc}
-     */ 
+     */
     public function setAvailableSpots(int $availableSpots): void
     {
         $this->availableSpots = $availableSpots;

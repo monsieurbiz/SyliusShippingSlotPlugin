@@ -16,12 +16,7 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Fixture\Factory;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
-use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
-use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
-use Sylius\Component\Locale\Model\LocaleInterface;
-use Sylius\Component\Product\Generator\SlugGeneratorInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -39,7 +34,7 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
 
     /** @var \Faker\Generator */
     private $faker;
-    
+
     /**
      * @param FactoryInterface $shippingSlotConfigFactory
      */

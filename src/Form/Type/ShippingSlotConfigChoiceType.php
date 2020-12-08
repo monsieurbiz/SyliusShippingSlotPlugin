@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Form\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ShippingSlotConfigChoiceType extends AbstractResourceType
 {
     private RepositoryInterface $shippingSlotConfigRepository;
 
     /**
-     * ShippingSlotConfigChoiceType constructor
+     * ShippingSlotConfigChoiceType constructor.
      *
      * @param RepositoryInterface $shippingSlotConfigRepository
      */
@@ -51,7 +51,7 @@ class ShippingSlotConfigChoiceType extends AbstractResourceType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'choices' => function (Options $options): array {
+            'choices' => function(Options $options): array {
                 return $this->shippingSlotConfigRepository->findAll();
             },
             'choice_value' => 'id',
