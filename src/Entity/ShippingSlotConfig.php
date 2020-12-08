@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class ShippingSlotConfig implements ShippingSlotConfigInterface
 {
     private ?int $id;
