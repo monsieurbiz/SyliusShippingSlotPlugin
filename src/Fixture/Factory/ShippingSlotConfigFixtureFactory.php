@@ -102,7 +102,7 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
                 return $this->faker->numberBetween(5, 10);
             })
             ->setDefault('color', function(Options $options): string {
-                return $this->faker->hexColor();
+                return $this->faker->hexColor;
             })
         ;
     }
