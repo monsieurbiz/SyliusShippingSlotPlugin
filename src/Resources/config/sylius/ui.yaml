@@ -3,3 +3,6 @@ sylius_ui:
         sylius.admin.shipping_method.update.form:
             blocks:
                 shipping_slot_configuration: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/ShippingMethod/shipping_slot_configuration.html.twig'
+        sylius.admin.shipping_method.create.form:
+            blocks:
+                shipping_slot_configuration: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/ShippingMethod/shipping_slot_configuration.html.twig'
