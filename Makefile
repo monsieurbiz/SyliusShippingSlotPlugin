@@ -5,6 +5,7 @@ SYMFONY=cd ${APP_DIR} && symfony
 COMPOSER=symfony composer
 CONSOLE=${SYMFONY} console
 export COMPOSE_PROJECT_NAME=shipping-slot
+DOCTRINE_NAMESPACE=MonsieurBiz\SyliusShippingSlotPlugin\Migrations
 COMPOSE=docker-compose
 YARN=yarn
 PHPUNIT=symfony php vendor/bin/phpunit
@@ -116,6 +117,9 @@ sylius.assets: ## Install all assets with symlinks
 	${CONSOLE} assets:install --symlink
 	${CONSOLE} sylius:install:assets
 	${CONSOLE} sylius:theme:assets:install --symlink
+
+doctrine.diff: ## Make doctrine diff
+	${CONSOLE} doctrine:migration:diff --namespace="${DOCTRINE_NAMESPACE}"
 
 ###
 ### PLATFORM
