@@ -1,6 +1,7 @@
 imports:
     - { resource: 'app/doctrine_migrations.yaml' }
     - { resource: 'sylius/resource.yaml' }
+    - { resource: 'sylius/grids.yaml' }
 
 sylius_shipping:
     resources:

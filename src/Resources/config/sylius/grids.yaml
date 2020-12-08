@@ -1,0 +1,20 @@
+sylius_grid:
+    grids:
+        monsieurbiz_shipping_slot_config:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig
+            fields:
+                name:
+                    type: string
+                    label: sylius.ui.name
+            actions:
+                main:
+                    create:
+                        type: create
+                item:
+                    update:
+                        type: update
+                    delete:
+                        type: delete

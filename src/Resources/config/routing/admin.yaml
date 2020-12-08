@@ -1,0 +1,14 @@
+monsieurbiz_shipping_slot_admin_config:
+    resource: |
+        alias: monsieurbiz_shipping_slot.shipping_slot_config
+        section: admin
+        templates: SyliusAdminBundle:Crud
+        except: ['show']
+        redirect: update
+        grid: monsieurbiz_shipping_slot_config
+        vars:
+            all:
+                subheader: monsieurbiz_shipping_slot.ui.manage_shipping_slot_config
+            index:
+                icon: 'truck'
+    type: sylius.resource
