@@ -108,7 +108,7 @@ class Slot implements SlotInterface
         $this->durationRange = $durationRange;
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function getShipment(): ?ShipmentInterface
