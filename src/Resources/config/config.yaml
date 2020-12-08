@@ -10,3 +10,6 @@ sylius_shipping:
         shipping_method:
             classes:
                 model: MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethod
+        shipment:
+            classes:
+                model: MonsieurBiz\SyliusShippingSlotPlugin\Entity\Shipment
