@@ -1,2 +1,14 @@
 monsieurbiz_shipping_slot:
   ui:
+    shipping_slot_configs: Shipping slot configuration
+    manage_shipping_slot_config: Manage your shipping slot configuration
+    new_shipping_slot_config: New shipping slot configuration
+    edit_shipping_slot_config: Edit shipping slot configuration
+    form:
+      name: Configuration's name
+      rrules: Recurrence rules
+      preparation_delay: Preparation delay (In minutes)
+      pickup_delay: Pickup delay (In minutes)
+      duration_range: Duration range of the slot (In minutes)
+      available_spots: Available spots in a slot
+      color: Color

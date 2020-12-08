@@ -1,2 +1,14 @@
 monsieurbiz_shipping_slot:
   ui:
+    shipping_slot_configs: Configuration des crénaux de livraison
+    manage_shipping_slot_config: Configurez la gestion de vos créneaux de livraison
+    new_shipping_slot_config: Nouvelle configuration de créneaux
+    edit_shipping_slot_config: Éditer une configuration de créneaux
+    form:
+      name: Nom de la configuration
+      rrules: Règles de récurrence
+      preparation_delay: Délai de préparation (En minutes)
+      pickup_delay: Délai de retrait (En minutes)
+      duration_range: Durée du créneau (En minutes)
+      available_spots: Nombre de places par créneaux
+      color: Couleur
