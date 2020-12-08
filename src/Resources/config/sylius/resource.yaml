@@ -1,6 +1,6 @@
 sylius_resource:
     resources:
-        monsieurbiz_shippingslot.shipping_slot_config:
+        monsieurbiz_shipping_slot.shipping_slot_config:
             classes:
                 model: MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig
-                # form: MonsieurBiz\SyliusShippingSlotPlugin\Form\Type\ShippingSlotConfigType
+                form: MonsieurBiz\SyliusShippingSlotPlugin\Form\Type\ShippingSlotConfigType

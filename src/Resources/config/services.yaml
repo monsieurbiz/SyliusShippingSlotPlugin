@@ -11,3 +11,9 @@ services:
     MonsieurBiz\SyliusShippingSlotPlugin\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
+
+    # ShippingSlotConfigType Form
+    MonsieurBiz\SyliusShippingSlotPlugin\Form\Type\ShippingSlotConfigType:
+        arguments:
+            $dataClass: '%monsieurbiz_shipping_slot.model.shipping_slot_config.class%'
+            $validationGroups: ['monsieurbiz']
