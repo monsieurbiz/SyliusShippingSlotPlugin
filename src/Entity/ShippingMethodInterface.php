@@ -13,23 +13,21 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
-use Sylius\Component\Core\Model\ShippingMethodInterface as SyliusShippingMethodInterface;
-
-interface ShippingMethodInterface extends SyliusShippingMethodInterface
+interface ShippingMethodInterface
 {
     /**
      * Get the shipping slot config.
      *
-     * @return ShippingSlotConfig|null
+     * @return ShippingSlotConfigInterface|null
      */
-    public function getShippingSlotConfig(): ?ShippingSlotConfig;
+    public function getShippingSlotConfig(): ?ShippingSlotConfigInterface;
 
     /**
      * Set the shipping slot config.
      *
-     * @param ShippingSlotConfig $shippingSlotConfig
+     * @param ShippingSlotConfigInterface $shippingSlotConfig
      *
      * @return void
      */
-    public function setShippingSlotConfig(ShippingSlotConfig $shippingSlotConfig): void;
+    public function setShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void;
 }

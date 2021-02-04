@@ -4,9 +4,3 @@ imports:
     - { resource: 'sylius/grids.yaml' }
     - { resource: 'sylius/fixtures.yaml' }
     - { resource: 'sylius/ui.yaml' }
-
-sylius_shipping:
-    resources:
-        shipping_method:
-            classes:
-                model: MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethod
