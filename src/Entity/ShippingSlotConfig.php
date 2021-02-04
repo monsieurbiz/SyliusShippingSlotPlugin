@@ -15,14 +15,14 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
 class ShippingSlotConfig implements ShippingSlotConfigInterface
 {
-    private ?int $id;
-    private ?string $name;
-    private ?array $rrules;
-    private ?int $preparationDelay;
-    private ?int $pickupDelay;
-    private ?int $durationRange;
-    private ?int $availableSpots;
-    private ?string $color;
+    private ?int $id = null;
+    private ?string $name = null;
+    private ?array $rrules = null;
+    private ?int $preparationDelay = null;
+    private ?int $pickupDelay = null;
+    private ?int $durationRange = null;
+    private ?int $availableSpots = null;
+    private ?string $color = null;
 
     /**
      * {@inheritDoc}
@@ -30,14 +30,6 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -49,15 +41,15 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getRrules(): ?array
     {
@@ -65,15 +57,15 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setRrules(array $rrules): void
+    public function setRrules(?array $rrules): void
     {
         $this->rrules = $rrules;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getPreparationDelay(): ?int
     {
@@ -81,15 +73,15 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setPreparationDelay(int $preparationDelay): void
+    public function setPreparationDelay(?int $preparationDelay): void
     {
         $this->preparationDelay = $preparationDelay;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getPickupDelay(): ?int
     {
@@ -97,15 +89,15 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setPickupDelay($pickupDelay): void
+    public function setPickupDelay(?int $pickupDelay): void
     {
         $this->pickupDelay = $pickupDelay;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getDurationRange(): ?int
     {
@@ -113,15 +105,15 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setDurationRange(int $durationRange): void
+    public function setDurationRange(?int $durationRange): void
     {
         $this->durationRange = $durationRange;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getAvailableSpots(): ?int
     {
@@ -129,15 +121,15 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setAvailableSpots(int $availableSpots): void
+    public function setAvailableSpots(?int $availableSpots): void
     {
         $this->availableSpots = $availableSpots;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getColor(): ?string
     {
@@ -145,9 +137,9 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setColor(string $color): void
+    public function setColor(?string $color): void
     {
         $this->color = $color;
     }

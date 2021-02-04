@@ -18,20 +18,6 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 interface ShippingSlotConfigInterface extends ResourceInterface
 {
     /**
-     * Get shipping config ID.
-     *
-     * @return int|null
-     */
-    public function getId(): ?int;
-
-    /**
-     * Set shipping config ID.
-     *
-     * @param int $id
-     */
-    public function setId(int $id): void;
-
-    /**
      * Get shipping config name.
      *
      * @return string|null
@@ -41,9 +27,9 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     /**
      * Set shipping config name.
      *
-     * @param string $name
+     * @param string|null $name
      */
-    public function setName(string $name): void;
+    public function setName(?string $name): void;
 
     /**
      * Get the list of RRULES for this config.
@@ -55,9 +41,9 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     /**
      * Set the list of RRULES for this config.
      *
-     * @param string[] $rrules
+     * @param string[]|null $rrules
      */
-    public function setRrules(array $rrules): void;
+    public function setRrules(?array $rrules): void;
 
     /**
      * Get the preparation delay in minutes.
@@ -69,9 +55,9 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     /**
      * Set the preparation delay in minutes.
      *
-     * @param int $preparationDelay
+     * @param int|null $preparationDelay
      */
-    public function setPreparationDelay(int $preparationDelay): void;
+    public function setPreparationDelay(?int $preparationDelay): void;
 
     /**
      * Get the pickup delay in minutes.
@@ -83,9 +69,9 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     /**
      * Set the pickup delay in minutes.
      *
-     * @param int $pickupDelay
+     * @param int|null $pickupDelay
      */
-    public function setPickupDelay(int $pickupDelay): void;
+    public function setPickupDelay(?int $pickupDelay): void;
 
     /**
      * Get the duration range of the slot.
@@ -97,9 +83,9 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     /**
      * Set the duration range of the slot.
      *
-     * @param int $durationRange
+     * @param int|null $durationRange
      */
-    public function setDurationRange(int $durationRange): void;
+    public function setDurationRange(?int $durationRange): void;
 
     /**
      * Get the number of available spots for a slot.
@@ -111,9 +97,9 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     /**
      * Set the number of available spots for a slot.
      *
-     * @param int $availableSpots
+     * @param int|null $availableSpots
      */
-    public function setAvailableSpots(int $availableSpots): void;
+    public function setAvailableSpots(?int $availableSpots): void;
 
     /**
      * Get the color displayed in calendar.
@@ -125,7 +111,7 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     /**
      * Set the color displayed in calendar.
      *
-     * @param string $color
+     * @param string|null $color
      */
-    public function setColor(string $color): void;
+    public function setColor(?string $color): void;
 }
