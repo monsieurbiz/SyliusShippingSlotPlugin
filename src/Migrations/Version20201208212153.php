@@ -23,7 +23,7 @@ final class Version20201208212153 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Setup the slot_config table and the relation with the shipping method.';
     }
 
     public function up(Schema $schema): void
