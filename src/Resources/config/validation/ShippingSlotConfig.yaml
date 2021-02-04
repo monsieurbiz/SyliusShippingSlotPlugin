@@ -10,14 +10,12 @@ MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig:
         preparationDelay:
             -   NotBlank:
                     groups: [monsieurbiz]
-            -   GreaterThan:
-                    value: 0
+            -   PositiveOrZero:
                     groups: [monsieurbiz]
         pickupDelay:
             -   NotBlank:
                     groups: [monsieurbiz]
-            -   GreaterThan:
-                    value: 0
+            -   PositiveOrZero:
                     groups: [monsieurbiz]
         durationRange:
             -   NotBlank:

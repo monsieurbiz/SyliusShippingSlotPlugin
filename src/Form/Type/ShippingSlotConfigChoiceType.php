@@ -56,6 +56,7 @@ class ShippingSlotConfigChoiceType extends AbstractResourceType
             },
             'choice_value' => 'id',
             'choice_label' => 'name',
+            'empty_data' => '',
         ]);
     }
 
