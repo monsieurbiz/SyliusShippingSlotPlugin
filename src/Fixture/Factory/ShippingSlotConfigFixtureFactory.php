@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Fixture\Factory;
 
+use Faker\Factory;
+use Faker\Generator;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
@@ -22,29 +24,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
-    /**
-     * @var FactoryInterface
-     */
-    private $shippingSlotConfigFactory;
+    private FactoryInterface $shippingSlotConfigFactory;
+    private OptionsResolver $optionsResolver;
+    private Generator $faker;
 
     /**
-     * @var OptionsResolver
-     */
-    private $optionsResolver;
-
-    /** @var \Faker\Generator */
-    private $faker;
-
-    /**
+     * ShippingSlotConfigFixtureFactory constructor.
+     *
      * @param FactoryInterface $shippingSlotConfigFactory
      */
-    public function __construct(
-        FactoryInterface $shippingSlotConfigFactory
-    ) {
+    public function __construct(FactoryInterface $shippingSlotConfigFactory)
+    {
         $this->shippingSlotConfigFactory = $shippingSlotConfigFactory;
-
-        $this->faker = \Faker\Factory::create();
-
+        $this->faker = Factory::create();
         $this->optionsResolver = new OptionsResolver();
         $this->configureOptions($this->optionsResolver);
     }

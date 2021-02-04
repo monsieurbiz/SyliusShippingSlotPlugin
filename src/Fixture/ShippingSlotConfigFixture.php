@@ -19,7 +19,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 class ShippingSlotConfigFixture extends AbstractResourceFixture
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName(): string
     {
@@ -27,7 +27,7 @@ class ShippingSlotConfigFixture extends AbstractResourceFixture
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {
@@ -41,7 +41,7 @@ class ShippingSlotConfigFixture extends AbstractResourceFixture
                 ->integerNode('preparationDelay')->min(0)->end()
                 ->integerNode('pickupDelay')->min(0)->end()
                 ->integerNode('durationRange')->min(0)->end()
-                ->integerNode('availableSpots')->min(0)->end()
+                ->integerNode('availableSpots')->min(1)->end()
                 ->scalarNode('color')->cannotBeEmpty()->end()
             ->end()
         ;
