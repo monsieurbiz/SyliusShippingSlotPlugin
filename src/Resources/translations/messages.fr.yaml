@@ -1,18 +1,19 @@
 monsieurbiz_shipping_slot:
-  ui:
-    shipping_slot_configs: Configuration des crénaux de livraison
-    shipping_slot_config: Configuration des crénaux de livraison
-    manage_shipping_slot_config: Configurez la gestion de vos créneaux de livraison
-    new_shipping_slot_config: Nouvelle configuration de créneaux
-    edit_shipping_slot_config: Éditer une configuration de créneaux
-    no_shipping_slot_config: Pas de créneaux de livraison pour ce mode
-    use_shipping_slot_configuration: Utilisez une configuration de créneaux de livraison pour afficher à vos client un calendrier avec les créneaux disponibles pour leurs colis.
-    form:
-      name: Nom de la configuration
-      rrules: Règles de récurrence
-      preparation_delay: Délai de préparation (En minutes)
-      pickup_delay: Délai de retrait (En minutes)
-      duration_range: Durée du créneau (En minutes)
-      available_spots: Nombre de places par créneaux
-      color: Couleur
-      shipping_slot_config: Configuration de crénaux pour ce mode de livraison
+    ui:
+        shipping_slot_configs: Configuration des crénaux de livraison
+        shipping_slot_config: Configuration des crénaux de livraison
+        manage_shipping_slot_config: Configurez la gestion de vos créneaux de livraison
+        new_shipping_slot_config: Nouvelle configuration de créneaux
+        edit_shipping_slot_config: Éditer une configuration de créneaux
+        no_shipping_slot_config: Pas de créneaux de livraison pour ce mode
+        use_shipping_slot_configuration: Utilisez une configuration de créneaux de livraison pour afficher à vos client un calendrier avec les créneaux disponibles pour leurs colis.
+        form:
+        name: Nom de la configuration
+            rrules: Règles de récurrence
+            rrules_help: 'Vous pouvez définir une nouvelle RRULE avec l''aide de <a href="https://jakubroztocil.github.io/rrule/">la démo en ligne</a>.'
+            preparation_delay: Délai de préparation (en minutes)
+            pickup_delay: Délai de retrait (en minutes)
+            duration_range: Durée du créneau (en minutes)
+            available_spots: Nombre de places par créneaux
+            color: Couleur
+            shipping_slot_config: Configuration de crénaux pour ce mode de livraison
