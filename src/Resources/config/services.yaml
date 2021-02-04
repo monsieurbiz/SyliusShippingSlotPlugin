@@ -6,7 +6,19 @@ services:
 
     MonsieurBiz\SyliusShippingSlotPlugin\:
         resource: '../../*'
+        exclude: '../../{Entity,Migrations}'
 
     MonsieurBiz\SyliusShippingSlotPlugin\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
+
+    # ShippingSlotConfigType Form
+    MonsieurBiz\SyliusShippingSlotPlugin\Form\Type\ShippingSlotConfigType:
+        arguments:
+            $dataClass: '%monsieurbiz_shipping_slot.model.shipping_slot_config.class%'
+            $validationGroups: ['monsieurbiz']
+
+    # Fixtures
+    MonsieurBiz\SyliusShippingSlotPlugin\Fixture\ShippingSlotConfigFixture:
+        arguments:
+            $exampleFactory: '@MonsieurBiz\SyliusShippingSlotPlugin\Fixture\Factory\ShippingSlotConfigFixtureFactory'

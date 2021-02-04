@@ -1,0 +1,31 @@
+sylius_grid:
+    grids:
+        monsieurbiz_shipping_slot_config:
+            driver:
+                options:
+                    class: MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig
+            fields:
+                name:
+                    type: string
+                    label: sylius.ui.name
+            actions:
+                main:
+                    create:
+                        type: create
+                item:
+                    update:
+                        type: update
+                    delete:
+                        type: delete
+        sylius_admin_shipping_method:
+            actions:
+                main:
+                    shipping_slot_config:
+                        type: shipping_slot_config
+                        label: monsieurbiz_shipping_slot.ui.shipping_slot_configs
+                        options:
+                            link:
+                                route: monsieurbiz_shipping_slot_admin_shipping_slot_config_index
+    templates:
+        action:
+            shipping_slot_config: "@MonsieurBizSyliusShippingSlotPlugin/Admin/Grid/Action/shippingSlotConfig.html.twig"

@@ -1,0 +1,7 @@
+sylius_fixtures:
+    suites:
+        default:
+            fixtures:
+                monsieurbiz_shipping_slot_config:
+                    options:
+                        random: 1
