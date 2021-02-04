@@ -2,7 +2,6 @@ sylius_grid:
     grids:
         monsieurbiz_shipping_slot_config:
             driver:
-                name: doctrine/orm
                 options:
                     class: MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig
             fields:
