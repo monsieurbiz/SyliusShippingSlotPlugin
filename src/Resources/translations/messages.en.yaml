@@ -1,19 +1,19 @@
 monsieurbiz_shipping_slot:
     ui:
-        shipping_slot_configs: Shipping slot configuration
-        shipping_slot_config: Shipping slot configuration
-        manage_shipping_slot_config: Manage your shipping slot configuration
-        new_shipping_slot_config: New shipping slot configuration
-        edit_shipping_slot_config: Edit shipping slot configuration
-        no_shipping_slot_config: No slot configuration for this method
-        use_shipping_slot_configuration: Use a shipping slot configuration if you want to display to your customers a calendar with available dates and times to retrieve their package.
+        shipping_slot_configs: 'Shipping slot configuration'
+        shipping_slot_config: 'Shipping slot configuration'
+        manage_shipping_slot_config: 'Manage your shipping slot configuration'
+        new_shipping_slot_config: 'New shipping slot configuration'
+        edit_shipping_slot_config: 'Edit shipping slot configuration'
+        no_shipping_slot_config: 'No slot configuration for this method'
+        use_shipping_slot_configuration: 'Use a shipping slot configuration if you want to display to your customers a calendar with available dates and times to retrieve their package.'
         form:
-            name: Configuration's name
-            rrules: Recurrence rules
+            name: 'Configuration''s name'
+            rrules: 'Recurrence rules'
             rrules_help: 'You can define a new RRULE with the help of <a href="https://jakubroztocil.github.io/rrule/">the online demo</a>.'
-            preparation_delay: Preparation delay (in minutes)
-            pickup_delay: Pickup delay (in minutes)
-            duration_range: Duration range of the slot (in minutes)
-            available_spots: Available spots in a slot
-            color: Color
-            shipping_slot_config: Slot configuration for shipping method
+            preparation_delay: 'Preparation delay (in minutes)'
+            pickup_delay: 'Pickup delay (in minutes)'
+            duration_range: 'Duration range of the slot (in minutes)'
+            available_spots: 'Available spots in a slot'
+            color: 'Color'
+            shipping_slot_config: 'Slot configuration for shipping method'
