@@ -32,3 +32,7 @@ MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig:
         color:
             -   NotBlank:
                     groups: [monsieurbiz]
+            -   Regex:
+                    pattern: '/#[0-9a-f]{6}/'
+                    match: true
+                    groups: [monsieurbiz]
