@@ -28,13 +28,6 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     public function getId(): ?int;
 
     /**
-     * Set slot ID.
-     *
-     * @param int $id
-     */
-    public function setId(int $id): void;
-
-    /**
      * Get slot timestamp.
      *
      * @return DateTimeInterface|null
@@ -44,9 +37,9 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     /**
      * Set slot timestamp.
      *
-     * @param DateTimeInterface $timestamp
+     * @param DateTimeInterface|null $timestamp
      */
-    public function setTimestamp(DateTimeInterface $timestamp): void;
+    public function setTimestamp(?DateTimeInterface $timestamp): void;
 
     /**
      * Get the preparation delay in minutes.
@@ -58,9 +51,9 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     /**
      * Set the preparation delay in minutes.
      *
-     * @param int $preparationDelay
+     * @param int|null $preparationDelay
      */
-    public function setPreparationDelay(int $preparationDelay): void;
+    public function setPreparationDelay(?int $preparationDelay): void;
 
     /**
      * Get the pickup delay in minutes.
@@ -72,9 +65,9 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     /**
      * Set the pickup delay in minutes.
      *
-     * @param int $pickupDelay
+     * @param int|null $pickupDelay
      */
-    public function setPickupDelay(int $pickupDelay): void;
+    public function setPickupDelay(?int $pickupDelay): void;
 
     /**
      * Get the duration range of the slot.
@@ -86,9 +79,9 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     /**
      * Set the duration range of the slot.
      *
-     * @param int $durationRange
+     * @param int|null $durationRange
      */
-    public function setDurationRange(int $durationRange): void;
+    public function setDurationRange(?int $durationRange): void;
 
     /**
      * Get the shipment of the slot.
@@ -100,7 +93,7 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     /**
      * Set the shipment of the slot.
      *
-     * @param ShipmentInterface $shipment
+     * @param ShipmentInterface|null $shipment
      */
-    public function setShipment(ShipmentInterface $shipment): void;
+    public function setShipment(?ShipmentInterface $shipment): void;
 }

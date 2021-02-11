@@ -27,9 +27,9 @@ interface ShipmentInterface extends SyliusShipmentInterface
     /**
      * Set the slot.
      *
-     * @param SlotInterface $slot
+     * @param SlotInterface|null $slot
      *
      * @return void
      */
-    public function setSlot(SlotInterface $slot): void;
+    public function setSlot(?SlotInterface $slot): void;
 }

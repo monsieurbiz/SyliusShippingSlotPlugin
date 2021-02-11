@@ -21,12 +21,12 @@ class Slot implements SlotInterface
 {
     use TimestampableTrait;
 
-    private ?int $id;
-    private ?DateTimeInterface $timestamp;
-    private ?int $preparationDelay;
-    private ?int $pickupDelay;
-    private ?int $durationRange;
-    private ?ShipmentInterface $shipment;
+    private ?int $id = null;
+    private ?DateTimeInterface $timestamp = null;
+    private ?int $preparationDelay = null;
+    private ?int $pickupDelay = null;
+    private ?int $durationRange = null;
+    private ?ShipmentInterface $shipment = null;
 
     /**
      * {@inheritDoc}
@@ -34,14 +34,6 @@ class Slot implements SlotInterface
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -55,7 +47,7 @@ class Slot implements SlotInterface
     /**
      * {@inheritdoc}
      */
-    public function setTimestamp(DateTimeInterface $timetamp): void
+    public function setTimestamp(?DateTimeInterface $timetamp): void
     {
         $this->timestamp = $timetamp;
     }
@@ -71,7 +63,7 @@ class Slot implements SlotInterface
     /**
      * {@inheritdoc}
      */
-    public function setPreparationDelay(int $preparationDelay): void
+    public function setPreparationDelay(?int $preparationDelay): void
     {
         $this->preparationDelay = $preparationDelay;
     }
@@ -87,7 +79,7 @@ class Slot implements SlotInterface
     /**
      * {@inheritdoc}
      */
-    public function setPickupDelay($pickupDelay): void
+    public function setPickupDelay(?int $pickupDelay): void
     {
         $this->pickupDelay = $pickupDelay;
     }
@@ -103,7 +95,7 @@ class Slot implements SlotInterface
     /**
      * {@inheritdoc}
      */
-    public function setDurationRange(int $durationRange): void
+    public function setDurationRange(?int $durationRange): void
     {
         $this->durationRange = $durationRange;
     }
@@ -119,7 +111,7 @@ class Slot implements SlotInterface
     /**
      * {@inheritdoc}
      */
-    public function setShipment(ShipmentInterface $shipment): void
+    public function setShipment(?ShipmentInterface $shipment): void
     {
         $this->shipment = $shipment;
     }

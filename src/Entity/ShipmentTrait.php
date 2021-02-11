@@ -13,11 +13,16 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
-use Sylius\Component\Core\Model\Shipment as SyliusShipment;
+use Doctrine\ORM\Mapping as ORM;
 
-class Shipment extends SyliusShipment implements ShipmentInterface
+trait ShipmentTrait
 {
-    private ?SlotInterface $slot;
+    /**
+     * @ORM\OneToOne(targetEntity="MonsieurBiz\SyliusShippingSlotPlugin\Entity\Slot", mappedBy="shipment", fetch="EAGER")
+     *
+     * @var SlotInterface|null
+     */
+    private ?SlotInterface $slot = null;
 
     /**
      * {@inheritDoc}
@@ -30,7 +35,7 @@ class Shipment extends SyliusShipment implements ShipmentInterface
     /**
      * {@inheritDoc}
      */
-    public function setSlot(SlotInterface $slot): void
+    public function setSlot(?SlotInterface $slot): void
     {
         $this->slot = $slot;
     }
