@@ -1,9 +1,11 @@
 global.MonsieurBizShippingSlotManager = class {
     constructor(
         shippingMethodInputs,
+        nextStepButtons,
         listSlotsUrl
     ) {
         this.shippingMethodInputs = shippingMethodInputs;
+        this.nextStepButtons = nextStepButtons;
         this.listSlotsUrl = listSlotsUrl;
         this.initShippingMethodInputs();
     }
@@ -27,12 +29,23 @@ global.MonsieurBizShippingSlotManager = class {
         })
     }
 
-    displayInputSlots(shippingMethodInput) { 
+    displayInputSlots(shippingMethodInput) {
+        this.disableButtons();
+        let shippingSlotManager = this;
         this.listShippingSlotsForAMethod(shippingMethodInput.value, function () {
             // this = req
             if (this.status === 200) {
                 let data = JSON.parse(this.responseText);
+                // Authorize user to go to next step if no slot needed
+                if (typeof data.form_html === 'undefined') { 
+                    shippingSlotManager.enableButtons();
+                    return;
+                }
+
+                // Display form
                 console.log(data);
+            } else {
+                shippingSlotManager.enableButtons();
             }
         });
     }
@@ -44,5 +57,19 @@ global.MonsieurBizShippingSlotManager = class {
         req.open("get", url.replace('__CODE__', shippingMethodCode), true);
         req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         req.send();
+    }
+
+    disableButtons()
+    {
+        for (let button of this.nextStepButtons) { 
+            button.disabled = true;
+        }
+    }
+
+    enableButtons()
+    {
+        for (let button of this.nextStepButtons) { 
+            button.disabled = false;
+        }
     }
 }

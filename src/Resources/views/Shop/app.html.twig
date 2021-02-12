@@ -3,8 +3,10 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', () => {
         let shippingMethodInputs = document.querySelectorAll('input[type="radio"][name*="sylius_checkout_select_shipping"]');
+        let nextStepButtons = document.querySelectorAll('form[name="sylius_checkout_select_shipping"] button#next-step');
         let config = new MonsieurBizShippingSlotManager(
                 shippingMethodInputs,
+                nextStepButtons,
                 '{{ url("monsieurbiz_shippingslot_checkout_listslots", {"code": "__CODE__"})|e('js') }}'
             );
     });
