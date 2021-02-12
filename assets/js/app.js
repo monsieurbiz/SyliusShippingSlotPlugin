@@ -1,10 +1,10 @@
 global.MonsieurBizShippingSlotManager = class {
     constructor(
         shippingMethodInputs,
-        listSlotUrl
+        listSlotsUrl
     ) {
         this.shippingMethodInputs = shippingMethodInputs;
-        this.listSlotUrl = listSlotUrl;
+        this.listSlotsUrl = listSlotsUrl;
         this.initShippingMethodInputs();
     }
 
@@ -13,7 +13,7 @@ global.MonsieurBizShippingSlotManager = class {
         for (let shippingMethodInput of this.shippingMethodInputs) {
             // On the page load, display load slots for selected method
             if (shippingMethodInput.checked) {
-                this.listShippingSlotsForAMethod(shippingMethodInput);
+                this.displayInputSlots(shippingMethodInput);
             }
             this.initShippingMethodInput(shippingMethodInput);
         }
@@ -23,11 +23,26 @@ global.MonsieurBizShippingSlotManager = class {
         let shippingSlotManager = this;
         shippingMethodInput.addEventListener('change', function() {
             // On shipping method change, display load slots for selected method
-            shippingSlotManager.listShippingSlotsForAMethod(shippingMethodInput);
+            shippingSlotManager.displayInputSlots(shippingMethodInput);
         })
     }
 
-    listShippingSlotsForAMethod(shippingMethodInput) { 
-        console.log(shippingMethodInput);
+    displayInputSlots(shippingMethodInput) { 
+        this.listShippingSlotsForAMethod(shippingMethodInput.value, function () {
+            // this = req
+            if (this.status === 200) {
+                let data = JSON.parse(this.responseText);
+                console.log(data);
+            }
+        });
+    }
+
+    listShippingSlotsForAMethod(shippingMethodCode, callback) { 
+        let req = new XMLHttpRequest();
+        req.onload = callback;
+        let url = this.listSlotsUrl;
+        req.open("get", url.replace('__CODE__', shippingMethodCode), true);
+        req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        req.send();
     }
 }
