@@ -43,6 +43,9 @@ class ShippingSlotConfigFixture extends AbstractResourceFixture
                 ->integerNode('durationRange')->min(0)->end()
                 ->integerNode('availableSpots')->min(1)->end()
                 ->scalarNode('color')->cannotBeEmpty()->end()
+                ->arrayNode('shipping_methods')
+                    ->scalarPrototype()->end()
+                ->end()
             ->end()
         ;
     }

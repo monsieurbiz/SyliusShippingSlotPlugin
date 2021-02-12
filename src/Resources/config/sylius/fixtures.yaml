@@ -2,6 +2,29 @@ sylius_fixtures:
     suites:
         default:
             fixtures:
+                monsieurbiz_shipping_slot_method:
+                    name: 'shipping_method'
+                    options:
+                        custom:
+                            slot_delivery:
+                                code: 'slot_delivery'
+                                name: 'Click''n''Collect'
+                                enabled: true
+                                channels:
+                                    - 'FASHION_WEB'
                 monsieurbiz_shipping_slot_config:
                     options:
-                        random: 1
+                        custom:
+                            fashion_store:
+                                name: 'Fashion Store hours'
+                                rrules: 
+                                    - 'RRULE:FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=0;BYSECOND=0'
+                                    - 'RRULE:FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=30;BYSECOND=0'
+                                preparationDelay: 60
+                                pickupDelay: 30
+                                durationRange: 120
+                                availableSpots: 10
+                                color: '#5D44DC'
+                                shipping_methods:
+                                    - 'slot_delivery'
+
