@@ -6,3 +6,7 @@ sylius_ui:
         sylius.admin.shipping_method.create.form:
             blocks:
                 shipping_slot_configuration: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/ShippingMethod/shipping_slot_configuration.html.twig'
+        sylius.shop.layout.javascripts:
+            blocks:
+                monsieurbiz_shipping_slot_init_app:
+                    template: '@MonsieurBizSyliusShippingSlotPlugin/Shop/app.html.twig'

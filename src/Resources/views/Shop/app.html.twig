@@ -1,0 +1,11 @@
+{% include '@SyliusUi/_javascripts.html.twig' with {'path': 'bundles/monsieurbizsyliusshippingslotplugin/js/shipping-slot-js.js'} %}
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        let shippingMethodInputs = document.querySelectorAll('input[type="radio"][name*="sylius_checkout_select_shipping"]');
+        let config = new MonsieurBizShippingSlotManager(
+                shippingMethodInputs,
+                '',
+            );
+    });
+</script>
