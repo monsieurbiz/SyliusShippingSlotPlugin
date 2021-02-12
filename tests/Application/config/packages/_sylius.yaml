@@ -27,3 +27,6 @@ sylius_shipping:
         shipping_method:
             classes:
                 model: App\Entity\ShippingMethod
+        shipment:
+            classes:
+                model: App\Entity\Shipment
