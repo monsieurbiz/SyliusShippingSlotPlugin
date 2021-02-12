@@ -1,0 +1,5 @@
+monsieurbiz_shippingslot_checkout_listslots:
+    path: /monsieurbiz_shippingslots/list/{code}
+    methods: [GET]
+    defaults:
+        _controller: MonsieurBiz\SyliusShippingSlotPlugin\Controller\SlotController:listAction
