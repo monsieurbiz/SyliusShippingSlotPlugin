@@ -44,8 +44,8 @@ jobs:
         id: cache-composer
         with:
           path: /home/runner/.composer/cache
-          key: composer2-php:${{ matrix.php }}-${{ github.sha }}
-          restore-keys: composer2-php:${{ matrix.php }}-
+          key: composer-php:${{ matrix.php }}-${{ github.sha }}
+          restore-keys: composer-php:${{ matrix.php }}-
 
       - run: mkdir -p /home/runner/.composer/cache
         if: steps.cache-composer.outputs.cache-hit != 'true'
@@ -66,7 +66,7 @@ jobs:
             composer config repositories.plugin '{"type": "path", "url": "../plugin/"}'
             composer config extra.symfony.allow-contrib true
             composer config secure-http false
-            composer config platform.php ${{ matrix.php }}
+            composer config --unset platform.php
 
       - name: Install plugin
         working-directory: ./sylius
