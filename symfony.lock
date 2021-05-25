@@ -711,6 +711,9 @@
     "sylius-labs/polyfill-symfony-event-dispatcher": {
         "version": "v1.0.0"
     },
+    "sylius/admin-api-bundle": {
+        "version": "v1.8.13"
+    },
     "sylius/fixtures-bundle": {
         "version": "v1.7.0"
     },
