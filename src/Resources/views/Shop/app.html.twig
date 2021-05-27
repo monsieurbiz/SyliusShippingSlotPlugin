@@ -5,11 +5,22 @@
         let shippingMethodInputs = document.querySelectorAll('input[type="radio"][name*="sylius_checkout_select_shipping"]');
         let nextStepButtons = document.querySelectorAll('form[name="sylius_checkout_select_shipping"] button#next-step');
         let calendarContainers = document.querySelectorAll('.monsieurbiz_shipping_slot_calendar');
+        let fullCalendarConfig = {
+            timeZone: 'UTC',
+            slotMinTime: "06:00:00",
+            slotMaxTime: "22:00:00",
+            locale: '{{ sylius.localeCode | slice(0, 2) | escape('js') }}',
+            firstDay: 1,
+            buttonText: {
+                list: '{{ 'monsieurbiz_shipping_slot.ui.list_view' | trans | escape('js') }}'
+            },
+        };
         let config = new MonsieurBizShippingSlotManager(
                 shippingMethodInputs,
                 nextStepButtons,
                 calendarContainers,
-                '{{ url("monsieurbiz_shippingslot_checkout_listslots", {"code": "__CODE__"})|e('js') }}'
+                fullCalendarConfig,
+                '{{ url("monsieurbiz_shippingslot_checkout_listslots", {"code": "__CODE__"})|e('js') }}',
             );
     });
 </script>
