@@ -19,5 +19,9 @@
   "homepage": "https://github.com/monsieurbiz/SyliusShippingSlotPlugin#readme",
   "devDependencies": {
     "@symfony/webpack-encore": "^0.28.1"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^5.7.0",
+    "@fullcalendar/timegrid": "^5.7.0"
   }
 }
