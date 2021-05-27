@@ -1,6 +1,9 @@
 {
   "entrypoints": {
     "shipping-slot-js": {
+      "css": [
+        "/public/shipping-slot-js.css"
+      ],
       "js": [
         "/public/js/shipping-slot-js.js"
       ]
