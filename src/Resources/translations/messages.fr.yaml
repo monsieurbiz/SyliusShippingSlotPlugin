@@ -8,6 +8,7 @@ monsieurbiz_shipping_slot:
         no_shipping_slot_config: 'Pas de créneaux de livraison pour ce mode'
         use_shipping_slot_configuration: 'Utilisez une configuration de créneaux de livraison pour afficher à vos client un calendrier avec les créneaux disponibles pour leurs colis.'
         list_view: 'Liste'
+        slot_select_error: 'Ce créneau n''est plus disponible'
         form:
             name: 'Nom de la configuration'
             rrules: 'Règles de récurrence'
