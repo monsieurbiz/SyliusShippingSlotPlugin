@@ -143,4 +143,14 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     {
         $this->color = $color;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSlotDelay(): int
+    {
+        return
+            (int) $this->getPreparationDelay() > (int) $this->getPickupDelay() ?
+            (int) $this->getPreparationDelay() : (int) $this->getPickupDelay();
+    }
 }
