@@ -14,3 +14,7 @@ sylius_ui:
             blocks:
                 monsieurbiz_shipping_slot_styles:
                     template: '@MonsieurBizSyliusShippingSlotPlugin/Shop/_styles.html.twig'
+        sylius.shop.checkout.select_shipping.after_method:
+            blocks:
+                monsieurbiz_shipping_slot_calendar:
+                    template: '@MonsieurBizSyliusShippingSlotPlugin/Shop/ShippingMethod/calendar.html.twig'
