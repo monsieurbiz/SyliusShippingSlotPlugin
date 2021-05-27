@@ -1,20 +1,24 @@
 import { Calendar } from "@fullcalendar/core";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list";
 import allLocales from "@fullcalendar/core/locales-all";
+import rrulePlugin from "@fullcalendar/rrule";
 
-import '@fullcalendar/timegrid/main.css';
+import "@fullcalendar/timegrid/main.css";
 
 global.MonsieurBizShippingSlotManager = class {
   constructor(
     shippingMethodInputs,
     nextStepButtons,
     calendarContainers,
+    fullCalendarConfig,
     listSlotsUrl
   ) {
     this.shippingMethodInputs = shippingMethodInputs;
     this.nextStepButtons = nextStepButtons;
     this.listSlotsUrl = listSlotsUrl;
     this.calendarContainers = calendarContainers;
+    this.fullCalendarConfig = fullCalendarConfig;
     this.initShippingMethodInputs();
   }
 
@@ -40,26 +44,32 @@ global.MonsieurBizShippingSlotManager = class {
     this.disableButtons();
     let shippingSlotManager = this;
     this.listShippingSlotsForAMethod(shippingMethodInput.value, function () {
-      // this = req
-      if (this.status === 200) {
-        let data = JSON.parse(this.responseText);
-        shippingSlotManager.hideCalendars();
-        // Authorize user to go to next step if no slot needed
-        if (typeof data.form_html === "undefined") {
-          shippingSlotManager.enableButtons();
-          return;
-        }
-
-        for (let calendarContainer of shippingSlotManager.calendarContainers) {
-          if (calendarContainer.classList.contains(shippingMethodInput.value)) {
-            shippingSlotManager.initCalendar(calendarContainer);
-          }
-        }
-
-        // Display form
-        console.log(data);
-      } else {
+      if (this.status !== 200) {
         shippingSlotManager.enableButtons();
+        return;
+      }
+
+      let data = JSON.parse(this.responseText);
+      let rules = new MonsieurBizShippingSlotRules(
+        data.rrules,
+        data.duration,
+        data.startDate
+      );
+
+      // Hide calendars
+      shippingSlotManager.hideCalendars();
+
+      // Authorize user to go to next step if no slot needed
+      if (typeof data.rrules === "undefined") {
+        shippingSlotManager.enableButtons();
+        return;
+      }
+
+      // Init calendar
+      for (let calendarContainer of shippingSlotManager.calendarContainers) {
+        if (calendarContainer.classList.contains(shippingMethodInput.value)) {
+          shippingSlotManager.initCalendar(calendarContainer, rules);
+        }
       }
     });
   }
@@ -91,34 +101,79 @@ global.MonsieurBizShippingSlotManager = class {
     }
   }
 
-  initCalendar(calendarContainer) {
+  initCalendar(calendarContainer, rules) {
     calendarContainer.style.display = "block";
-    let calendar = new Calendar(calendarContainer, {
-      plugins: [timeGridPlugin],
-      initialView: "timeGridWeek",
-      contentHeight: "auto",
-      slotMinTime: "06:00:00",
-      slotMaxTime: "22:00:00",
-      locales: allLocales,
-      locale: "fr",
-      firstDay: 1,
-      allDaySlot: false,
-      selectable: true,
-      headerToolbar: {
-        left: 'today prev,next',
-        center: 'title',
-        right: 'timeGridWeek,timeGridDay',
-      },
-      events:  [
+    let events = [];
+    for (let rrule of rules.getRrules()) {
+      events.push({
+        rrule: "DTSTART:" + rules.getStartDate() + "\n" + rrule,
+        duration: rules.getDuration(),
+      });
+    }
+    let calendar = new Calendar(
+      calendarContainer,
+      Object.assign(
         {
-            start: '2021-05-27T10:30:00',
-            end: '2021-05-27T11:30:00',
-        }
-      ],
-      eventClick: function (info) {
-        console.log(info.event);
-      }
-    });
+          plugins: [timeGridPlugin, listPlugin, rrulePlugin],
+          locales: allLocales,
+          initialView: "timeGridWeek",
+          contentHeight: "auto",
+          allDaySlot: false,
+          slotDuration: "00:30",
+          headerToolbar: {
+            left: "today prev,next",
+            center: "title",
+            right: "timeGridWeek,timeGridDay,listDay",
+          },
+          events: events,
+          eventClick: function (info) {
+            console.log(info.event);
+          },
+        },
+        this.fullCalendarConfig // Merge and override config with the given one
+      )
+    );
     calendar.render();
   }
+};
+
+global.MonsieurBizShippingSlotRules = class {
+  constructor(rrules, duration, startDate) {
+    this.rrules = rrules;
+    this.duration = duration;
+    this.startDate = startDate;
+  }
+
+  getRrules() {
+    return this.rrules;
+  }
+
+  /**
+   * Return duration on format HH:mm (example : `02:00`)
+   */
+  getDuration() {
+    let duration = this.duration;
+    let hours = parseInt(this.duration / 60, 10);
+    let minutes = duration - hours * 60;
+    return (
+      String(hours).padStart(2, "0") + ":" + String(minutes).padStart(2, "0")
+    );
+  }
+
+  /**
+   * Return duration on format YYYYMMDDTHiSZ (example : `20210101T113000Z`)
+   */
+  getStartDate() {
+    let date = new Date(this.startDate);
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, "0"); // Month is from 0 to 11
+    let day = String(date.getDate()).padStart(2, "0");
+    let hours = String(date.getHours()).padStart(2, "0");
+    let minutes = String(date.getMinutes()).padStart(2, "0");
+    let seconds = String(date.getSeconds()).padStart(2, "0");
+    console.log(`${year}${month}${day}T${hours}${minutes}${seconds}Z`);
+    return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+  }
+
+  formatstar;
 };
