@@ -15,6 +15,8 @@ global.MonsieurBizShippingSlotManager = class {
     slotStyle,
     selectedSlotStyle,
     listSlotsUrl,
+    saveSlotUrl,
+    slotSelectError,
   ) {
     this.shippingMethodInputs = shippingMethodInputs;
     this.nextStepButtons = nextStepButtons;
@@ -23,6 +25,8 @@ global.MonsieurBizShippingSlotManager = class {
     this.slotStyle = slotStyle;
     this.selectedSlotStyle = selectedSlotStyle;
     this.listSlotsUrl = listSlotsUrl;
+    this.saveSlotUrl = saveSlotUrl;
+    this.slotSelectError = slotSelectError;
     this.previousSlot = null;
     this.initShippingMethodInputs();
   }
@@ -79,6 +83,21 @@ global.MonsieurBizShippingSlotManager = class {
     });
   }
 
+  selectSlot(slot) {
+    this.disableButtons();
+    let shippingSlotManager = this;
+    this.saveSlot(slot, function () {
+      if (this.status !== 200) {
+        alert(shippingSlotManager.slotSelectError);
+        return;
+      }
+
+      let data = JSON.parse(this.responseText);
+      console.log(data);
+      shippingSlotManager.enableButtons();
+    });
+  }
+
   listShippingSlotsForAMethod(shippingMethodCode, callback) {
     let req = new XMLHttpRequest();
     req.onload = callback;
@@ -86,6 +105,16 @@ global.MonsieurBizShippingSlotManager = class {
     req.open("get", url.replace("__CODE__", shippingMethodCode), true);
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     req.send();
+  }
+
+  saveSlot(slot, callback) {
+    let req = new XMLHttpRequest();
+    req.onload = callback;
+    req.open("post", this.saveSlotUrl, true);
+    req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    let data = new FormData();
+    data.append('slot', JSON.stringify(slot));
+    req.send(data);
   }
 
   disableButtons() {
@@ -149,11 +178,15 @@ global.MonsieurBizShippingSlotManager = class {
           eventBackgroundColor: this.slotStyle.backgroundColor,
           eventBorderColor: this.slotStyle.borderColor,
           eventClick: function (info) {
+            // Change slot display
             shippingSlotManager.applySelectedSlotStyle(info);
             if (shippingSlotManager.previousSlot !== null) {
               shippingSlotManager.applySlotStyle(shippingSlotManager.previousSlot);
             }
             shippingSlotManager.previousSlot = info;
+
+            // Save selected slot
+            shippingSlotManager.selectSlot(info);
           },
           eventContent: function (info) {
             // Will be used to hide non available slots
