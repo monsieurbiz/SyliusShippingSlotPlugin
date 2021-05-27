@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use DateTime;
+use DateInterval;
 
 
 class SlotController extends AbstractController
@@ -23,18 +26,26 @@ class SlotController extends AbstractController
     public function listAction(Request $request, string $code): Response
     {
         // Find shipping method from code
+        /** @var ShippingMethodInterface $shippingMethod */
         if (!$shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $code])) {
             throw $this->createNotFoundException(sprintf('Shipping method "%s" not found', $code));
         }
 
         // No need to load slots if shipping method has no slot configuration
-        if (!$shippingMethod->getShippingSlotConfig()) {
+        if (!($shipingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
             return new JsonResponse(['code' => $code]);
         }
 
+
+
+        $startDate = new DateTime();
+        $startDate->add(new DateInterval(sprintf('PT%dM', $shipingSlotConfig->getSlotDelay()))); // Add minutes delay
+
         return new JsonResponse([
             'code' => $code,
-            'form_html' => '',
+            'rrules' => $shipingSlotConfig->getRrules(),
+            'duration' => $shipingSlotConfig->getDurationRange(),
+            'startDate' => $startDate->format(DateTime::W3C),
         ]);
     }
 }
