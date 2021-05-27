@@ -7,6 +7,7 @@ monsieurbiz_shipping_slot:
         edit_shipping_slot_config: 'Éditer une configuration de créneaux'
         no_shipping_slot_config: 'Pas de créneaux de livraison pour ce mode'
         use_shipping_slot_configuration: 'Utilisez une configuration de créneaux de livraison pour afficher à vos client un calendrier avec les créneaux disponibles pour leurs colis.'
+        list_view: 'Liste'
         form:
             name: 'Nom de la configuration'
             rrules: 'Règles de récurrence'

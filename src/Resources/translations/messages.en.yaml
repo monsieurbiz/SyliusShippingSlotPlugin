@@ -7,6 +7,7 @@ monsieurbiz_shipping_slot:
         edit_shipping_slot_config: 'Edit shipping slot configuration'
         no_shipping_slot_config: 'No slot configuration for this method'
         use_shipping_slot_configuration: 'Use a shipping slot configuration if you want to display to your customers a calendar with available dates and times to retrieve their package.'
+        list_view: 'list'
         form:
             name: 'Configuration''s name'
             rrules: 'Recurrence rules'
