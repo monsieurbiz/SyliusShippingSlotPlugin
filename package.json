@@ -22,6 +22,9 @@
   },
   "dependencies": {
     "@fullcalendar/core": "^5.7.0",
-    "@fullcalendar/timegrid": "^5.7.0"
+    "@fullcalendar/list": "^5.7.0",
+    "@fullcalendar/rrule": "^5.7.0",
+    "@fullcalendar/timegrid": "^5.7.0",
+    "rrule": "^2.6.8"
   }
 }
