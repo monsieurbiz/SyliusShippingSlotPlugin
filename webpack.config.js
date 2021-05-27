@@ -13,7 +13,6 @@ Encore
     .disableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
-    .enableVersioning(Encore.isProduction())
 
     // organise files
     .configureFilenames({
