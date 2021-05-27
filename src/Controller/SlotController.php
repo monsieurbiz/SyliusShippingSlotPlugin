@@ -36,8 +36,6 @@ class SlotController extends AbstractController
             return new JsonResponse(['code' => $code]);
         }
 
-
-
         $startDate = new DateTime();
         $startDate->add(new DateInterval(sprintf('PT%dM', $shipingSlotConfig->getSlotDelay()))); // Add minutes delay
 
@@ -47,5 +45,17 @@ class SlotController extends AbstractController
             'duration' => $shipingSlotConfig->getDurationRange(),
             'startDate' => $startDate->format(DateTime::W3C),
         ]);
+    }
+
+    public function saveAction(Request $request): Response
+    {
+        $data = $request->get('slot', '{}');
+        $data = json_decode($data, true);
+
+        if (!isset($data['event']) || !isset($data['event']['start'])) {
+            throw $this->createNotFoundException('Start date not defined');
+        }
+
+        return new JsonResponse([]);
     }
 }
