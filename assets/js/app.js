@@ -12,13 +12,18 @@ global.MonsieurBizShippingSlotManager = class {
     nextStepButtons,
     calendarContainers,
     fullCalendarConfig,
-    listSlotsUrl
+    slotStyle,
+    selectedSlotStyle,
+    listSlotsUrl,
   ) {
     this.shippingMethodInputs = shippingMethodInputs;
     this.nextStepButtons = nextStepButtons;
-    this.listSlotsUrl = listSlotsUrl;
     this.calendarContainers = calendarContainers;
     this.fullCalendarConfig = fullCalendarConfig;
+    this.slotStyle = slotStyle;
+    this.selectedSlotStyle = selectedSlotStyle;
+    this.listSlotsUrl = listSlotsUrl;
+    this.previousSlot = null;
     this.initShippingMethodInputs();
   }
 
@@ -101,6 +106,18 @@ global.MonsieurBizShippingSlotManager = class {
     }
   }
 
+  applySlotStyle(slot) {
+    slot.el.querySelector('.fc-event-main').style.color = this.slotStyle.textColor;
+    slot.el.style.borderColor = this.slotStyle.borderColor;
+    slot.el.style.backgroundColor = this.slotStyle.backgroundColor;
+  }
+
+  applySelectedSlotStyle(slot) {
+    slot.el.querySelector('.fc-event-main').style.color = this.selectedSlotStyle.textColor;
+    slot.el.style.borderColor = this.selectedSlotStyle.borderColor;
+    slot.el.style.backgroundColor = this.selectedSlotStyle.backgroundColor;
+  }
+
   initCalendar(calendarContainer, rules) {
     calendarContainer.style.display = "block";
     let events = [];
@@ -110,6 +127,7 @@ global.MonsieurBizShippingSlotManager = class {
         duration: rules.getDuration(),
       });
     }
+    let shippingSlotManager = this;
     let calendar = new Calendar(
       calendarContainer,
       Object.assign(
@@ -126,9 +144,21 @@ global.MonsieurBizShippingSlotManager = class {
             right: "timeGridWeek,timeGridDay,listDay",
           },
           events: events,
+          progressiveEventRendering: true,
+          eventTextColor: this.slotStyle.textColor,
+          eventBackgroundColor: this.slotStyle.backgroundColor,
+          eventBorderColor: this.slotStyle.borderColor,
           eventClick: function (info) {
-            console.log(info.event);
+            shippingSlotManager.applySelectedSlotStyle(info);
+            if (shippingSlotManager.previousSlot !== null) {
+              shippingSlotManager.applySlotStyle(shippingSlotManager.previousSlot);
+            }
+            shippingSlotManager.previousSlot = info;
           },
+          eventContent: function (info) {
+            // Will be used to hide non available slots
+            // info.event.setProp('display', 'none');
+          }
         },
         this.fullCalendarConfig // Merge and override config with the given one
       )
@@ -171,7 +201,6 @@ global.MonsieurBizShippingSlotRules = class {
     let hours = String(date.getHours()).padStart(2, "0");
     let minutes = String(date.getMinutes()).padStart(2, "0");
     let seconds = String(date.getSeconds()).padStart(2, "0");
-    console.log(`${year}${month}${day}T${hours}${minutes}${seconds}Z`);
     return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
   }
 
