@@ -30,3 +30,8 @@ sylius_shipping:
         shipment:
             classes:
                 model: App\Entity\Shipment
+sylius_order:
+    resources:
+        order:
+            classes:
+                model: App\Entity\Order
