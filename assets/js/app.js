@@ -178,9 +178,15 @@ global.MonsieurBizShippingSlotManager = class {
           eventBackgroundColor: this.slotStyle.backgroundColor,
           eventBorderColor: this.slotStyle.borderColor,
           eventClick: function (info) {
-            // Change slot display
+            // Apply slot selected display
             shippingSlotManager.applySelectedSlotStyle(info);
-            if (shippingSlotManager.previousSlot !== null) {
+
+            // Remove old selected slot style if it's different of the current one
+            if (
+              shippingSlotManager.previousSlot !== null
+              && shippingSlotManager.previousSlot.event !== null
+              && shippingSlotManager.previousSlot.event.start.valueOf() !== info.event.start.valueOf()
+            ) {
               shippingSlotManager.applySlotStyle(shippingSlotManager.previousSlot);
             }
             shippingSlotManager.previousSlot = info;
