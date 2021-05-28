@@ -166,11 +166,10 @@ global.MonsieurBizShippingSlotManager = class {
           initialView: "timeGridWeek",
           contentHeight: "auto",
           allDaySlot: false,
-          slotDuration: "00:30",
           headerToolbar: {
             left: "today prev,next",
             center: "title",
-            right: "timeGridWeek,timeGridDay,listDay",
+            right: "timeGridWeek,timeGridDay",
           },
           events: events,
           progressiveEventRendering: true,
