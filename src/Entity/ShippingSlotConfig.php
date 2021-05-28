@@ -153,4 +153,9 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
             (int) $this->getPreparationDelay() > (int) $this->getPickupDelay() ?
             (int) $this->getPreparationDelay() : (int) $this->getPickupDelay();
     }
+
+    public function __toString(): string
+    {
+        return (string) $this->getName();
+    }
 }
