@@ -19,33 +19,39 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sylius\Component\Order\Context\CartContextInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Repository\SlotRepositoryInterface;
+use DateTime;
 
 class SlotGenerator implements SlotGeneratorInterface
 {
     private CartContextInterface $cartContext;
     private FactoryInterface $slotFactory;
-    private RepositoryInterface $shippingMethodRepository;
+    private ShippingMethodRepositoryInterface $shippingMethodRepository;
+    private SlotRepositoryInterface $slotRepository;
     private EntityManagerInterface $slotManager;
 
     /**
      * @param CartContextInterface $cartContext
      * @param FactoryInterface $slotFactory
-     * @param RepositoryInterface $shippingMethodRepository
+     * @param ShippingMethodRepositoryInterface $shippingMethodRepository
+     * @param SlotRepositoryInterface $slotRepository
      * @param EntityManagerInterface $slotManager
      */
     public function __construct(
         CartContextInterface $cartContext,
         FactoryInterface $slotFactory,
-        RepositoryInterface $shippingMethodRepository,
+        ShippingMethodRepositoryInterface $shippingMethodRepository,
+        SlotRepositoryInterface $slotRepository,
         EntityManagerInterface $slotManager
     ) {
         $this->cartContext = $cartContext;
         $this->slotFactory = $slotFactory;
         $this->shippingMethodRepository = $shippingMethodRepository;
+        $this->slotRepository = $slotRepository;
         $this->slotManager = $slotManager;
     }
 
@@ -134,5 +140,30 @@ class SlotGenerator implements SlotGeneratorInterface
         }
 
         return $shipment->getSlot();
+    }
+
+    public function getUnavailableTimestamps(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array
+    {
+        if (null === ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
+            return [];
+        }
+
+        $fullTimestamps = [];
+        $slotsByTimestamp = [];
+        $availableSpots = (int) $shippingSlotConfig->getAvailableSpots();
+
+        $slots = $this->slotRepository->findByMethodAndDate($shippingMethod, $from);
+        /** @var SlotInterface $slot */
+        foreach ($slots as $slot) {
+            $slotsByTimestamp[$slot->getTimestamp()->format(DateTime::W3C)][] = $slot;
+        }
+
+        // Add full slots in unavailable list
+        foreach ($slotsByTimestamp as $timestamp => $timestampSlots) {
+            if (count($timestampSlots) >= $availableSpots) {
+                $fullTimestamps[] = $timestamp;
+            }
+        }
+        return $fullTimestamps;
     }
 }

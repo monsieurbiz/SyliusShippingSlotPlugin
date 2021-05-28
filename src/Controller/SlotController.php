@@ -14,11 +14,12 @@ use DateTime;
 use DateInterval;
 use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
 use Exception;
-
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class SlotController extends AbstractController
 {
     private ShippingMethodRepositoryInterface $shippingMethodRepository;
+    private RepositoryInterface $slotRepository;
     private SlotGeneratorInterface $slotGenerator;
 
     /**
@@ -27,9 +28,11 @@ class SlotController extends AbstractController
      */
     public function __construct(
         ShippingMethodRepositoryInterface $shippingMethodRepository,
+        RepositoryInterface $slotRepository,
         SlotGeneratorInterface $slotGenerator
     ) {
         $this->shippingMethodRepository = $shippingMethodRepository;
+        $this->slotRepository = $slotRepository;
         $this->slotGenerator = $slotGenerator;
     }
 
@@ -59,6 +62,7 @@ class SlotController extends AbstractController
             'rrules' => $shipingSlotConfig->getRrules(),
             'duration' => $shipingSlotConfig->getDurationRange(),
             'startDate' => $startDate->format(DateTime::W3C),
+            'unavailableDates' => $this->slotGenerator->getUnavailableTimestamps($shippingMethod, $startDate),
         ]);
     }
 

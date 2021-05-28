@@ -15,6 +15,7 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Generator;
 
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 use DateTimeInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 
 interface SlotGeneratorInterface
 {
@@ -32,4 +33,9 @@ interface SlotGeneratorInterface
      * @return SlotInterface|null
      */
     public function getSlot(int $shipmentIndex): ?SlotInterface;
+
+    /**
+     * @return array
+     */
+    public function getUnavailableTimestamps(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array;
 }
