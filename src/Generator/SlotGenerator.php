@@ -117,4 +117,22 @@ class SlotGenerator implements SlotGeneratorInterface
         $this->slotManager->remove($slot);
         $this->slotManager->flush();
     }
+
+    /**
+     * @return SlotInterface|null
+     */
+    public function getSlot(int $shipmentIndex): ?SlotInterface
+    {
+        /** @var OrderInterface $order */
+        $order = $this->cartContext->getCart();
+        $shipments = $order->getShipments();
+
+        /** @var ShipmentInterface $shipment */
+        $shipment = $shipments->get($shipmentIndex) ?? null;
+        if (null === $shipment) {
+            throw new Exception(sprintf('Cannot find shipment index "%d"', $shipmentIndex));
+        }
+
+        return $shipment->getSlot();
+    }
 }

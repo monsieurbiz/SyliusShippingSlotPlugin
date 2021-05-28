@@ -15,3 +15,9 @@ monsieurbiz_shippingslot_checkout_resetslot:
     methods: [POST]
     defaults:
         _controller: MonsieurBiz\SyliusShippingSlotPlugin\Controller\SlotController:resetAction
+
+monsieurbiz_shippingslot_checkout_getslot:
+    path: /monsieurbiz_shippingslots/get/{shipmentIndex}
+    methods: [GET]
+    defaults:
+        _controller: MonsieurBiz\SyliusShippingSlotPlugin\Controller\SlotController:getAction

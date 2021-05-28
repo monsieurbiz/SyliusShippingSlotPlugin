@@ -27,4 +27,9 @@ interface SlotGeneratorInterface
      * @return void
      */
     public function resetSlot(int $shipmentIndex): void;
+
+    /**
+     * @return SlotInterface|null
+     */
+    public function getSlot(int $shipmentIndex): ?SlotInterface;
 }

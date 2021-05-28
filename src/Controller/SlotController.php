@@ -112,4 +112,26 @@ class SlotController extends AbstractController
 
         return new JsonResponse([]);
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function getAction(Request $request, int $shipmentIndex): Response
+    {
+        try {
+            $slot = $this->slotGenerator->getSlot($shipmentIndex);
+        } catch (Exception $e) {
+            throw $this->createNotFoundException($e->getMessage());
+        }
+
+        if (null === $slot) {
+            return new JsonResponse([]);
+        }
+
+        return new JsonResponse([
+            'duration' => $slot->getDurationRange(),
+            'startDate' => $slot->getTimestamp()->format(DateTime::W3C),
+        ]);
+    }
 }

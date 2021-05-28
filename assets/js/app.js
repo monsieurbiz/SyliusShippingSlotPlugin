@@ -17,7 +17,8 @@ global.MonsieurBizShippingSlotManager = class {
     listSlotsUrl,
     saveSlotUrl,
     resetSlotUrl,
-    slotSelectError,
+    getSlotUrl,
+    slotSelectError
   ) {
     this.shippingMethodInputs = shippingMethodInputs;
     this.nextStepButtons = nextStepButtons;
@@ -28,6 +29,7 @@ global.MonsieurBizShippingSlotManager = class {
     this.listSlotsUrl = listSlotsUrl;
     this.saveSlotUrl = saveSlotUrl;
     this.resetSlotUrl = resetSlotUrl;
+    this.getSlotUrl = getSlotUrl;
     this.slotSelectError = slotSelectError;
     this.previousSlot = null;
     this.initShippingMethodInputs();
@@ -56,7 +58,7 @@ global.MonsieurBizShippingSlotManager = class {
     this.resetSlot(shippingMethodInput, function () {
       // Display load slots for selected method
       shippingSlotManager.displayInputSlots(shippingMethodInput);
-    })
+    });
   }
 
   displayInputSlots(shippingMethodInput) {
@@ -69,11 +71,6 @@ global.MonsieurBizShippingSlotManager = class {
       }
 
       let data = JSON.parse(this.responseText);
-      let rules = new MonsieurBizShippingSlotRules(
-        data.rrules,
-        data.duration,
-        data.startDate
-      );
 
       // Hide calendars
       shippingSlotManager.hideCalendars();
@@ -84,12 +81,44 @@ global.MonsieurBizShippingSlotManager = class {
         return;
       }
 
-      // Init calendar
-      for (let calendarContainer of shippingSlotManager.calendarContainers) {
-        if (calendarContainer.classList.contains(shippingMethodInput.value)) {
-          shippingSlotManager.initCalendar(calendarContainer, rules);
+      let rules = new MonsieurBizShippingSlotRules(
+        data.rrules,
+        data.duration,
+        data.startDate
+      );
+
+      // Retrieve current slot and manage display
+      shippingSlotManager.getSlot(
+        shippingMethodInput.getAttribute("tabIndex"),
+        function () {
+          let currentSlot = null;
+          if (this.status === 200) {
+            let data = JSON.parse(this.responseText);
+            if (
+              typeof data.startDate !== "undefined" &&
+              typeof data.duration !== "undefined"
+            ) {
+              currentSlot = new MonsieurBizShippingSlotSlot(
+                data.startDate,
+                data.duration
+              );
+            }
+
+            // Init calendar
+            for (let calendarContainer of shippingSlotManager.calendarContainers) {
+              if (
+                calendarContainer.classList.contains(shippingMethodInput.value)
+              ) {
+                shippingSlotManager.initCalendar(
+                  calendarContainer,
+                  rules,
+                  currentSlot
+                );
+              }
+            }
+          }
         }
-      }
+      );
     });
   }
 
@@ -103,9 +132,6 @@ global.MonsieurBizShippingSlotManager = class {
             alert(shippingSlotManager.slotSelectError);
             return;
           }
-
-          let data = JSON.parse(this.responseText);
-          console.log(data);
           shippingSlotManager.enableButtons();
         });
       }
@@ -127,9 +153,9 @@ global.MonsieurBizShippingSlotManager = class {
     req.open("post", this.saveSlotUrl, true);
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     let data = new FormData();
-    data.append('slot', JSON.stringify(slot));
-    data.append('shippingMethod', shippingMethodInput.value);
-    data.append('shipmentIndex', shippingMethodInput.getAttribute('tabIndex'))
+    data.append("slot", JSON.stringify(slot));
+    data.append("shippingMethod", shippingMethodInput.value);
+    data.append("shipmentIndex", shippingMethodInput.getAttribute("tabIndex"));
     req.send(data);
   }
 
@@ -139,8 +165,21 @@ global.MonsieurBizShippingSlotManager = class {
     req.open("post", this.resetSlotUrl, true);
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     let data = new FormData();
-    data.append('shipmentIndex', shippingMethodInput.getAttribute('tabIndex'))
+    data.append("shipmentIndex", shippingMethodInput.getAttribute("tabIndex"));
     req.send(data);
+  }
+
+  getSlot(shippingMethodIndex, callback) {
+    let req = new XMLHttpRequest();
+    req.onload = callback;
+    let url = this.getSlotUrl;
+    req.open(
+      "get",
+      url.replace("__INDEX__", Number.parseInt(shippingMethodIndex)),
+      true
+    );
+    req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    req.send();
   }
 
   disableButtons() {
@@ -162,18 +201,20 @@ global.MonsieurBizShippingSlotManager = class {
   }
 
   applySlotStyle(slot) {
-    slot.el.querySelector('.fc-event-main').style.color = this.slotStyle.textColor;
+    slot.el.querySelector(".fc-event-main").style.color =
+      this.slotStyle.textColor;
     slot.el.style.borderColor = this.slotStyle.borderColor;
     slot.el.style.backgroundColor = this.slotStyle.backgroundColor;
   }
 
   applySelectedSlotStyle(slot) {
-    slot.el.querySelector('.fc-event-main').style.color = this.selectedSlotStyle.textColor;
+    slot.el.querySelector(".fc-event-main").style.color =
+      this.selectedSlotStyle.textColor;
     slot.el.style.borderColor = this.selectedSlotStyle.borderColor;
     slot.el.style.backgroundColor = this.selectedSlotStyle.backgroundColor;
   }
 
-  initCalendar(calendarContainer, rules) {
+  initCalendar(calendarContainer, rules, currentSlot) {
     calendarContainer.style.display = "block";
     let events = [];
     for (let rrule of rules.getRrules()) {
@@ -208,11 +249,14 @@ global.MonsieurBizShippingSlotManager = class {
 
             // Remove old selected slot style if it's different of the current one
             if (
-              shippingSlotManager.previousSlot !== null
-              && shippingSlotManager.previousSlot.event !== null
-              && shippingSlotManager.previousSlot.event.start.valueOf() !== info.event.start.valueOf()
+              shippingSlotManager.previousSlot !== null &&
+              shippingSlotManager.previousSlot.event !== null &&
+              shippingSlotManager.previousSlot.event.start.valueOf() !==
+                info.event.start.valueOf()
             ) {
-              shippingSlotManager.applySlotStyle(shippingSlotManager.previousSlot);
+              shippingSlotManager.applySlotStyle(
+                shippingSlotManager.previousSlot
+              );
             }
             shippingSlotManager.previousSlot = info;
 
@@ -222,7 +266,20 @@ global.MonsieurBizShippingSlotManager = class {
           eventContent: function (info) {
             // Will be used to hide non available slots
             // info.event.setProp('display', 'none');
-          }
+          },
+          eventDidMount: function (info) {
+            // Display selected the current slot
+            if (
+              info.event !== null &&
+              currentSlot !== null &&
+              currentSlot.getStartDate() !== null &&
+              currentSlot.getStartDate().valueOf() ===
+                info.event.start.valueOf()
+            ) {
+              shippingSlotManager.applySelectedSlotStyle(info);
+              shippingSlotManager.enableButtons();
+            }
+          },
         },
         this.fullCalendarConfig // Merge and override config with the given one
       )
@@ -267,6 +324,20 @@ global.MonsieurBizShippingSlotRules = class {
     let seconds = String(date.getSeconds()).padStart(2, "0");
     return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
   }
+};
 
-  formatstar;
+global.MonsieurBizShippingSlotSlot = class {
+  constructor(startDate, duration) {
+    this.startDate = startDate;
+    this.duration = duration;
+  }
+
+  getStartDate() {
+    let date = new Date(this.startDate);
+    return date;
+  }
+
+  getDuration() {
+    return this.duration;
+  }
 };
