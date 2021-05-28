@@ -9,3 +9,9 @@ monsieurbiz_shippingslot_checkout_saveslot:
     methods: [POST]
     defaults:
         _controller: MonsieurBiz\SyliusShippingSlotPlugin\Controller\SlotController:saveAction
+
+monsieurbiz_shippingslot_checkout_resetslot:
+    path: /monsieurbiz_shippingslots/reset/
+    methods: [POST]
+    defaults:
+        _controller: MonsieurBiz\SyliusShippingSlotPlugin\Controller\SlotController:resetAction

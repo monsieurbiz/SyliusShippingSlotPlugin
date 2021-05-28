@@ -16,6 +16,7 @@ global.MonsieurBizShippingSlotManager = class {
     selectedSlotStyle,
     listSlotsUrl,
     saveSlotUrl,
+    resetSlotUrl,
     slotSelectError,
   ) {
     this.shippingMethodInputs = shippingMethodInputs;
@@ -26,6 +27,7 @@ global.MonsieurBizShippingSlotManager = class {
     this.selectedSlotStyle = selectedSlotStyle;
     this.listSlotsUrl = listSlotsUrl;
     this.saveSlotUrl = saveSlotUrl;
+    this.resetSlotUrl = resetSlotUrl;
     this.slotSelectError = slotSelectError;
     this.previousSlot = null;
     this.initShippingMethodInputs();
@@ -44,9 +46,17 @@ global.MonsieurBizShippingSlotManager = class {
   initShippingMethodInput(shippingMethodInput) {
     let shippingSlotManager = this;
     shippingMethodInput.addEventListener("change", function () {
-      // On shipping method change, display load slots for selected method
-      shippingSlotManager.displayInputSlots(shippingMethodInput);
+      shippingSlotManager.changeShippingMethod(shippingMethodInput);
     });
+  }
+
+  changeShippingMethod(shippingMethodInput) {
+    let shippingSlotManager = this;
+    // Reset existing slot if needed
+    this.resetSlot(shippingMethodInput, function () {
+      // Display load slots for selected method
+      shippingSlotManager.displayInputSlots(shippingMethodInput);
+    })
   }
 
   displayInputSlots(shippingMethodInput) {
@@ -119,6 +129,16 @@ global.MonsieurBizShippingSlotManager = class {
     let data = new FormData();
     data.append('slot', JSON.stringify(slot));
     data.append('shippingMethod', shippingMethodInput.value);
+    data.append('shipmentIndex', shippingMethodInput.getAttribute('tabIndex'))
+    req.send(data);
+  }
+
+  resetSlot(shippingMethodInput, callback) {
+    let req = new XMLHttpRequest();
+    req.onload = callback;
+    req.open("post", this.resetSlotUrl, true);
+    req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    let data = new FormData();
     data.append('shipmentIndex', shippingMethodInput.getAttribute('tabIndex'))
     req.send(data);
   }

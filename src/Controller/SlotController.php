@@ -93,4 +93,23 @@ class SlotController extends AbstractController
 
         return new JsonResponse($slotElement);
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function resetAction(Request $request): Response
+    {
+        if (null === ($shipmentIndex = $request->get('shipmentIndex'))) {
+            throw $this->createNotFoundException('Shipment index not defined');
+        }
+
+        try {
+            $this->slotGenerator->resetSlot((int) $shipmentIndex);
+        } catch (Exception $e) {
+            throw $this->createNotFoundException($e->getMessage());
+        }
+
+        return new JsonResponse([]);
+    }
 }
