@@ -84,7 +84,8 @@ global.MonsieurBizShippingSlotManager = class {
       let rules = new MonsieurBizShippingSlotRules(
         data.rrules,
         data.duration,
-        data.startDate
+        data.startDate,
+        data.unavailableDates
       );
 
       // Retrieve current slot and manage display
@@ -214,6 +215,10 @@ global.MonsieurBizShippingSlotManager = class {
     slot.el.style.backgroundColor = this.selectedSlotStyle.backgroundColor;
   }
 
+  hideSlot(slot) {
+    slot.el.style.display = 'none';
+  }
+
   initCalendar(calendarContainer, rules, currentSlot) {
     calendarContainer.style.display = "block";
     let events = [];
@@ -263,11 +268,17 @@ global.MonsieurBizShippingSlotManager = class {
             // Save selected slot
             shippingSlotManager.selectSlot(info);
           },
-          eventContent: function (info) {
-            // Will be used to hide non available slots
-            // info.event.setProp('display', 'none');
-          },
           eventDidMount: function (info) {
+            // Hide non available slots
+            for (let unavailableDate of rules.getUnavailableDates()) {
+              if (
+                info.event !== null &&
+                unavailableDate.valueOf() === info.event.start.valueOf()
+              ) {
+                shippingSlotManager.hideSlot(info);
+              }
+            }
+
             // Display selected the current slot
             if (
               info.event !== null &&
@@ -289,10 +300,14 @@ global.MonsieurBizShippingSlotManager = class {
 };
 
 global.MonsieurBizShippingSlotRules = class {
-  constructor(rrules, duration, startDate) {
+  constructor(rrules, duration, startDate, unavailableDates) {
     this.rrules = rrules;
     this.duration = duration;
     this.startDate = startDate;
+    this.unavailableDates = [];
+    for (let unavailableDate of unavailableDates) {
+      this.unavailableDates.push(new Date(unavailableDate));
+    }
   }
 
   getRrules() {
@@ -323,6 +338,10 @@ global.MonsieurBizShippingSlotRules = class {
     let minutes = String(date.getMinutes()).padStart(2, "0");
     let seconds = String(date.getSeconds()).padStart(2, "0");
     return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+  }
+
+  getUnavailableDates() {
+    return this.unavailableDates;
   }
 };
 
