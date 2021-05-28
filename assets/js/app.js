@@ -86,16 +86,20 @@ global.MonsieurBizShippingSlotManager = class {
   selectSlot(slot) {
     this.disableButtons();
     let shippingSlotManager = this;
-    this.saveSlot(slot, function () {
-      if (this.status !== 200) {
-        alert(shippingSlotManager.slotSelectError);
-        return;
-      }
+    for (let shippingMethodInput of this.shippingMethodInputs) {
+      if (shippingMethodInput.checked) {
+        this.saveSlot(slot, shippingMethodInput, function () {
+          if (this.status !== 200) {
+            alert(shippingSlotManager.slotSelectError);
+            return;
+          }
 
-      let data = JSON.parse(this.responseText);
-      console.log(data);
-      shippingSlotManager.enableButtons();
-    });
+          let data = JSON.parse(this.responseText);
+          console.log(data);
+          shippingSlotManager.enableButtons();
+        });
+      }
+    }
   }
 
   listShippingSlotsForAMethod(shippingMethodCode, callback) {
@@ -107,13 +111,15 @@ global.MonsieurBizShippingSlotManager = class {
     req.send();
   }
 
-  saveSlot(slot, callback) {
+  saveSlot(slot, shippingMethodInput, callback) {
     let req = new XMLHttpRequest();
     req.onload = callback;
     req.open("post", this.saveSlotUrl, true);
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     let data = new FormData();
     data.append('slot', JSON.stringify(slot));
+    data.append('shippingMethod', shippingMethodInput.value);
+    data.append('shipmentIndex', shippingMethodInput.getAttribute('tabIndex'))
     req.send(data);
   }
 
