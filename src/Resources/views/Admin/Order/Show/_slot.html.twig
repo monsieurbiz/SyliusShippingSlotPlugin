@@ -1,0 +1,24 @@
+
+<div class="item">
+    {% if slot.shipment.method.shippingSlotConfig is defined %}
+        <div class="content">
+            <div class="channel">
+                <span class="ui medium empty circular label channel__item" style="background-color: {{ slot.shipment.method.shippingSlotConfig.color|default('#000') }}"></span>
+                <span class="channel__item">
+                    {{ slot.shipment.method.shippingSlotConfig.name }}
+                </span>
+            </div>
+        </div>
+        <br />
+    {% endif %}
+	<div class="content">
+		<div class="ui big label">
+			{{ slot.timestamp|date('d-m-Y') }}
+			<div class="detail">
+				{{ slot.timestamp|date('H:i') }}
+				-
+				{{ slot.timestamp|date_modify("+ " ~ slot.durationRange ~ " minutes")|date('H:i') }}
+			</div>
+		</div>
+	</div>
+</div>
