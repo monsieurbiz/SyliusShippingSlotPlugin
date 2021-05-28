@@ -12,17 +12,32 @@ use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use DateTime;
 use DateInterval;
+use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
+use Exception;
 
 
 class SlotController extends AbstractController
 {
     private ShippingMethodRepositoryInterface $shippingMethodRepository;
+    private SlotGeneratorInterface $slotGenerator;
 
-    public function __construct(ShippingMethodRepositoryInterface $shippingMethodRepository)
-    {
+    /**
+     * @param ShippingMethodRepositoryInterface $shippingMethodRepository
+     * @param SlotGeneratorInterface $slotGenerator
+     */
+    public function __construct(
+        ShippingMethodRepositoryInterface $shippingMethodRepository,
+        SlotGeneratorInterface $slotGenerator
+    ) {
         $this->shippingMethodRepository = $shippingMethodRepository;
+        $this->slotGenerator = $slotGenerator;
     }
 
+    /**
+     * @param Request $request
+     * @param string $code
+     * @return Response
+     */
     public function listAction(Request $request, string $code): Response
     {
         // Find shipping method from code
@@ -47,15 +62,35 @@ class SlotController extends AbstractController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function saveAction(Request $request): Response
     {
-        $data = $request->get('slot', '{}');
-        $data = json_decode($data, true);
+        if (!($shippingMethod = $request->get('shippingMethod'))) {
+            throw $this->createNotFoundException('Shipping method not defined');
+        }
 
-        if (!isset($data['event']) || !isset($data['event']['start'])) {
+        if (null === ($shipmentIndex = $request->get('shipmentIndex'))) {
+            throw $this->createNotFoundException('Shipment index not defined');
+        }
+
+        $slotElement = json_decode($request->get('slot', '{}'), true);
+        if (!isset($slotElement['event']) || !isset($slotElement['event']['start'])) {
             throw $this->createNotFoundException('Start date not defined');
         }
 
-        return new JsonResponse([]);
+        try {
+            $slot = $this->slotGenerator->createFromCheckout(
+                $shippingMethod,
+                (int) $shipmentIndex,
+                new DateTime($slotElement['event']['start'])
+            );
+        } catch (Exception $e) {
+            throw $this->createNotFoundException($e->getMessage());
+        }
+
+        return new JsonResponse($slotElement);
     }
 }
