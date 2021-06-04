@@ -27,3 +27,8 @@ services:
     MonsieurBiz\SyliusShippingSlotPlugin\Listener\AdminMenuListener:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItem }
+
+    # Remove shipping slot on cart clean
+    MonsieurBiz\SyliusShippingSlotPlugin\Listener\CartsPreRemoveListener:
+        tags:
+            - { name: kernel.event_listener, event: sylius.carts.pre_remove, method: removeExpiredCartsSlots }
