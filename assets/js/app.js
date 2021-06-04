@@ -39,7 +39,7 @@ global.MonsieurBizShippingSlotManager = class {
     for (let shippingMethodInput of this.shippingMethodInputs) {
       // On the page load, display load slots for selected method
       if (shippingMethodInput.checked) {
-        this.displayInputSlots(shippingMethodInput);
+        this.displayInputSlots(shippingMethodInput, true);
       }
       this.initShippingMethodInput(shippingMethodInput);
     }
@@ -57,11 +57,11 @@ global.MonsieurBizShippingSlotManager = class {
     // Reset existing slot if needed
     this.resetSlot(shippingMethodInput, function () {
       // Display load slots for selected method
-      shippingSlotManager.displayInputSlots(shippingMethodInput);
+      shippingSlotManager.displayInputSlots(shippingMethodInput, false);
     });
   }
 
-  displayInputSlots(shippingMethodInput) {
+  displayInputSlots(shippingMethodInput, resetSlot) {
     this.disableButtons();
     let shippingSlotManager = this;
     this.listShippingSlotsForAMethod(shippingMethodInput.value, function () {
@@ -77,7 +77,11 @@ global.MonsieurBizShippingSlotManager = class {
 
       // Authorize user to go to next step if no slot needed
       if (typeof data.rrules === "undefined") {
-        shippingSlotManager.enableButtons();
+        if (resetSlot) {
+          shippingSlotManager.resetSlot(shippingMethodInput, function () { shippingSlotManager.enableButtons() });
+        } else {
+          shippingSlotManager.enableButtons();
+        }
         return;
       }
 
