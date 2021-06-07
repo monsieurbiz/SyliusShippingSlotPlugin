@@ -38,4 +38,9 @@ interface SlotGeneratorInterface
      * @return array
      */
     public function getUnavailableTimestamps(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array;
+
+    /**
+     * @return bool
+     */
+    public function isFull(SlotInterface $slot): bool;
 }

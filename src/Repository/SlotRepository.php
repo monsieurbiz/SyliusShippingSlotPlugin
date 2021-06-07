@@ -40,4 +40,26 @@ class SlotRepository extends EntityRepository implements SlotRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @return array
+     */
+    public function findByMethodAndDate(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from = null): array
+    {
+        $queryBuilder = $this->createQueryBuilder('o')
+            ->addSelect('shipment')
+            ->leftJoin('o.shipment', 'shipment')
+            ->where('shipment.method = :shippingMethod')
+            ->setParameter('shippingMethod', $shippingMethod)
+        ;
+
+        if ($from) {
+            $queryBuilder
+                ->andWhere('o.timestamp = :from')
+                ->setParameter('from', $from)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

@@ -167,4 +167,16 @@ class SlotGenerator implements SlotGeneratorInterface
         }
         return $fullTimestamps;
     }
+
+    public function isFull(SlotInterface $slot): bool
+    {
+        /** @var ShippingMethodInterface $shippingMethod */
+        $shippingMethod = $slot->getShipment()->getMethod();
+        if (null === ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
+            return false;
+        }
+
+        $slots = $this->slotRepository->findByMethodAndDate($shippingMethod, $slot->getTimestamp());
+        return count($slots) > (int) $shippingSlotConfig->getAvailableSpots(); // Not >= because we have the current user slot
+    }
 }
