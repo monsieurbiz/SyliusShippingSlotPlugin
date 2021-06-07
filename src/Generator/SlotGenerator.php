@@ -153,7 +153,7 @@ class SlotGenerator implements SlotGeneratorInterface
         $slotsByTimestamp = [];
         $availableSpots = (int) $shippingSlotConfig->getAvailableSpots();
 
-        $slots = $this->slotRepository->findByMethodAndDate($shippingMethod, $from);
+        $slots = $this->slotRepository->findByMethodAndStartDate($shippingMethod, $from);
         /** @var SlotInterface $slot */
         foreach ($slots as $slot) {
             $slotsByTimestamp[$slot->getTimestamp()->format(DateTime::W3C)][] = $slot;

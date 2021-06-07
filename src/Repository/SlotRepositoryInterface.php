@@ -23,5 +23,5 @@ interface SlotRepositoryInterface extends ObjectRepository, RepositoryInterface
     /**
      * @return array
      */
-    public function findByMethodAndDate(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from = null): array;
+    public function findByMethodAndStartDate(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from = null): array;
 }
