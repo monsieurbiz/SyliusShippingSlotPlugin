@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 
 final class OrderPreCompleteListener
 {
@@ -46,15 +48,23 @@ final class OrderPreCompleteListener
         Assert::isInstanceOf($order, OrderInterface::class);
 
         $nonValidSlots = [];
-        /** @var SlotInterface $slot */
-        foreach ($order->getSlots() as $slot) {
-            if (!$slot->isValid() || $this->slotGenerator->isFull($slot)) {
-                $nonValidSlots[] = $slot;
-                $this->slotManager->remove($slot);
+        $missingSlots = [];
+        /** @var ShipmentInterface $shipment */
+        foreach ($order->getShipments() as $shipment) {
+            /** @var ShippingMethodInterface $shippingMethod */
+            $shippingMethod = $shipment->getMethod();
+            if ($shippingMethod->getShippingSlotConfig()) {
+                $slot = $shipment->getSlot();
+                if (null === $slot) {
+                    $missingSlots[] = $shippingMethod;
+                } elseif (!$slot->isValid() || $this->slotGenerator->isFull($slot)) {
+                    $nonValidSlots[] = $slot;
+                    $this->slotManager->remove($slot);
+                }
             }
         }
 
-        if (empty($nonValidSlots)) {
+        if (empty($nonValidSlots) && empty($missingSlots)) {
             return;
         }
 
