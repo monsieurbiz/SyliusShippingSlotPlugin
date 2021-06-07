@@ -32,3 +32,8 @@ services:
     MonsieurBiz\SyliusShippingSlotPlugin\Listener\CartsPreRemoveListener:
         tags:
             - { name: kernel.event_listener, event: sylius.carts.pre_remove, method: removeExpiredCartsSlots }
+
+    # Validate slot on checkout complete
+    MonsieurBiz\SyliusShippingSlotPlugin\Listener\OrderPreCompleteListener:
+        tags:
+            - { name: kernel.event_listener, event: sylius.order.pre_complete, method: checkSlot }
