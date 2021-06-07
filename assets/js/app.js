@@ -180,7 +180,7 @@ global.MonsieurBizShippingSlotManager = class {
     let url = this.getSlotUrl;
     req.open(
       "get",
-      url.replace("__INDEX__", Number.parseInt(shippingMethodIndex)),
+      url.replace("__INDEX__", Number.parseInt(shippingMethodIndex, 10)),
       true
     );
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -324,7 +324,7 @@ global.MonsieurBizShippingSlotRules = class {
    */
   getDuration() {
     let duration = this.duration;
-    let hours = parseInt(this.duration / 60, 10);
+    let hours = Number.parseInt(this.duration / 60, 10);
     let minutes = duration - hours * 60;
     return (
       String(hours).padStart(2, "0") + ":" + String(minutes).padStart(2, "0")
