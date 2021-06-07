@@ -28,6 +28,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
     private FactoryInterface $shippingSlotConfigFactory;
+    private RepositoryInterface $shippingMethodRepository;
     private OptionsResolver $optionsResolver;
     private Generator $faker;
 

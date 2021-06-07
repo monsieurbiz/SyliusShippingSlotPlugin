@@ -19,7 +19,6 @@ use Exception;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +27,6 @@ use Symfony\Component\HttpFoundation\Response;
 class SlotController extends AbstractController
 {
     private ShippingMethodRepositoryInterface $shippingMethodRepository;
-    private RepositoryInterface $slotRepository;
     private SlotGeneratorInterface $slotGenerator;
 
     /**
@@ -37,11 +35,9 @@ class SlotController extends AbstractController
      */
     public function __construct(
         ShippingMethodRepositoryInterface $shippingMethodRepository,
-        RepositoryInterface $slotRepository,
         SlotGeneratorInterface $slotGenerator
     ) {
         $this->shippingMethodRepository = $shippingMethodRepository;
-        $this->slotRepository = $slotRepository;
         $this->slotGenerator = $slotGenerator;
     }
 
@@ -54,8 +50,9 @@ class SlotController extends AbstractController
     public function listAction(Request $request, string $code): Response
     {
         // Find shipping method from code
-        /** @var ShippingMethodInterface $shippingMethod */
-        if (!$shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $code])) {
+        /** @var ShippingMethodInterface|null $shippingMethod */
+        $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $code]);
+        if (null === $shippingMethod) {
             throw $this->createNotFoundException(sprintf('Shipping method "%s" not found', $code));
         }
 
@@ -146,9 +143,12 @@ class SlotController extends AbstractController
             return new JsonResponse([]);
         }
 
+        /** @var DateTime $timestamp */
+        $timestamp = $slot->getTimestamp();
+
         return new JsonResponse([
             'duration' => $slot->getDurationRange(),
-            'startDate' => $slot->getTimestamp()->format(DateTime::W3C),
+            'startDate' => $timestamp->format(DateTime::W3C),
         ]);
     }
 }

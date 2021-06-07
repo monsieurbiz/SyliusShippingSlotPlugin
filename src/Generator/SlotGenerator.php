@@ -68,13 +68,13 @@ class SlotGenerator implements SlotGeneratorInterface
         $order = $this->cartContext->getCart();
         $shipments = $order->getShipments();
 
-        /** @var ShipmentInterface $shipment */
+        /** @var ShipmentInterface|null $shipment */
         $shipment = $shipments->get($shipmentIndex) ?? null;
         if (null === $shipment) {
             throw new Exception(sprintf('Cannot find shipment index "%d"', $shipmentIndex));
         }
 
-        /** @var ShippingMethodInterface $shippingMethod */
+        /** @var ShippingMethodInterface|null $shippingMethod */
         $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $shippingMethod]);
         if (null === $shippingMethod) {
             throw new Exception(sprintf('Cannot find shipping method "%s"', $shippingMethod));
@@ -82,14 +82,16 @@ class SlotGenerator implements SlotGeneratorInterface
 
         $shippingSlotConfig = $shippingMethod->getShippingSlotConfig();
         if (null === $shippingSlotConfig) {
-            throw new Exception(sprintf('Cannot find slot configuration for shipping method "%s"', $shippingMethod));
+            throw new Exception(sprintf('Cannot find slot configuration for shipping method "%s"', $shippingMethod->getName()));
         }
 
-        /** @var SlotInterface $slot */
-        if (null === ($slot = $shipment->getSlot())) {
+        $slot = $shipment->getSlot();
+        if (null === $slot) {
             $slot = $this->slotFactory->createNew();
         }
+        /** @var SlotInterface $slot */
         $slot->setShipment($shipment);
+        /** @var DateTime $startDate */
         $slot->setTimestamp($startDate->setTimezone(new DateTimeZone('UTC')));
         $slot->setDurationRange($shippingSlotConfig->getDurationRange());
         $slot->setPickupDelay($shippingSlotConfig->getPickupDelay());
@@ -110,14 +112,15 @@ class SlotGenerator implements SlotGeneratorInterface
         $order = $this->cartContext->getCart();
         $shipments = $order->getShipments();
 
-        /** @var ShipmentInterface $shipment */
+        /** @var ShipmentInterface|null $shipment */
         $shipment = $shipments->get($shipmentIndex) ?? null;
         if (null === $shipment) {
             throw new Exception(sprintf('Cannot find shipment index "%d"', $shipmentIndex));
         }
 
-        /** @var SlotInterface $slot */
-        if (null === ($slot = $shipment->getSlot())) {
+        /** @var SlotInterface|null $slot */
+        $slot = $shipment->getSlot();
+        if (null === $slot) {
             return;
         }
 
@@ -134,7 +137,7 @@ class SlotGenerator implements SlotGeneratorInterface
         $order = $this->cartContext->getCart();
         $shipments = $order->getShipments();
 
-        /** @var ShipmentInterface $shipment */
+        /** @var ShipmentInterface|null $shipment */
         $shipment = $shipments->get($shipmentIndex) ?? null;
         if (null === $shipment) {
             throw new Exception(sprintf('Cannot find shipment index "%d"', $shipmentIndex));
@@ -156,7 +159,9 @@ class SlotGenerator implements SlotGeneratorInterface
         $slots = $this->slotRepository->findByMethodAndStartDate($shippingMethod, $from);
         /** @var SlotInterface $slot */
         foreach ($slots as $slot) {
-            $slotsByTimestamp[$slot->getTimestamp()->format(DateTime::W3C)][] = $slot;
+            /** @var DateTime $timestamp */
+            $timestamp = $slot->getTimestamp();
+            $slotsByTimestamp[$timestamp->format(DateTime::W3C)][] = $slot;
         }
 
         // Add full slots in unavailable list
@@ -171,8 +176,13 @@ class SlotGenerator implements SlotGeneratorInterface
 
     public function isFull(SlotInterface $slot): bool
     {
+        $shipment = $slot->getShipment();
+        if (null === $shipment) {
+            return false;
+        }
+
         /** @var ShippingMethodInterface $shippingMethod */
-        $shippingMethod = $slot->getShipment()->getMethod();
+        $shippingMethod = $shipment->getMethod();
         if (null === ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
             return false;
         }

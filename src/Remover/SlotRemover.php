@@ -16,37 +16,28 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Remover;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\OrderInterface;
-use MonsieurBiz\SyliusShippingSlotPlugin\MonsieurBizShippingSlotExpiredCartsEvents;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class SlotRemover implements SlotRemoverInterface
 {
     private OrderRepositoryInterface $orderRepository;
     private EntityManagerInterface $slotManager;
-    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * @param OrderRepositoryInterface $orderRepository
      * @param EntityManagerInterface $slotManager
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        EntityManagerInterface $slotManager,
-        EventDispatcherInterface $eventDispatcher
+        EntityManagerInterface $slotManager
     ) {
         $this->orderRepository = $orderRepository;
         $this->slotManager = $slotManager;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function removeIdleSlots(string $expirationPeriod): void
     {
         $expiredSlotCarts = $this->orderRepository->findCartsNotModifiedSince(new DateTime('-' . $expirationPeriod));
-
-        $this->eventDispatcher->dispatch(MonsieurBizShippingSlotExpiredCartsEvents::PRE_REMOVE, new GenericEvent($expiredSlotCarts));
 
         /** @var OrderInterface $expiredSlotCart */
         foreach ($expiredSlotCarts as $expiredSlotCart) {
@@ -56,7 +47,5 @@ class SlotRemover implements SlotRemoverInterface
         }
 
         $this->slotManager->flush();
-
-        $this->eventDispatcher->dispatch(MonsieurBizShippingSlotExpiredCartsEvents::POST_REMOVE, new GenericEvent($expiredSlotCarts));
     }
 }
