@@ -21,7 +21,7 @@ monsieurbiz_shipping_slot:
         form:
             name: 'Nom de la configuration'
             rrules: 'Règles de récurrence'
-            rrules_help: 'Vous pouvez définir une nouvelle RRULE avec l''aide de <a href="https://jakubroztocil.github.io/rrule/">la démo en ligne</a>.'
+            rrules_help: 'Vous pouvez définir une nouvelle RRULE avec l''aide de <a href="https://jakubroztocil.github.io/rrule/">la démo en ligne</a>. Mettre les heures en UTC.'
             preparation_delay: 'Délai de préparation (en minutes)'
             pickup_delay: 'Délai de retrait (en minutes)'
             duration_range: 'Durée du créneau (en minutes)'

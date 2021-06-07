@@ -21,7 +21,7 @@ monsieurbiz_shipping_slot:
         form:
             name: 'Configuration''s name'
             rrules: 'Recurrence rules'
-            rrules_help: 'You can define a new RRULE with the help of <a href="https://jakubroztocil.github.io/rrule/">the online demo</a>.'
+            rrules_help: 'You can define a new RRULE with the help of <a href="https://jakubroztocil.github.io/rrule/">the online demo</a>. Use UTC times !'
             preparation_delay: 'Preparation delay (in minutes)'
             pickup_delay: 'Pickup delay (in minutes)'
             duration_range: 'Duration range of the slot (in minutes)'
