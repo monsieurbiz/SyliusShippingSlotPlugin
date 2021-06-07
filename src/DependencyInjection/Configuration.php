@@ -25,13 +25,20 @@ final class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('monsieurbiz_sylius_shipping_slot');
         if (method_exists($treeBuilder, 'getRootNode')) {
-            $treeBuilder->getRootNode();
-
-            return $treeBuilder;
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('monsieurbiz_sylius_shipping_slot');
         }
 
-        // BC layer for symfony/config 4.1 and older
-        $treeBuilder->root('monsieurbiz_sylius_shipping_slot');
+        $rootNode
+            ->children()
+            ->arrayNode('expiration')
+                ->children()
+                    ->scalarNode('slot')->isRequired()->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

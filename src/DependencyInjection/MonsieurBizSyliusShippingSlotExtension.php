@@ -25,7 +25,8 @@ final class MonsieurBizSyliusShippingSlotExtension extends Extension
      */
     public function load(array $config, ContainerBuilder $container): void
     {
-        $this->processConfiguration($this->getConfiguration([], $container), $config);
+        $configuration = $this->processConfiguration($this->getConfiguration([], $container), $config);
+        $container->setParameter('monsieurbiz_sylius_shipping_slot.slot_expiration_period', $configuration['expiration']['slot']);
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
     }
