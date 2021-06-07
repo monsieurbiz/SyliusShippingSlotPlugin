@@ -13,16 +13,15 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Listener;
 
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\OrderInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
-use Webmozart\Assert\Assert;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\RouterInterface;
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
-use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\OrderInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
+use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\RouterInterface;
+use Webmozart\Assert\Assert;
 
 final class OrderPreCompleteListener
 {

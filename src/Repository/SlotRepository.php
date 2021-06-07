@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Repository;
 
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use DateTimeInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 class SlotRepository extends EntityRepository implements SlotRepositoryInterface
 {

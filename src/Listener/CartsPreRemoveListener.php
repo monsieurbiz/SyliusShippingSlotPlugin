@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Listener;
 
-use Symfony\Component\EventDispatcher\GenericEvent;
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\OrderInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\OrderInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 final class CartsPreRemoveListener
 {

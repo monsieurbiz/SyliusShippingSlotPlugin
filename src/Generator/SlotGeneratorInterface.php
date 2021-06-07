@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Generator;
 
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 use DateTimeInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 
 interface SlotGeneratorInterface
 {

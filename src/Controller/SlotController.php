@@ -1,20 +1,29 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Shipping Slot plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
-use DateTime;
 use DateInterval;
-use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
+use DateTime;
 use Exception;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
+use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SlotController extends AbstractController
 {
@@ -39,6 +48,7 @@ class SlotController extends AbstractController
     /**
      * @param Request $request
      * @param string $code
+     *
      * @return Response
      */
     public function listAction(Request $request, string $code): Response
@@ -68,6 +78,7 @@ class SlotController extends AbstractController
 
     /**
      * @param Request $request
+     *
      * @return Response
      */
     public function saveAction(Request $request): Response
@@ -100,6 +111,7 @@ class SlotController extends AbstractController
 
     /**
      * @param Request $request
+     *
      * @return Response
      */
     public function resetAction(Request $request): Response
@@ -119,6 +131,7 @@ class SlotController extends AbstractController
 
     /**
      * @param Request $request
+     *
      * @return Response
      */
     public function getAction(Request $request, int $shipmentIndex): Response

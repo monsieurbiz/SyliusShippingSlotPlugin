@@ -98,14 +98,14 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     public function setShipment(?ShipmentInterface $shipment): void;
 
     /**
-     * Get the delay to add for start date
+     * Get the delay to add for start date.
      *
      * @return int
      */
     public function getSlotDelay(): int;
 
     /**
-     * Check if a slot is valid
+     * Check if a slot is valid.
      *
      * @return bool
      */

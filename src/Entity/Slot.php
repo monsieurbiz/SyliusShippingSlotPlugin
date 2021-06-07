@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
+use DateInterval;
+use DateTime;
 use DateTimeInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
-use DateTime;
-use DateInterval;
 
 class Slot implements SlotInterface
 {

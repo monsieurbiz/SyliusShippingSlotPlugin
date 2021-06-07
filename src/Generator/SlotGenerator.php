@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Generator;
 
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
+use DateTime;
 use DateTimeInterface;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Sylius\Component\Order\Context\CartContextInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\Component\Core\Model\OrderInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
-use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Repository\SlotRepositoryInterface;
-use DateTime;
-use DateTimeZone;
+use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
+use Sylius\Component\Order\Context\CartContextInterface;
+use Sylius\Component\Resource\Factory\FactoryInterface;
 
 class SlotGenerator implements SlotGeneratorInterface
 {
@@ -80,7 +80,7 @@ class SlotGenerator implements SlotGeneratorInterface
             throw new Exception(sprintf('Cannot find shipping method "%s"', $shippingMethod));
         }
 
-        $shippingSlotConfig = $shippingMethod ->getShippingSlotConfig();
+        $shippingSlotConfig = $shippingMethod->getShippingSlotConfig();
         if (null === $shippingSlotConfig) {
             throw new Exception(sprintf('Cannot find slot configuration for shipping method "%s"', $shippingMethod));
         }
@@ -90,7 +90,7 @@ class SlotGenerator implements SlotGeneratorInterface
             $slot = $this->slotFactory->createNew();
         }
         $slot->setShipment($shipment);
-        $slot->setTimestamp($startDate->setTimezone(new DateTimeZone("UTC")));
+        $slot->setTimestamp($startDate->setTimezone(new DateTimeZone('UTC')));
         $slot->setDurationRange($shippingSlotConfig->getDurationRange());
         $slot->setPickupDelay($shippingSlotConfig->getPickupDelay());
         $slot->setPreparationDelay($shippingSlotConfig->getPreparationDelay());
@@ -161,10 +161,11 @@ class SlotGenerator implements SlotGeneratorInterface
 
         // Add full slots in unavailable list
         foreach ($slotsByTimestamp as $timestamp => $timestampSlots) {
-            if (count($timestampSlots) >= $availableSpots) {
+            if (\count($timestampSlots) >= $availableSpots) {
                 $fullTimestamps[] = $timestamp;
             }
         }
+
         return $fullTimestamps;
     }
 
@@ -177,6 +178,7 @@ class SlotGenerator implements SlotGeneratorInterface
         }
 
         $slots = $this->slotRepository->findByMethodAndDate($shippingMethod, $slot->getTimestamp());
-        return count($slots) > (int) $shippingSlotConfig->getAvailableSpots(); // Not >= because we have the current user slot
+
+        return \count($slots) > (int) $shippingSlotConfig->getAvailableSpots(); // Not >= because we have the current user slot
     }
 }

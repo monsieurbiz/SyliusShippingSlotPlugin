@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Fixture\Factory;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\Options;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
-use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
-use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
-use Faker\Generator;
 use Faker\Factory;
+use Faker\Generator;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
+use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
+use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
+use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
+use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {

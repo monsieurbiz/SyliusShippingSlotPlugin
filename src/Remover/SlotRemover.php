@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Remover;
 
-use Doctrine\ORM\EntityManagerInterface;
 use DateTime;
-use Sylius\Component\Core\Repository\OrderRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\OrderInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\MonsieurBizShippingSlotExpiredCartsEvents;
+use Sylius\Component\Core\Repository\OrderRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class SlotRemover implements SlotRemoverInterface
 {

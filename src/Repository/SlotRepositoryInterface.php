@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Repository;
 
-use Doctrine\Persistence\ObjectRepository;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use DateTimeInterface;
+use Doctrine\Persistence\ObjectRepository;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface SlotRepositoryInterface extends ObjectRepository, RepositoryInterface
 {

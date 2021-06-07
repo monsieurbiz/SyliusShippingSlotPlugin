@@ -30,6 +30,7 @@ trait OrderTrait
                 $slots[] = $slot;
             }
         }
+
         return $slots;
     }
 }
