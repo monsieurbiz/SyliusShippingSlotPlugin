@@ -292,6 +292,7 @@ global.MonsieurBizShippingSlotManager = class {
                 info.event.start.valueOf()
             ) {
               shippingSlotManager.applySelectedSlotStyle(info);
+              shippingSlotManager.previousSlot = info;
               shippingSlotManager.enableButtons();
             }
           },
@@ -335,12 +336,12 @@ global.MonsieurBizShippingSlotRules = class {
    */
   getStartDate() {
     let date = new Date(this.startDate);
-    let year = date.getFullYear();
-    let month = String(date.getMonth() + 1).padStart(2, "0"); // Month is from 0 to 11
-    let day = String(date.getDate()).padStart(2, "0");
-    let hours = String(date.getHours()).padStart(2, "0");
-    let minutes = String(date.getMinutes()).padStart(2, "0");
-    let seconds = String(date.getSeconds()).padStart(2, "0");
+    let year = date.getUTCFullYear();
+    let month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Month is from 0 to 11
+    let day = String(date.getUTCDate()).padStart(2, "0");
+    let hours = String(date.getUTCHours()).padStart(2, "0");
+    let minutes = String(date.getUTCMinutes()).padStart(2, "0");
+    let seconds = String(date.getUTCSeconds()).padStart(2, "0");
     return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
   }
 
