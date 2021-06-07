@@ -25,6 +25,7 @@ use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Repository\SlotRepositoryInterface;
 use DateTime;
+use DateTimeZone;
 
 class SlotGenerator implements SlotGeneratorInterface
 {
@@ -89,7 +90,7 @@ class SlotGenerator implements SlotGeneratorInterface
             $slot = $this->slotFactory->createNew();
         }
         $slot->setShipment($shipment);
-        $slot->setTimestamp($startDate);
+        $slot->setTimestamp($startDate->setTimezone(new DateTimeZone("UTC")));
         $slot->setDurationRange($shippingSlotConfig->getDurationRange());
         $slot->setPickupDelay($shippingSlotConfig->getPickupDelay());
         $slot->setPreparationDelay($shippingSlotConfig->getPreparationDelay());
