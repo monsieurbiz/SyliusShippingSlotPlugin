@@ -146,6 +146,25 @@ class SlotGenerator implements SlotGeneratorInterface
         return $shipment->getSlot();
     }
 
+    /**
+     * @return SlotInterface|null
+     */
+    public function getSlotByMethod(ShippingMethodInterface $shippingMethod): ?SlotInterface
+    {
+        /** @var OrderInterface $order */
+        $order = $this->cartContext->getCart();
+        $shipments = $order->getShipments();
+
+        /** @var ShipmentInterface $shipment */
+        foreach ($shipments as $shipment) {
+            if ($shipment->getMethod() === $shippingMethod) {
+                return $shipment->getSlot();
+            }
+        }
+
+        return null;
+    }
+
     public function getUnavailableTimestamps(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array
     {
         if (null === ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
@@ -155,23 +174,23 @@ class SlotGenerator implements SlotGeneratorInterface
         $fullTimestamps = [];
         $slotsByTimestamp = [];
         $availableSpots = (int) $shippingSlotConfig->getAvailableSpots();
-
+        $currentSlot = $this->getSlotByMethod($shippingMethod);
         $slots = $this->slotRepository->findByMethodAndStartDate($shippingMethod, $from);
         /** @var SlotInterface $slot */
         foreach ($slots as $slot) {
+            if ($currentSlot === $slot) {
+                continue;
+            }
             /** @var DateTime $timestamp */
             $timestamp = $slot->getTimestamp();
             $slotsByTimestamp[$timestamp->format(DateTime::W3C)][] = $slot;
         }
 
-        // Add full slots in unavailable list
-        foreach ($slotsByTimestamp as $timestamp => $timestampSlots) {
-            if (\count($timestampSlots) >= $availableSpots) {
-                $fullTimestamps[] = $timestamp;
-            }
-        }
+        $fullTimestamps = array_filter($slotsByTimestamp, function($timestampSlots) use ($availableSpots) {
+            return \count($timestampSlots) >= $availableSpots;
+        });
 
-        return $fullTimestamps;
+        return array_keys($fullTimestamps);
     }
 
     public function isFull(SlotInterface $slot): bool

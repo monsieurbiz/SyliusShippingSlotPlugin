@@ -35,6 +35,11 @@ interface SlotGeneratorInterface
     public function getSlot(int $shipmentIndex): ?SlotInterface;
 
     /**
+     * @return SlotInterface|null
+     */
+    public function getSlotByMethod(ShippingMethodInterface $shippingMethod): ?SlotInterface;
+
+    /**
      * @return array
      */
     public function getUnavailableTimestamps(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array;
