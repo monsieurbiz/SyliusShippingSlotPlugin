@@ -28,6 +28,8 @@ final class OrderPreCompleteListener
     private RouterInterface $router;
     private EntityManagerInterface $slotManager;
     private SlotGeneratorInterface $slotGenerator;
+    private array $nonValidSlots;
+    private array $missingSlots;
 
     public function __construct(
         RouterInterface $router,
@@ -37,6 +39,8 @@ final class OrderPreCompleteListener
         $this->router = $router;
         $this->slotManager = $slotManager;
         $this->slotGenerator = $slotGenerator;
+        $this->nonValidSlots = [];
+        $this->missingSlots = [];
     }
 
     public function checkSlot(ResourceControllerEvent $event): void
@@ -46,24 +50,12 @@ final class OrderPreCompleteListener
         /** @var OrderInterface $order */
         Assert::isInstanceOf($order, OrderInterface::class);
 
-        $nonValidSlots = [];
-        $missingSlots = [];
         /** @var ShipmentInterface $shipment */
         foreach ($order->getShipments() as $shipment) {
-            /** @var ShippingMethodInterface $shippingMethod */
-            $shippingMethod = $shipment->getMethod();
-            if ($shippingMethod->getShippingSlotConfig()) {
-                $slot = $shipment->getSlot();
-                if (null === $slot) {
-                    $missingSlots[] = $shippingMethod;
-                } elseif (!$slot->isValid() || $this->slotGenerator->isFull($slot)) {
-                    $nonValidSlots[] = $slot;
-                    $this->slotManager->remove($slot);
-                }
-            }
+            $this->checkShipment($shipment);
         }
 
-        if (empty($nonValidSlots) && empty($missingSlots)) {
+        if (empty($this->nonValidSlots) && empty($this->missingSlots)) {
             return;
         }
 
@@ -73,5 +65,26 @@ final class OrderPreCompleteListener
             ResourceControllerEvent::TYPE_ERROR
         );
         $event->setResponse(new RedirectResponse($this->router->generate('sylius_shop_cart_summary')));
+    }
+
+    private function checkShipment(ShipmentInterface $shipment): void
+    {
+        /** @var ShippingMethodInterface|null $shippingMethod */
+        $shippingMethod = $shipment->getMethod();
+        Assert::isInstanceOf($shippingMethod, ShippingMethodInterface::class);
+        if (!$shippingMethod->getShippingSlotConfig()) {
+            return;
+        }
+
+        $slot = $shipment->getSlot();
+        switch (true) {
+            case null === $slot:
+                $this->missingSlots[] = $shippingMethod;
+                break;
+            case !$slot->isValid() || $this->slotGenerator->isFull($slot):
+                $this->nonValidSlots[] = $slot;
+                $this->slotManager->remove($slot);
+                break;
+        }
     }
 }

@@ -42,12 +42,11 @@ class SlotController extends AbstractController
     }
 
     /**
-     * @param Request $request
      * @param string $code
      *
      * @return Response
      */
-    public function listAction(Request $request, string $code): Response
+    public function listAction(string $code): Response
     {
         // Find shipping method from code
         /** @var ShippingMethodInterface|null $shippingMethod */
@@ -89,15 +88,15 @@ class SlotController extends AbstractController
         }
 
         $slotElement = json_decode($request->get('slot', '{}'), true);
-        if (!isset($slotElement['event']) || !isset($slotElement['event']['start'])) {
+        if (!($startDate = $slotElement['event']['start'] ?? false)) {
             throw $this->createNotFoundException('Start date not defined');
         }
 
         try {
-            $slot = $this->slotGenerator->createFromCheckout(
+            $this->slotGenerator->createFromCheckout(
                 $shippingMethod,
                 (int) $shipmentIndex,
-                new DateTime($slotElement['event']['start'])
+                new DateTime($startDate)
             );
         } catch (Exception $e) {
             throw $this->createNotFoundException($e->getMessage());
@@ -127,11 +126,11 @@ class SlotController extends AbstractController
     }
 
     /**
-     * @param Request $request
+     * @param int $shipmentIndex
      *
      * @return Response
      */
-    public function getAction(Request $request, int $shipmentIndex): Response
+    public function getAction(int $shipmentIndex): Response
     {
         try {
             $slot = $this->slotGenerator->getSlot($shipmentIndex);
