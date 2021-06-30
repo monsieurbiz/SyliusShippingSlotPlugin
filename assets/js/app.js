@@ -237,7 +237,7 @@ global.MonsieurBizShippingSlotManager = class {
       calendarContainer,
       Object.assign(
         {
-          plugins: [timeGridPlugin, listPlugin, rrulePlugin],
+          plugins: [timeGridPlugin, rrulePlugin],
           locales: allLocales,
           initialView: "timeGridWeek",
           contentHeight: "auto",
