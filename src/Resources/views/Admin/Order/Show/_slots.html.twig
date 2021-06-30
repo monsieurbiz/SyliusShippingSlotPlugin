@@ -1,0 +1,11 @@
+{% set slots = order.slots %}
+{% if slots is not empty %}
+    <div class="ui segment" id="monsieurbiz-shipping-slot-order-slots">
+        <h3 class="ui dividing header">{{ 'monsieurbiz_shipping_slot.ui.slots'|trans }}</h3>
+        <div class="ui relaxed divided list" id="monsieurbiz-shipping-slot-slots">
+            {% for slot in slots %}
+                {% include '@MonsieurBizSyliusShippingSlotPlugin/Admin/Order/Show/_slot.html.twig' %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

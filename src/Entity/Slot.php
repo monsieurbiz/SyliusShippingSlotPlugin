@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
+use DateInterval;
+use DateTime;
 use DateTimeInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
@@ -114,5 +116,31 @@ class Slot implements SlotInterface
     public function setShipment(?ShipmentInterface $shipment): void
     {
         $this->shipment = $shipment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSlotDelay(): int
+    {
+        return
+            (int) $this->getPreparationDelay() > (int) $this->getPickupDelay() ?
+            (int) $this->getPreparationDelay() : (int) $this->getPickupDelay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isValid(): bool
+    {
+        $minDate = new DateTime();
+        $minDate->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay()))); // Add minutes delay
+
+        // Too late the slot is not valid anymore
+        if ($this->getTimestamp() < $minDate) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -15,16 +15,20 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Fixture\Factory;
 
 use Faker\Factory;
 use Faker\Generator;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
+use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
 use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
     private FactoryInterface $shippingSlotConfigFactory;
+    private RepositoryInterface $shippingMethodRepository;
     private OptionsResolver $optionsResolver;
     private Generator $faker;
 
@@ -33,9 +37,12 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
      *
      * @param FactoryInterface $shippingSlotConfigFactory
      */
-    public function __construct(FactoryInterface $shippingSlotConfigFactory)
-    {
+    public function __construct(
+        FactoryInterface $shippingSlotConfigFactory,
+        RepositoryInterface $shippingMethodRepository
+    ) {
         $this->shippingSlotConfigFactory = $shippingSlotConfigFactory;
+        $this->shippingMethodRepository = $shippingMethodRepository;
         $this->faker = Factory::create();
         $this->optionsResolver = new OptionsResolver();
         $this->configureOptions($this->optionsResolver);
@@ -58,6 +65,11 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
         $shippingSlotConfig->setAvailableSpots($options['availableSpots']);
         $shippingSlotConfig->setColor($options['color']);
 
+        /** @var ShippingMethodInterface $shippingMethod */
+        foreach ($options['shipping_methods'] as $shippingMethod) {
+            $shippingMethod->setShippingSlotConfig($shippingSlotConfig);
+        }
+
         return $shippingSlotConfig;
     }
 
@@ -72,8 +84,8 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
             })
             ->setDefault('rrules', function(Options $options): array {
                 return [
-                    'RRULE:FREQ=HOURLY;COUNT=30;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=0;BYSECOND=0',
-                    'RRULE:FREQ=HOURLY;COUNT=30;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=30;BYSECOND=0',
+                    'RRULE:FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=0;BYSECOND=0',
+                    'RRULE:FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=30;BYSECOND=0',
                 ];
             })
             ->setDefault('preparationDelay', function(Options $options): int {
@@ -91,6 +103,9 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
             ->setDefault('color', function(Options $options): string {
                 return $this->faker->hexColor;
             })
+            ->setDefault('shipping_methods', [])
+            ->setAllowedTypes('shipping_methods', 'array')
+            ->setNormalizer('shipping_methods', LazyOption::findBy($this->shippingMethodRepository, 'code'))
         ;
     }
 }

@@ -7,3 +7,4 @@ sylius_resource:
         monsieurbiz_shipping_slot.slot:
             classes:
                 model: MonsieurBiz\SyliusShippingSlotPlugin\Entity\Slot
+                repository: MonsieurBiz\SyliusShippingSlotPlugin\Repository\SlotRepository

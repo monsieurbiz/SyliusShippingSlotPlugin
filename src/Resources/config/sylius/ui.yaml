@@ -6,3 +6,20 @@ sylius_ui:
         sylius.admin.shipping_method.create.form:
             blocks:
                 shipping_slot_configuration: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/ShippingMethod/shipping_slot_configuration.html.twig'
+        sylius.admin.order.show.sidebar:
+            blocks:
+                monsieurbiz_shipping_slot_order_slots:
+                    template: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Order/Show/_slots.html.twig'
+                    priority: 50
+        sylius.shop.layout.javascripts:
+            blocks:
+                monsieurbiz_shipping_slot_init_app:
+                    template: '@MonsieurBizSyliusShippingSlotPlugin/Shop/app.html.twig'
+        sylius.shop.layout.stylesheets:
+            blocks:
+                monsieurbiz_shipping_slot_styles:
+                    template: '@MonsieurBizSyliusShippingSlotPlugin/Shop/_styles.html.twig'
+        sylius.shop.checkout.select_shipping.after_method:
+            blocks:
+                monsieurbiz_shipping_slot_calendar:
+                    template: '@MonsieurBizSyliusShippingSlotPlugin/Shop/ShippingMethod/calendar.html.twig'

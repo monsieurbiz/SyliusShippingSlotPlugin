@@ -1,0 +1,30 @@
+{
+  "name": "monsieurbiz-sylius-shipping-slot-plugin",
+  "version": "0.0.1",
+  "description": "Add and manage shipping slots for your deliveries",
+  "main": "webpack.config.js",
+  "scripts": {
+    "build": "encore production",
+    "watch": "encore dev --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monsieurbiz/SyliusShippingSlotPlugin.git"
+  },
+  "author": "Monsieur Biz <hello@monsieurbiz.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/monsieurbiz/SyliusShippingSlotPlugin/issues"
+  },
+  "homepage": "https://github.com/monsieurbiz/SyliusShippingSlotPlugin#readme",
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.28.1"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^5.7.0",
+    "@fullcalendar/list": "^5.7.0",
+    "@fullcalendar/rrule": "^5.7.0",
+    "@fullcalendar/timegrid": "^5.7.0",
+    "rrule": "^2.6.8"
+  }
+}

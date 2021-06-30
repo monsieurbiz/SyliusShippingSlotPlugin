@@ -1,0 +1,9 @@
+{% if data is not null %}
+    <div class="channel">
+        <span class="ui medium empty circular label channel__item" style="background-color: {{ data.color|default('#000') }}"></span>
+
+        <span class="channel__item">
+            {{ data.name }}
+        </span>
+    </div>
+{% endif %}

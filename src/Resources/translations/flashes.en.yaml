@@ -1,0 +1,3 @@
+monsieurbiz_shipping_slot:
+    order:
+       slot_no_longer_available: 'The shipping slot for your order is no longer available.'

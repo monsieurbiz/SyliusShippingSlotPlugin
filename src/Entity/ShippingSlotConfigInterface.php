@@ -114,4 +114,11 @@ interface ShippingSlotConfigInterface extends ResourceInterface
      * @param string|null $color
      */
     public function setColor(?string $color): void;
+
+    /**
+     * Get the delay to add to fetch the first slot.
+     *
+     * @return int
+     */
+    public function getSlotDelay(): int;
 }

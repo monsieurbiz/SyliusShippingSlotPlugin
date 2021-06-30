@@ -24,14 +24,18 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('monsieurbiz_sylius_shipping_slot');
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            $treeBuilder->getRootNode();
+        $rootNode = method_exists($treeBuilder, 'getRootNode') ?
+            $rootNode = $treeBuilder->getRootNode()
+            : $treeBuilder->root('monsieurbiz_sylius_shipping_slot'); // BC layer for symfony/config 4.1 and older
 
-            return $treeBuilder;
-        }
-
-        // BC layer for symfony/config 4.1 and older
-        $treeBuilder->root('monsieurbiz_sylius_shipping_slot');
+        $rootNode
+            ->children()
+            ->arrayNode('expiration')
+                ->children()
+                    ->scalarNode('slot')->isRequired()->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }
