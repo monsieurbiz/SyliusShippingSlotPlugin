@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class RemoveExpiredSlotsCommand extends Command
 {
-    protected static $defaultName = 'monsieurbiz-shipping-slot:remove-expired-slots';
+    protected static $defaultName = 'monsieurbiz:shipping-slot:remove-expired-slots';
 
     private ParameterBagInterface $parameterBag;
     private SlotRemoverInterface $slotRemover;
