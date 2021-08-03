@@ -85,7 +85,6 @@ global.MonsieurBizShippingSlotManager = class {
 
       let slotEvents = new MonsieurBizShippingSlotEvents(
         data.events,
-        data.duration,
         data.startDate,
         data.unavailableDates
       );
@@ -297,9 +296,8 @@ global.MonsieurBizShippingSlotManager = class {
 };
 
 global.MonsieurBizShippingSlotEvents = class {
-  constructor(events, duration, startDate, unavailableDates) {
+  constructor(events, startDate, unavailableDates) {
     this.events = events;
-    this.duration = duration;
     this.startDate = startDate;
     this.unavailableDates = [];
     for (let unavailableDate of unavailableDates) {
@@ -309,18 +307,6 @@ global.MonsieurBizShippingSlotEvents = class {
 
   getEvents() {
     return this.events;
-  }
-
-  /**
-   * Return duration on format HH:mm (example : `02:00`)
-   */
-  getDuration() {
-    let duration = this.duration;
-    let hours = Number.parseInt(this.duration / 60, 10);
-    let minutes = duration - hours * 60;
-    return (
-      String(hours).padStart(2, "0") + ":" + String(minutes).padStart(2, "0")
-    );
   }
 
   /**

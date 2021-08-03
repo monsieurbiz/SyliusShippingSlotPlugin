@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use DateTimeZone;
 
 class SlotController extends AbstractController
 {
@@ -60,10 +61,10 @@ class SlotController extends AbstractController
             return new JsonResponse(['code' => $code]);
         }
 
-        $startDate = new DateTime();
+        $startDate = new DateTime('now');
         $startDate->add(new DateInterval(sprintf('PT%dM', $shipingSlotConfig->getSlotDelay()))); // Add minutes delay
 
-        $recurrences = $shipingSlotConfig->getRecurrences();
+        $recurrences = $shipingSlotConfig->getRecurrences($startDate);
         $events = [];
         foreach ($recurrences as $recurrence) {
             $events[] = [
@@ -75,7 +76,6 @@ class SlotController extends AbstractController
         return new JsonResponse([
             'code' => $code,
             'events' => $events,
-            'duration' => $shipingSlotConfig->getDurationRange(),
             'startDate' => $startDate->format(DateTime::W3C),
             'unavailableDates' => $this->slotGenerator->getUnavailableTimestamps($shippingMethod, $startDate),
         ]);
