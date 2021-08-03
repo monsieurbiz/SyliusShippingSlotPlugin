@@ -642,6 +642,9 @@
     "sebastian/version": {
         "version": "2.0.1"
     },
+    "simshaun/recurr": {
+        "version": "v4.0.5"
+    },
     "slevomat/coding-standard": {
         "version": "6.4.1"
     },
