@@ -1,7 +1,6 @@
 import { Calendar } from "@fullcalendar/core";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import allLocales from "@fullcalendar/core/locales-all";
-import rrulePlugin from "@fullcalendar/rrule";
 
 import "@fullcalendar/timegrid/main.css";
 
@@ -75,7 +74,7 @@ global.MonsieurBizShippingSlotManager = class {
       shippingSlotManager.hideCalendars();
 
       // Authorize user to go to next step if no slot needed
-      if (typeof data.rrules === "undefined") {
+      if (typeof data.events === "undefined") {
         if (resetSlot) {
           shippingSlotManager.resetSlot(shippingMethodInput, function () { shippingSlotManager.enableButtons() });
         } else {
@@ -84,8 +83,8 @@ global.MonsieurBizShippingSlotManager = class {
         return;
       }
 
-      let rules = new MonsieurBizShippingSlotRules(
-        data.rrules,
+      let slotEvents = new MonsieurBizShippingSlotEvents(
+        data.events,
         data.duration,
         data.startDate,
         data.unavailableDates
@@ -115,7 +114,7 @@ global.MonsieurBizShippingSlotManager = class {
               ) {
                 shippingSlotManager.initCalendar(
                   calendarContainer,
-                  rules,
+                  slotEvents,
                   currentSlot
                 );
               }
@@ -222,21 +221,15 @@ global.MonsieurBizShippingSlotManager = class {
     slot.el.style.display = 'none';
   }
 
-  initCalendar(calendarContainer, rules, currentSlot) {
+  initCalendar(calendarContainer, slotEvents, currentSlot) {
     calendarContainer.style.display = "block";
-    let events = [];
-    for (let rrule of rules.getRrules()) {
-      events.push({
-        rrule: "DTSTART:" + rules.getStartDate() + "\n" + rrule,
-        duration: rules.getDuration(),
-      });
-    }
+    let events = slotEvents.getEvents();
     let shippingSlotManager = this;
     let calendar = new Calendar(
       calendarContainer,
       Object.assign(
         {
-          plugins: [timeGridPlugin, rrulePlugin],
+          plugins: [timeGridPlugin],
           locales: allLocales,
           initialView: "timeGridWeek",
           contentHeight: "auto",
@@ -273,7 +266,7 @@ global.MonsieurBizShippingSlotManager = class {
           },
           eventDidMount: function (info) {
             // Hide non available slots
-            for (let unavailableDate of rules.getUnavailableDates()) {
+            for (let unavailableDate of slotEvents.getUnavailableDates()) {
               if (
                 info.event !== null &&
                 unavailableDate.valueOf() === info.event.start.valueOf()
@@ -303,9 +296,9 @@ global.MonsieurBizShippingSlotManager = class {
   }
 };
 
-global.MonsieurBizShippingSlotRules = class {
-  constructor(rrules, duration, startDate, unavailableDates) {
-    this.rrules = rrules;
+global.MonsieurBizShippingSlotEvents = class {
+  constructor(events, duration, startDate, unavailableDates) {
+    this.events = events;
     this.duration = duration;
     this.startDate = startDate;
     this.unavailableDates = [];
@@ -314,8 +307,8 @@ global.MonsieurBizShippingSlotRules = class {
     }
   }
 
-  getRrules() {
-    return this.rrules;
+  getEvents() {
+    return this.events;
   }
 
   /**

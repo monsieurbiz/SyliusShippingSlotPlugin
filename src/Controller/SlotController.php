@@ -63,9 +63,18 @@ class SlotController extends AbstractController
         $startDate = new DateTime();
         $startDate->add(new DateInterval(sprintf('PT%dM', $shipingSlotConfig->getSlotDelay()))); // Add minutes delay
 
+        $recurrences = $shipingSlotConfig->getRecurrences();
+        $events = [];
+        foreach ($recurrences as $recurrence) {
+            $events[] = [
+                'start' => $recurrence->getStart()->format(DateTime::W3C),
+                'end' => $recurrence->getEnd()->format(DateTime::W3C),
+            ];
+        }
+
         return new JsonResponse([
             'code' => $code,
-            'rrules' => $shipingSlotConfig->getRrules(),
+            'events' => $events,
             'duration' => $shipingSlotConfig->getDurationRange(),
             'startDate' => $startDate->format(DateTime::W3C),
             'unavailableDates' => $this->slotGenerator->getUnavailableTimestamps($shippingMethod, $startDate),
