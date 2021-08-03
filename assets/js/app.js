@@ -12,10 +12,10 @@ global.MonsieurBizShippingSlotManager = class {
     fullCalendarConfig,
     slotStyle,
     selectedSlotStyle,
+    initUrl,
     listSlotsUrl,
     saveSlotUrl,
     resetSlotUrl,
-    getSlotUrl,
     slotSelectError
   ) {
     this.shippingMethodInputs = shippingMethodInputs;
@@ -24,10 +24,10 @@ global.MonsieurBizShippingSlotManager = class {
     this.fullCalendarConfig = fullCalendarConfig;
     this.slotStyle = slotStyle;
     this.selectedSlotStyle = selectedSlotStyle;
+    this.initUrl = initUrl;
     this.listSlotsUrl = listSlotsUrl;
     this.saveSlotUrl = saveSlotUrl;
     this.resetSlotUrl = resetSlotUrl;
-    this.getSlotUrl = getSlotUrl;
     this.slotSelectError = slotSelectError;
     this.previousSlot = null;
     this.initShippingMethodInputs();
@@ -62,7 +62,7 @@ global.MonsieurBizShippingSlotManager = class {
   displayInputSlots(shippingMethodInput, resetSlot) {
     this.disableButtons();
     let shippingSlotManager = this;
-    this.listShippingSlotsForAMethod(shippingMethodInput.value, function () {
+    this.initCalendarForAMethod(shippingMethodInput.value, function () {
       if (this.status !== 200) {
         shippingSlotManager.enableButtons();
         return;
@@ -83,44 +83,19 @@ global.MonsieurBizShippingSlotManager = class {
         return;
       }
 
-      let slotEvents = new MonsieurBizShippingSlotEvents(
-        data.events,
-        data.startDate,
-        data.unavailableDates
-      );
-
-      // Retrieve current slot and manage display
-      shippingSlotManager.getSlot(
-        shippingMethodInput.getAttribute("tabIndex"),
-        function () {
-          let currentSlot = null;
-          if (this.status === 200) {
-            let data = JSON.parse(this.responseText);
-            if (
-              typeof data.startDate !== "undefined" &&
-              typeof data.duration !== "undefined"
-            ) {
-              currentSlot = new MonsieurBizShippingSlotSlot(
-                data.startDate,
-                data.duration
-              );
-            }
-
-            // Init calendar
-            for (let calendarContainer of shippingSlotManager.calendarContainers) {
-              if (
-                calendarContainer.classList.contains(shippingMethodInput.value)
-              ) {
-                shippingSlotManager.initCalendar(
-                  calendarContainer,
-                  slotEvents,
-                  currentSlot
-                );
-              }
-            }
-          }
+      // Init calendar
+      for (let calendarContainer of shippingSlotManager.calendarContainers) {
+        if (
+          calendarContainer.classList.contains(shippingMethodInput.value)
+        ) {
+          shippingSlotManager.initCalendar(
+            calendarContainer,
+            data.events,
+            data.timezone,
+            shippingMethodInput.value
+          );
         }
-      );
+      }
     });
   }
 
@@ -140,11 +115,24 @@ global.MonsieurBizShippingSlotManager = class {
     }
   }
 
-  listShippingSlotsForAMethod(shippingMethodCode, callback) {
+  initCalendarForAMethod(shippingMethodCode, callback) {
     let req = new XMLHttpRequest();
     req.onload = callback;
-    let url = this.listSlotsUrl;
+    let url = this.initUrl;
     req.open("get", url.replace("__CODE__", shippingMethodCode), true);
+    req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    req.send();
+  }
+
+  listSlots(shippingMethodCode, from, to, callback) {
+    let req = new XMLHttpRequest();
+    req.onload = callback;
+    let url = this.listSlotsUrl
+      .replace("__CODE__", shippingMethodCode)
+      .replace("__FROM__", from)
+      .replace("__TO__", to)
+    ;
+    req.open("get", url, true);
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     req.send();
   }
@@ -169,19 +157,6 @@ global.MonsieurBizShippingSlotManager = class {
     let data = new FormData();
     data.append("shipmentIndex", shippingMethodInput.getAttribute("tabIndex"));
     req.send(data);
-  }
-
-  getSlot(shippingMethodIndex, callback) {
-    let req = new XMLHttpRequest();
-    req.onload = callback;
-    let url = this.getSlotUrl;
-    req.open(
-      "get",
-      url.replace("__INDEX__", Number.parseInt(shippingMethodIndex, 10)),
-      true
-    );
-    req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    req.send();
   }
 
   disableButtons() {
@@ -220,14 +195,14 @@ global.MonsieurBizShippingSlotManager = class {
     slot.el.style.display = 'none';
   }
 
-  initCalendar(calendarContainer, slotEvents, currentSlot) {
+  initCalendar(calendarContainer, events, timezone, shippingMethodCode) {
     calendarContainer.style.display = "block";
-    let events = slotEvents.getEvents();
     let shippingSlotManager = this;
     let calendar = new Calendar(
       calendarContainer,
       Object.assign(
         {
+          timeZone: timezone,
           plugins: [timeGridPlugin],
           locales: allLocales,
           initialView: "timeGridWeek",
@@ -239,7 +214,6 @@ global.MonsieurBizShippingSlotManager = class {
             right: "timeGridWeek,timeGridDay",
           },
           events: events,
-          progressiveEventRendering: true,
           eventTextColor: this.slotStyle.textColor,
           eventBackgroundColor: this.slotStyle.backgroundColor,
           eventBorderColor: this.slotStyle.borderColor,
@@ -264,82 +238,40 @@ global.MonsieurBizShippingSlotManager = class {
             shippingSlotManager.selectSlot(info);
           },
           eventDidMount: function (info) {
-            // Hide non available slots
-            for (let unavailableDate of slotEvents.getUnavailableDates()) {
-              if (
-                info.event !== null &&
-                unavailableDate.valueOf() === info.event.start.valueOf()
-              ) {
-                shippingSlotManager.hideSlot(info);
-              }
-            }
-
             // Display selected the current slot
             if (
               info.event !== null &&
-              currentSlot !== null &&
-              currentSlot.getStartDate() !== null &&
-              currentSlot.getStartDate().valueOf() ===
-                info.event.start.valueOf()
+              info.event.extendedProps.isCurrent === true
             ) {
               shippingSlotManager.applySelectedSlotStyle(info);
               shippingSlotManager.previousSlot = info;
               shippingSlotManager.enableButtons();
             }
           },
+          datesSet(dateInfo) {
+            let calendar = this;
+            shippingSlotManager.listSlots(shippingMethodCode, dateInfo.startStr, dateInfo.endStr, function () {
+              if (this.status !== 200) {
+                console.error('Error during slot list');
+                return;
+              }
+
+              let events = JSON.parse(this.responseText);
+              // Use batch rendering to improve events loading
+              calendar.batchRendering(function() {
+                for (const event of calendar.getEvents()) {
+                  event.remove();
+                }
+                for (const event of events) {
+                  calendar.addEvent(event);
+                }
+              });
+            });
+          },
         },
         this.fullCalendarConfig // Merge and override config with the given one
       )
     );
     calendar.render();
-  }
-};
-
-global.MonsieurBizShippingSlotEvents = class {
-  constructor(events, startDate, unavailableDates) {
-    this.events = events;
-    this.startDate = startDate;
-    this.unavailableDates = [];
-    for (let unavailableDate of unavailableDates) {
-      this.unavailableDates.push(new Date(unavailableDate));
-    }
-  }
-
-  getEvents() {
-    return this.events;
-  }
-
-  /**
-   * Return duration on format YYYYMMDDTHiSZ (example : `20210101T113000Z`)
-   */
-  getStartDate() {
-    let date = new Date(this.startDate);
-    let year = date.getUTCFullYear();
-    let month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Month is from 0 to 11
-    let day = String(date.getUTCDate()).padStart(2, "0");
-    let hours = String(date.getUTCHours()).padStart(2, "0");
-    let minutes = String(date.getUTCMinutes()).padStart(2, "0");
-    let seconds = String(date.getUTCSeconds()).padStart(2, "0");
-    return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
-  }
-
-  getUnavailableDates() {
-    return this.unavailableDates;
-  }
-};
-
-global.MonsieurBizShippingSlotSlot = class {
-  constructor(startDate, duration) {
-    this.startDate = startDate;
-    this.duration = duration;
-  }
-
-  getStartDate() {
-    let date = new Date(this.startDate);
-    return date;
-  }
-
-  getDuration() {
-    return this.duration;
   }
 };

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Controller;
 
-use DateInterval;
 use DateTime;
 use Exception;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
@@ -23,7 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use DateTimeZone;
 
 class SlotController extends AbstractController
 {
@@ -47,7 +45,7 @@ class SlotController extends AbstractController
      *
      * @return Response
      */
-    public function listAction(string $code): Response
+    public function initAction(string $code): Response
     {
         // Find shipping method from code
         /** @var ShippingMethodInterface|null $shippingMethod */
@@ -56,15 +54,43 @@ class SlotController extends AbstractController
             throw $this->createNotFoundException(sprintf('Shipping method "%s" not found', $code));
         }
 
-        // No need to load slots if shipping method has no slot configuration
+        // No need to load calendar if shipping method has no slot configuration
         if (!($shipingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
             return new JsonResponse(['code' => $code]);
         }
 
-        $startDate = new DateTime('now');
-        $startDate->add(new DateInterval(sprintf('PT%dM', $shipingSlotConfig->getSlotDelay()))); // Add minutes delay
+        return new JsonResponse([
+            'code' => $code,
+            'events' => [], // Events are loaded dynamically when full calendar ask it
+            'timezone' => $shipingSlotConfig->getTimezone() ?? 'UTC',
+        ]);
+    }
 
-        $recurrences = $shipingSlotConfig->getRecurrences($startDate);
+    /**
+     * @param string $code
+     * @param string $fromDate
+     * @param string $toDate
+     *
+     * @return Response
+     */
+    public function listAction(string $code, string $fromDate, string $toDate): Response
+    {
+        // Find shipping method from code
+        /** @var ShippingMethodInterface|null $shippingMethod */
+        $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $code]);
+        if (null === $shippingMethod) {
+            throw $this->createNotFoundException(sprintf('Shipping method "%s" not found', $code));
+        }
+
+        // Shipping method not compatible with shipping slots
+        if (!($shipingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
+            throw $this->createNotFoundException(sprintf('Shipping method "%s" is not compatible with shipping slots', $code));
+        }
+
+        $startDate = new DateTime($fromDate);
+        $endDate = new DateTime($toDate);
+
+        $recurrences = $shipingSlotConfig->getRecurrences($startDate, $endDate);
         $events = [];
         foreach ($recurrences as $recurrence) {
             $events[] = [
@@ -73,12 +99,7 @@ class SlotController extends AbstractController
             ];
         }
 
-        return new JsonResponse([
-            'code' => $code,
-            'events' => $events,
-            'startDate' => $startDate->format(DateTime::W3C),
-            'unavailableDates' => $this->slotGenerator->getUnavailableTimestamps($shippingMethod, $startDate),
-        ]);
+        return new JsonResponse($events);
     }
 
     /**
