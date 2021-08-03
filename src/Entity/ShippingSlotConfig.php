@@ -17,6 +17,7 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
 {
     private ?int $id = null;
     private ?string $name = null;
+    private ?string $timezone = null;
     private ?array $rrules = null;
     private ?int $preparationDelay = null;
     private ?int $pickupDelay = null;
@@ -46,6 +47,22 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTimezone(?string $timezone): void
+    {
+        $this->timezone = $timezone;
     }
 
     /**

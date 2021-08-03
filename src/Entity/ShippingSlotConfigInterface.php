@@ -32,6 +32,20 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     public function setName(?string $name): void;
 
     /**
+     * Get shipping config timezone.
+     *
+     * @return string|null
+     */
+    public function getTimezone(): ?string;
+
+    /**
+     * Set shipping config timezone.
+     *
+     * @param string|null $name
+     */
+    public function setTimezone(?string $timezone): void;
+
+    /**
      * Get the list of RRULES for this config.
      *
      * @return string[]|null

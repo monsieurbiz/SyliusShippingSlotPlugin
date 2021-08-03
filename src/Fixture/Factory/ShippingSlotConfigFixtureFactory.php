@@ -58,6 +58,7 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
         /** @var ShippingSlotConfigInterface $shippingSlotConfig */
         $shippingSlotConfig = $this->shippingSlotConfigFactory->createNew();
         $shippingSlotConfig->setName($options['name']);
+        $shippingSlotConfig->setTimezone($options['timezone']);
         $shippingSlotConfig->setRrules($options['rrules']);
         $shippingSlotConfig->setPreparationDelay($options['preparationDelay']);
         $shippingSlotConfig->setPickupDelay($options['pickupDelay']);
@@ -81,6 +82,9 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
         $resolver
             ->setDefault('name', function(Options $options): string {
                 return $this->faker->sentence(2, true);
+            })
+            ->setDefault('timezone', function(Options $options): string {
+                return $this->faker->timezone;
             })
             ->setDefault('rrules', function(Options $options): array {
                 return [

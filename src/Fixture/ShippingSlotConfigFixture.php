@@ -35,6 +35,7 @@ class ShippingSlotConfigFixture extends AbstractResourceFixture
         $resourceNode
             ->children()
                 ->scalarNode('name')->cannotBeEmpty()->end()
+                ->scalarNode('timezone')->cannotBeEmpty()->end()
                 ->arrayNode('rrules')
                     ->scalarPrototype()->end()
                 ->end()

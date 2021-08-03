@@ -25,6 +25,7 @@ sylius_fixtures:
                         custom:
                             fashion_store:
                                 name: 'Fashion Store hours'
+                                timezone: 'Europe/Paris'
                                 rrules: 
                                     - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=6,7,8,9,10,11,12,13,14,15;BYMINUTE=0,10,20,30,40,50;BYSECOND=0'
                                 preparationDelay: 60
@@ -36,6 +37,7 @@ sylius_fixtures:
                                     - 'slot_delivery'
                             courier:
                                 name: 'Courier hours'
+                                timezone: 'Europe/Paris'
                                 rrules: 
                                     - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=17;BYMINUTE=0;BYSECOND=0'
                                     - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=5,6,7,8,9,10,11,12,13,14,15,16;BYMINUTE=0,30;BYSECOND=0'
