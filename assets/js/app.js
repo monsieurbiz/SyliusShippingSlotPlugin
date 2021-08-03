@@ -1,6 +1,5 @@
 import { Calendar } from "@fullcalendar/core";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listPlugin from "@fullcalendar/list";
 import allLocales from "@fullcalendar/core/locales-all";
 import rrulePlugin from "@fullcalendar/rrule";
 
