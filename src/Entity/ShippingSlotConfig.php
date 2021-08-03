@@ -13,6 +13,16 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
+use DateInterval;
+use DateTimeInterface;
+use Recurr\Recurrence;
+use Recurr\Rule as Rrule;
+use Recurr\Transformer\ArrayTransformer;
+use Recurr\Transformer\Constraint\AfterConstraint;
+use Recurr\Transformer\Constraint\BeforeConstraint;
+use Recurr\Transformer\Constraint\BetweenConstraint;
+use Recurr\Transformer\ConstraintInterface;
+
 class ShippingSlotConfig implements ShippingSlotConfigInterface
 {
     private ?int $id = null;
@@ -169,6 +179,55 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
         return
             (int) $this->getPreparationDelay() > (int) $this->getPickupDelay() ?
             (int) $this->getPreparationDelay() : (int) $this->getPickupDelay();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getRecurrences(
+        ?DateTimeInterface $startDate = null,
+        ?DateTimeInterface $endDate = null
+    ): array {
+        $recurrences = [];
+
+        switch (true) {
+            case null !== $startDate && null !== $endDate:
+                $constraint = new BetweenConstraint($startDate, $endDate);
+                break;
+            case null !== $startDate:
+                $constraint = new AfterConstraint($startDate);
+                break;
+            case null !== $endDate:
+                $constraint = new BeforeConstraint($endDate);
+                break;
+            default:
+                $constraint = null;
+        }
+
+        foreach ($this->getRrules() ?? [] as $rrule) {
+            $recurrences = array_merge($recurrences, $this->rruleToRecurrences($rrule, $constraint));
+        }
+
+        return $recurrences;
+    }
+
+    /**
+     * @param string $rrule
+     * @param ConstraintInterface|null $constraint
+     *
+     * @return Recurrence[]
+     */
+    private function rruleToRecurrences(string $rrule, ?ConstraintInterface $constraint): array
+    {
+        // Transform Rrule in a list of recurrences
+        return (new ArrayTransformer())->transform(new Rrule($rrule), $constraint)->map(function(Recurrence $recurrence) {
+            // Update end date with the slot duration on each recureence
+            $recurrence->setEnd($recurrence->getEnd()->add(new DateInterval(sprintf('PT%dM', $this->getDurationRange()))));
+
+            return $recurrence;
+        })->toArray();
     }
 
     public function __toString(): string

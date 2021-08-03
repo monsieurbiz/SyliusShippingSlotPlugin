@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
+use DateTimeInterface;
+use Recurr\Recurrence;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface ShippingSlotConfigInterface extends ResourceInterface
@@ -41,7 +43,7 @@ interface ShippingSlotConfigInterface extends ResourceInterface
     /**
      * Set shipping config timezone.
      *
-     * @param string|null $name
+     * @param string|null $timezone
      */
     public function setTimezone(?string $timezone): void;
 
@@ -135,4 +137,17 @@ interface ShippingSlotConfigInterface extends ResourceInterface
      * @return int
      */
     public function getSlotDelay(): int;
+
+    /**
+     * Get available recurrences from Rrules for given dates.
+     *
+     * @param DateTimeInterface|null $startDate
+     * @param DateTimeInterface|null $endDate
+     *
+     * @return Recurrence[]
+     */
+    public function getRecurrences(
+        ?DateTimeInterface $startDate = null,
+        ?DateTimeInterface $endDate = null
+    ): array;
 }
