@@ -131,24 +131,6 @@ class SlotGenerator implements SlotGeneratorInterface
     /**
      * @return SlotInterface|null
      */
-    public function getSlot(int $shipmentIndex): ?SlotInterface
-    {
-        /** @var OrderInterface $order */
-        $order = $this->cartContext->getCart();
-        $shipments = $order->getShipments();
-
-        /** @var ShipmentInterface|null $shipment */
-        $shipment = $shipments->get($shipmentIndex) ?? null;
-        if (null === $shipment) {
-            throw new Exception(sprintf('Cannot find shipment index "%d"', $shipmentIndex));
-        }
-
-        return $shipment->getSlot();
-    }
-
-    /**
-     * @return SlotInterface|null
-     */
     public function getSlotByMethod(ShippingMethodInterface $shippingMethod): ?SlotInterface
     {
         /** @var OrderInterface $order */
@@ -165,7 +147,10 @@ class SlotGenerator implements SlotGeneratorInterface
         return null;
     }
 
-    public function getUnavailableTimestamps(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array
+    /**
+     * @return array
+     */
+    public function getFullSlots(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array
     {
         if (null === ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
             return [];
@@ -190,9 +175,17 @@ class SlotGenerator implements SlotGeneratorInterface
             return \count($timestampSlots) >= $availableSpots;
         });
 
-        return array_keys($fullTimestamps);
+        $fullSlots = [];
+        foreach ($fullTimestamps as $slots) {
+            $fullSlots = array_merge($fullSlots, $slots);
+        }
+
+        return $fullSlots;
     }
 
+    /**
+     * @return bool
+     */
     public function isFull(SlotInterface $slot): bool
     {
         $shipment = $slot->getShipment();
@@ -209,5 +202,41 @@ class SlotGenerator implements SlotGeneratorInterface
         $slots = $this->slotRepository->findByMethodAndDate($shippingMethod, $slot->getTimestamp());
 
         return \count($slots) > (int) $shippingSlotConfig->getAvailableSpots(); // Not >= because we have the current user slot
+    }
+
+    /**
+     * @return array
+     */
+    public function generateCalendarEvents(
+        ShippingMethodInterface $shippingMethod,
+        DateTimeInterface $startDate,
+        DateTimeInterface $endDate
+    ): array {
+        $shippingSlotConfig = $shippingMethod->getShippingSlotConfig();
+        if (null === $shippingSlotConfig) {
+            return [];
+        }
+        $recurrences = $shippingSlotConfig->getRecurrences($startDate, $endDate);
+        $currentSlot = $this->getSlotByMethod($shippingMethod);
+        $fullSlots = $this->getFullSlots($shippingMethod, $startDate);
+        $unavailableTimestamps = array_map(function(SlotInterface $slot) {
+            return $slot->getTimestamp();
+        }, $fullSlots);
+
+        $events = [];
+        foreach ($recurrences as $recurrence) {
+            if (\in_array($recurrence->getStart(), $unavailableTimestamps, true)) {
+                continue;
+            }
+            $events[] = [
+                'start' => $recurrence->getStart()->format(DateTime::W3C),
+                'end' => $recurrence->getEnd()->format(DateTime::W3C),
+                'extendedProps' => [
+                    'isCurrent' => null !== $currentSlot && $currentSlot->getTimestamp() == $recurrence->getStart(),
+                ],
+            ];
+        }
+
+        return $events;
     }
 }

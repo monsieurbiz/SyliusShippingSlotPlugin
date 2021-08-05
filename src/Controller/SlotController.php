@@ -83,23 +83,15 @@ class SlotController extends AbstractController
         }
 
         // Shipping method not compatible with shipping slots
-        if (!($shipingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
+        if (null === $shippingMethod->getShippingSlotConfig()) {
             throw $this->createNotFoundException(sprintf('Shipping method "%s" is not compatible with shipping slots', $code));
         }
 
-        $startDate = new DateTime($fromDate);
-        $endDate = new DateTime($toDate);
-
-        $recurrences = $shipingSlotConfig->getRecurrences($startDate, $endDate);
-        $events = [];
-        foreach ($recurrences as $recurrence) {
-            $events[] = [
-                'start' => $recurrence->getStart()->format(DateTime::W3C),
-                'end' => $recurrence->getEnd()->format(DateTime::W3C),
-            ];
-        }
-
-        return new JsonResponse($events);
+        return new JsonResponse($this->slotGenerator->generateCalendarEvents(
+            $shippingMethod,
+            new DateTime($fromDate),
+            new DateTime($toDate)
+        ));
     }
 
     /**
@@ -153,31 +145,5 @@ class SlotController extends AbstractController
         }
 
         return new JsonResponse([]);
-    }
-
-    /**
-     * @param int $shipmentIndex
-     *
-     * @return Response
-     */
-    public function getAction(int $shipmentIndex): Response
-    {
-        try {
-            $slot = $this->slotGenerator->getSlot($shipmentIndex);
-        } catch (Exception $e) {
-            throw $this->createNotFoundException($e->getMessage());
-        }
-
-        if (null === $slot) {
-            return new JsonResponse([]);
-        }
-
-        /** @var DateTime $timestamp */
-        $timestamp = $slot->getTimestamp();
-
-        return new JsonResponse([
-            'duration' => $slot->getDurationRange(),
-            'startDate' => $timestamp->format(DateTime::W3C),
-        ]);
     }
 }

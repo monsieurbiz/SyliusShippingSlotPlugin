@@ -32,20 +32,24 @@ interface SlotGeneratorInterface
     /**
      * @return SlotInterface|null
      */
-    public function getSlot(int $shipmentIndex): ?SlotInterface;
-
-    /**
-     * @return SlotInterface|null
-     */
     public function getSlotByMethod(ShippingMethodInterface $shippingMethod): ?SlotInterface;
 
     /**
      * @return array
      */
-    public function getUnavailableTimestamps(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array;
+    public function getFullSlots(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array;
 
     /**
      * @return bool
      */
     public function isFull(SlotInterface $slot): bool;
+
+    /**
+     * @return array
+     */
+    public function generateCalendarEvents(
+        ShippingMethodInterface $shippingMethod,
+        DateTimeInterface $startDate,
+        DateTimeInterface $endDate
+    ): array;
 }
