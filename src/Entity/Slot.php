@@ -142,4 +142,24 @@ class Slot implements SlotInterface
 
         return true;
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getTimezone(): string
+    {
+        if (
+            null !== ($shipment = $this->getShipment())
+            && null !== ($shippingMethod = $shipment->getMethod())
+            && $shippingMethod instanceof ShippingMethodInterface
+            && null !== ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())
+            && null !== ($timezone = $shippingSlotConfig->getTimezone())
+        ) {
+            return $timezone;
+        }
+
+        return 'UTC';
+    }
 }

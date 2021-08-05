@@ -110,4 +110,11 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
      * @return bool
      */
     public function isValid(): bool;
+
+    /**
+     * Returns slot timezone.
+     *
+     * @return string
+     */
+    public function getTimezone(): string;
 }
