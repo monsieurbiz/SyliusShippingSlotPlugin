@@ -1,6 +1,7 @@
 import { Calendar } from "@fullcalendar/core";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import allLocales from "@fullcalendar/core/locales-all";
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 
 import "@fullcalendar/timegrid/main.css";
 
@@ -203,7 +204,7 @@ global.MonsieurBizShippingSlotManager = class {
       Object.assign(
         {
           timeZone: timezone,
-          plugins: [timeGridPlugin],
+          plugins: [timeGridPlugin, momentTimezonePlugin],
           locales: allLocales,
           initialView: "timeGridWeek",
           contentHeight: "auto",
