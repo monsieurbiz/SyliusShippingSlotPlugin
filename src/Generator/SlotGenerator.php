@@ -22,6 +22,7 @@ use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Repository\SlotRepositoryInterface;
+use Recurr\Recurrence;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use Sylius\Component\Order\Context\CartContextInterface;
@@ -225,7 +226,7 @@ class SlotGenerator implements SlotGeneratorInterface
 
         $events = [];
         foreach ($recurrences as $recurrence) {
-            if (\in_array($recurrence->getStart(), $unavailableTimestamps, true)) {
+            if ($this->isUnaivalableRecurrence($recurrence, $unavailableTimestamps)) {
                 continue;
             }
             $events[] = [
@@ -238,5 +239,22 @@ class SlotGenerator implements SlotGeneratorInterface
         }
 
         return $events;
+    }
+
+    /**
+     * @param Recurrence $recurrence
+     * @param DateTimeInterface[] $unavailableTimestamps
+     *
+     * @return bool
+     */
+    private function isUnaivalableRecurrence(Recurrence $recurrence, array $unavailableTimestamps): bool
+    {
+        foreach ($unavailableTimestamps as $unavailableTimestamp) {
+            if ($unavailableTimestamp == $recurrence->getStart()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
