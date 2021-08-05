@@ -40,9 +40,11 @@ class RemoveExpiredSlotsCommand extends Command
         ;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        unset($input); // For PHP MD
         /** @var string $expirationPeriod */
         $expirationPeriod = $this->parameterBag->get('monsieurbiz_sylius_shipping_slot.slot_expiration_period');
         $output->writeln(sprintf(
