@@ -16,6 +16,7 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 use DateInterval;
 use DateTime;
 use DateTimeInterface;
+use DateTimeZone;
 use Recurr\Recurrence;
 use Recurr\Rule as Rrule;
 use Recurr\Transformer\ArrayTransformer;
@@ -222,8 +223,11 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
      */
     private function rruleToRecurrences(string $rrule, ?ConstraintInterface $constraint): array
     {
-        $rrule = new Rrule($rrule);
-        $minDate = (new DateTime())->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay()))); // Add minutes delay
+        $minDate = (new DateTime())
+            ->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay())))
+            ->setTimezone(new DateTimeZone($this->getTimezone() ?? 'UTC'))
+        ;
+        $rrule = (new Rrule($rrule))->setStartDate($minDate);
         // Transform Rrule in a list of recurrences
         return (new ArrayTransformer())
             ->transform($rrule, $constraint)
