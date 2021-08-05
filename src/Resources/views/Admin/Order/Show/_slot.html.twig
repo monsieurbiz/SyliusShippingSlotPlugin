@@ -13,11 +13,11 @@
     {% endif %}
 	<div class="content">
 		<div class="ui big label">
-			{{ slot.timestamp|date('d-m-Y') }}
+			{{ slot.timestamp|date('d-m-Y', slot.timezone) }}
 			<div class="detail">
-				{{ slot.timestamp|date('H:i') }}
+				{{ slot.timestamp|date('H:i', slot.timezone) }}
 				-
-				{{ slot.timestamp|date_modify("+ " ~ slot.durationRange ~ " minutes")|date('H:i') }}
+				{{ slot.timestamp|date_modify("+ " ~ slot.durationRange ~ " minutes")|date('H:i', slot.timezone) }}
 			</div>
 		</div>
 	</div>
