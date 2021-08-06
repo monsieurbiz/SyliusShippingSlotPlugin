@@ -37,3 +37,7 @@ services:
     MonsieurBiz\SyliusShippingSlotPlugin\Listener\OrderPreCompleteListener:
         tags:
             - { name: kernel.event_listener, event: sylius.order.pre_complete, method: checkSlot }
+
+    # Make transition public for winzou
+    MonsieurBiz\SyliusShippingSlotPlugin\Transition\PaymentPaidTransition:
+        public: true

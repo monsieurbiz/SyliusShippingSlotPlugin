@@ -3,4 +3,5 @@ imports:
     - { resource: 'sylius/resource.yaml' }
     - { resource: 'sylius/grids.yaml' }
     - { resource: 'sylius/fixtures.yaml' }
+    - { resource: 'sylius/state_machine.yaml' }
     - { resource: 'sylius/ui.yaml' }
