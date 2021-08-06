@@ -6,3 +6,11 @@ winzou_state_machine:
                     on: ['complete']
                     do: ['@MonsieurBiz\SyliusShippingSlotPlugin\Transition\PaymentPaidTransition', '__invoke']
                     args: ['object']
+
+    sylius_order:
+        callbacks:
+            after:
+                monsieurbiz_shipping_slot_payment_complete_producer:
+                    on: ['cancel']
+                    do: ['@MonsieurBiz\SyliusShippingSlotPlugin\Transition\OrderCancelTransition', '__invoke']
+                    args: ['object']

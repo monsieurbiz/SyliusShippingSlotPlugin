@@ -48,4 +48,15 @@ class SlotRemover implements SlotRemoverInterface
 
         $this->slotManager->flush();
     }
+
+    /**
+     * @return void
+     */
+    public function removeOrderSlots(OrderInterface $order): void
+    {
+        foreach ($order->getSlots() as $slot) {
+            $this->slotManager->remove($slot);
+        }
+        $this->slotManager->flush();
+    }
 }
