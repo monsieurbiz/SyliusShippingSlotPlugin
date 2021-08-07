@@ -35,6 +35,7 @@ class ShippingSlotConfigFixture extends AbstractResourceFixture
         $resourceNode
             ->children()
                 ->scalarNode('name')->cannotBeEmpty()->end()
+                ->scalarNode('timezone')->cannotBeEmpty()->end()
                 ->arrayNode('rrules')
                     ->scalarPrototype()->end()
                 ->end()
@@ -43,6 +44,9 @@ class ShippingSlotConfigFixture extends AbstractResourceFixture
                 ->integerNode('durationRange')->min(0)->end()
                 ->integerNode('availableSpots')->min(1)->end()
                 ->scalarNode('color')->cannotBeEmpty()->end()
+                ->arrayNode('shipping_methods')
+                    ->scalarPrototype()->end()
+                ->end()
             ->end()
         ;
     }

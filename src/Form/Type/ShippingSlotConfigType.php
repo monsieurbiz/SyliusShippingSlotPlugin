@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ShippingSlotConfigType extends AbstractResourceType
@@ -30,6 +31,9 @@ class ShippingSlotConfigType extends AbstractResourceType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'monsieurbiz_shipping_slot.ui.form.name',
+            ])
+            ->add('timezone', TimezoneType::class, [
+                'label' => 'monsieurbiz_shipping_slot.ui.form.timezone',
             ])
             ->add('rrules', CollectionType::class, [
                 'label' => 'monsieurbiz_shipping_slot.ui.form.rrules',

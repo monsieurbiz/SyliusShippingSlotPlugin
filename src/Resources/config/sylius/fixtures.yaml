@@ -2,6 +2,51 @@ sylius_fixtures:
     suites:
         default:
             fixtures:
+                monsieurbiz_shipping_slot_method:
+                    name: 'shipping_method'
+                    options:
+                        custom:
+                            slot_delivery:
+                                code: 'slot_delivery'
+                                name: 'Click''n''Collect'
+                                enabled: true
+                                channels:
+                                    - 'FASHION_WEB'
+                                zone: 'WORLD'
+                            courier_delivery:
+                                code: 'courier_delivery'
+                                name: 'Courrier delivery'
+                                enabled: true
+                                channels:
+                                    - 'FASHION_WEB'
+                                zone: 'WORLD'
                 monsieurbiz_shipping_slot_config:
                     options:
-                        random: 1
+                        custom:
+                            fashion_store:
+                                name: 'Fashion Store hours'
+                                timezone: 'Europe/Paris'
+                                rrules: 
+                                    - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=18;BYMINUTE=0;BYSECOND=0'
+                                    - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=8,9,10,11,12,13,14,15,16,17;BYMINUTE=0,10,20,30,40,50;BYSECOND=0'
+                                preparationDelay: 60
+                                pickupDelay: 0
+                                durationRange: 30
+                                availableSpots: 10
+                                color: '#5D44DC'
+                                shipping_methods:
+                                    - 'slot_delivery'
+                            courier:
+                                name: 'Courier hours'
+                                timezone: 'Europe/Paris'
+                                rrules: 
+                                    - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=19;BYMINUTE=0;BYSECOND=0'
+                                    - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=7,8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=0,30;BYSECOND=0'
+                                preparationDelay: 60
+                                pickupDelay: 30
+                                durationRange: 60
+                                availableSpots: 10
+                                color: '#22B99A'
+                                shipping_methods:
+                                    - 'courier_delivery'
+

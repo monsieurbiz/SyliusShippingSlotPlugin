@@ -642,6 +642,9 @@
     "sebastian/version": {
         "version": "2.0.1"
     },
+    "simshaun/recurr": {
+        "version": "v4.0.5"
+    },
     "slevomat/coding-standard": {
         "version": "6.4.1"
     },
@@ -936,6 +939,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.20.0"
+    },
+    "symfony/polyfill-php81": {
+        "version": "v1.23.0"
     },
     "symfony/process": {
         "version": "v4.4.16"

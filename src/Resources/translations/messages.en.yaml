@@ -1,5 +1,14 @@
 monsieurbiz_shipping_slot:
     ui:
+        slots: 'Shipping slots'
+        manage_shipping_slot_slot: 'Manage shipping slots'
+        slot_type: 'Slot type'
+        slot_range: 'Slot range'
+        no_filter: 'No filter'
+        slots_to_prepare: 'To prepare'
+        prepared_slots: 'Prepared'
+        reserved_slots: 'Reserved'
+        awaiting_slots: 'Awaiting'
         shipping_slot_configs: 'Shipping slot configuration'
         shipping_slot_config: 'Shipping slot configuration'
         manage_shipping_slot_config: 'Manage your shipping slot configuration'
@@ -7,8 +16,11 @@ monsieurbiz_shipping_slot:
         edit_shipping_slot_config: 'Edit shipping slot configuration'
         no_shipping_slot_config: 'No slot configuration for this method'
         use_shipping_slot_configuration: 'Use a shipping slot configuration if you want to display to your customers a calendar with available dates and times to retrieve their package.'
+        list_view: 'list'
+        slot_select_error: 'This slot is no longer available'
         form:
             name: 'Configuration''s name'
+            timezone: 'Timezone'
             rrules: 'Recurrence rules'
             rrules_help: 'You can define a new RRULE with the help of <a href="https://jakubroztocil.github.io/rrule/">the online demo</a>.'
             preparation_delay: 'Preparation delay (in minutes)'
@@ -17,3 +29,6 @@ monsieurbiz_shipping_slot:
             available_spots: 'Available spots in a slot'
             color: 'Color'
             shipping_slot_config: 'Slot configuration for shipping method'
+sylius:
+    ui:
+       partially_refunded: 'Partially refunded'

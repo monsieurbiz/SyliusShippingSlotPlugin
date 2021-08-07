@@ -1,5 +1,208 @@
 sylius_grid:
     grids:
+        monsieurbiz_shipping_slot_slot:
+            driver:
+                options:
+                    class: MonsieurBiz\SyliusShippingSlotPlugin\Entity\Slot
+            sorting:
+                timestamp: asc
+            fields:
+                orderNumber:
+                    type: twig
+                    label: sylius.ui.order
+                    path: shipment.order
+                    options:
+                        template: "@MonsieurBizSyliusShippingSlotPlugin/Admin/Grid/Field/order_number.html.twig"
+                shippingMethod:
+                    type: twig
+                    label: sylius.ui.shipping_method
+                    path: shipment.method
+                    options:
+                        template: "@MonsieurBizSyliusShippingSlotPlugin/Admin/Grid/Field/shipping_method.html.twig"
+                slotType:
+                    type: twig
+                    label: monsieurbiz_shipping_slot.ui.slot_type
+                    path: shipment.method.shippingSlotConfig
+                    options:
+                        template: "@MonsieurBizSyliusShippingSlotPlugin/Admin/Grid/Field/slot_type.html.twig"
+                channel:
+                    type: twig
+                    label: sylius.ui.channel
+                    path: shipment.order.channel
+                    options:
+                        template: "@SyliusAdmin/Order/Grid/Field/channel.html.twig"
+                customer:
+                    type: twig
+                    label: sylius.ui.customer
+                    path: shipment.order.customer
+                    options:
+                        template: "@SyliusAdmin/Order/Grid/Field/customer.html.twig"
+                timestamp:
+                    type: twig
+                    label: monsieurbiz_shipping_slot.ui.slot_range
+                    path: shipment.slot
+                    sortable: timestamp
+                    options:
+                        template: "@MonsieurBizSyliusShippingSlotPlugin/Admin/Grid/Field/slot_range.html.twig"
+                        vars:
+                            dateFormat: d-m-Y 
+                            timeFormat: H:i
+                orderState:
+                    type: twig
+                    label: sylius.ui.order_state
+                    path: shipment.order.state
+                    sortable: ~
+                    options:
+                        template: "@SyliusUi/Grid/Field/state.html.twig"
+                        vars:
+                            labels: "@SyliusAdmin/Order/Label/State"
+                paymentState:
+                    type: twig
+                    label: sylius.ui.payment_state
+                    path: shipment.order.paymentState
+                    sortable: ~
+                    options:
+                        template: "@SyliusUi/Grid/Field/state.html.twig"
+                        vars:
+                            labels: "@SyliusAdmin/Order/Label/PaymentState"
+                shippingState:
+                    type: twig
+                    label: sylius.ui.shipping_state
+                    path: shipment.order.shippingState
+                    sortable: ~
+                    options:
+                        template: "@SyliusUi/Grid/Field/state.html.twig"
+                        vars:
+                            labels: "@SyliusAdmin/Order/Label/ShippingState"
+            filters:
+                orderNumber:
+                    type: string
+                    label: sylius.ui.order
+                    options:
+                        fields: [shipment.order.number]
+                shippingMethod:
+                    type: entity
+                    label: sylius.ui.shipping_method
+                    options:
+                        fields: [shipment.method]
+                    form_options:
+                        class: "%sylius.model.shipping_method.class%"
+                slotType:
+                    type: entity
+                    label: monsieurbiz_shipping_slot.ui.slot_type
+                    options:
+                        fields: [shipment.method.shippingSlotConfig]
+                    form_options:
+                        class: "%monsieurbiz_shipping_slot.model.shipping_slot_config.class%"
+                channel:
+                    type: entity
+                    label: sylius.ui.channel
+                    options:
+                        fields: [shipment.order.channel]
+                    form_options:
+                        class: "%sylius.model.channel.class%"
+                customer:
+                    type: string
+                    label: sylius.ui.customer
+                    options:
+                        fields: [shipment.order.customer.email, shipment.order.customer.firstName, shipment.order.customer.lastName]
+                date:
+                    type: date
+                    label: sylius.ui.date
+                    options:
+                        field: timestamp
+                        inclusive_to: true
+                orderState:
+                    type: select
+                    label: sylius.ui.order_state
+                    options:
+                        field: shipment.order.state
+                    form_options:
+                        choices:
+                            sylius.ui.cart: cart
+                            sylius.ui.new: new
+                            sylius.ui.cancelled: cancelled
+                            sylius.ui.fulfilled: fulfilled
+                paymentState:
+                    type: select
+                    label: sylius.ui.payment_state
+                    options:
+                        field: shipment.order.paymentState
+                    form_options:
+                        choices:
+                            sylius.ui.cart: cart
+                            sylius.ui.awaiting_payment: awaiting_payment
+                            sylius.ui.partially_authorized: partially_authorized
+                            sylius.ui.authorized: authorized
+                            sylius.ui.partially_paid: partially_paid
+                            sylius.ui.cancelled: cancelled
+                            sylius.ui.paid: paid
+                            sylius.ui.partially_refunded: partially_refunded
+                            sylius.ui.refunded: refunded
+                shippingState:
+                    type: select
+                    label: sylius.ui.shipping_state
+                    options:
+                        field: shipment.order.shippingState
+                    form_options:
+                        choices:
+                            sylius.ui.cart: cart
+                            sylius.ui.ready: ready
+                            sylius.ui.cancelled: cancelled
+                            sylius.ui.partially_shipped: partially_shipped
+                            sylius.ui.shipped: shipped
+            actions:
+                main:
+                    no_filter:
+                        type: default
+                        label: monsieurbiz_shipping_slot.ui.no_filter
+                        icon: x icon
+                        options:
+                            link:
+                                route: monsieurbiz_shipping_slot_admin_slot_index
+                    reserved_slots:
+                        type: default
+                        label: monsieurbiz_shipping_slot.ui.reserved_slots
+                        icon: cart
+                        options:
+                            link:
+                                route: monsieurbiz_shipping_slot_admin_slot_index
+                                parameters:
+                                    criteria: 
+                                        orderState: cart
+                    awaiting_slots:
+                        type: default
+                        label: monsieurbiz_shipping_slot.ui.awaiting_slots
+                        icon: clock
+                        options:
+                            link:
+                                route: monsieurbiz_shipping_slot_admin_slot_index
+                                parameters:
+                                    criteria: 
+                                        paymentState: awaiting_payment
+                    slots_to_prepare:
+                        type: default
+                        label: monsieurbiz_shipping_slot.ui.slots_to_prepare
+                        icon: dolly
+                        options:
+                            link:
+                                route: monsieurbiz_shipping_slot_admin_slot_index
+                                parameters:
+                                    criteria: 
+                                        paymentState: paid
+                                        shippingState: ready
+                    prepared_slots:
+                        type: default
+                        label: monsieurbiz_shipping_slot.ui.prepared_slots
+                        icon: clipboard check
+                        options:
+                            link:
+                                route: monsieurbiz_shipping_slot_admin_slot_index
+                                parameters:
+                                    criteria: 
+                                        paymentState: paid
+                                        shippingState: shipped
+
         monsieurbiz_shipping_slot_config:
             driver:
                 options:
@@ -28,4 +231,4 @@ sylius_grid:
                                 route: monsieurbiz_shipping_slot_admin_shipping_slot_config_index
     templates:
         action:
-            shipping_slot_config: "@MonsieurBizSyliusShippingSlotPlugin/Admin/Grid/Action/shippingSlotConfig.html.twig"
+            shipping_slot_config: "@MonsieurBizSyliusShippingSlotPlugin/Admin/Grid/Action/shipping_slot_config.html.twig"

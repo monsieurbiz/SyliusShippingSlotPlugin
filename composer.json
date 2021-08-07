@@ -8,7 +8,8 @@
         "php": "~7.4",
         "sylius/sylius": "~1.8.0",
         "gedmo/doctrine-extensions": "^2.4.12",
-        "phpstan/phpstan-webmozart-assert": "^0.12.7"
+        "phpstan/phpstan-webmozart-assert": "^0.12.7",
+        "simshaun/recurr": "^4.0"
     },
     "require-dev": {
         "behat/behat": "^3.6.1",

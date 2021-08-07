@@ -1,0 +1,13 @@
+{% if options.vars.dateFormat is defined and options.vars.timeFormat is defined %}
+    <div class="ui label">
+        {{ data.timestamp|date(options.vars.dateFormat, data.timezone) }}
+        <div class="detail">
+            {{ data.timestamp|date(options.vars.timeFormat, data.timezone) }}
+            -
+            {{ data.timestamp|date_modify("+ " ~ data.durationRange ~ " minutes")|date(options.vars.timeFormat, data.timezone) }}
+        </div>
+    </div>
+{% else %}
+    {{ data.timestamp|date }}<br />
+    {{ data.timestamp|date_modify("+ " ~ data.durationRange ~ " minutes")|date }}
+{% endif %}

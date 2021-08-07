@@ -13,10 +13,23 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
+use DateInterval;
+use DateTime;
+use DateTimeInterface;
+use DateTimeZone;
+use Recurr\Recurrence;
+use Recurr\Rule as Rrule;
+use Recurr\Transformer\ArrayTransformer;
+use Recurr\Transformer\Constraint\AfterConstraint;
+use Recurr\Transformer\Constraint\BeforeConstraint;
+use Recurr\Transformer\Constraint\BetweenConstraint;
+use Recurr\Transformer\ConstraintInterface;
+
 class ShippingSlotConfig implements ShippingSlotConfigInterface
 {
     private ?int $id = null;
     private ?string $name = null;
+    private ?string $timezone = null;
     private ?array $rrules = null;
     private ?int $preparationDelay = null;
     private ?int $pickupDelay = null;
@@ -46,6 +59,22 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTimezone(?string $timezone): void
+    {
+        $this->timezone = $timezone;
     }
 
     /**
@@ -142,5 +171,82 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     public function setColor(?string $color): void
     {
         $this->color = $color;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSlotDelay(): int
+    {
+        return
+            (int) $this->getPreparationDelay() > (int) $this->getPickupDelay() ?
+            (int) $this->getPreparationDelay() : (int) $this->getPickupDelay();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getRecurrences(
+        ?DateTimeInterface $startDate = null,
+        ?DateTimeInterface $endDate = null
+    ): array {
+        $recurrences = [];
+
+        switch (true) {
+            case null !== $startDate && null !== $endDate:
+                $constraint = new BetweenConstraint($startDate, $endDate);
+                break;
+            case null !== $startDate:
+                $constraint = new AfterConstraint($startDate);
+                break;
+            case null !== $endDate:
+                $constraint = new BeforeConstraint($endDate);
+                break;
+            default:
+                $constraint = null;
+        }
+
+        foreach ($this->getRrules() ?? [] as $rrule) {
+            $recurrences = array_merge($recurrences, $this->rruleToRecurrences($rrule, $constraint));
+        }
+
+        return $recurrences;
+    }
+
+    /**
+     * @param string $rrule
+     * @param ConstraintInterface|null $constraint
+     *
+     * @return Recurrence[]
+     */
+    private function rruleToRecurrences(string $rrule, ?ConstraintInterface $constraint): array
+    {
+        $minDate = (new DateTime())
+            ->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay())))
+            ->setTimezone(new DateTimeZone($this->getTimezone() ?? 'UTC'))
+        ;
+        $rrule = (new Rrule($rrule))->setStartDate($minDate);
+        // Transform Rrule in a list of recurrences
+        return (new ArrayTransformer())
+            ->transform($rrule, $constraint)
+            ->filter(function(Recurrence $recurrence) use ($minDate) {
+                // Filter on minimum date depending on the slot delay
+                return $recurrence->getStart() >= $minDate;
+            })
+            ->map(function(Recurrence $recurrence) {
+                // Update end date with the slot duration on each recurrence
+                $recurrence->setEnd($recurrence->getEnd()->add(new DateInterval(sprintf('PT%dM', $this->getDurationRange()))));
+
+                return $recurrence;
+            })
+            ->toArray()
+        ;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getName();
     }
 }

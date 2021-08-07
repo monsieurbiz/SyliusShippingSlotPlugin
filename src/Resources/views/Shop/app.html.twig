@@ -1,0 +1,41 @@
+{% include '@SyliusUi/_javascripts.html.twig' with {'path': 'bundles/monsieurbizsyliusshippingslotplugin/js/shipping-slot-js.js'} %}
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        let shippingMethodInputs = document.querySelectorAll('input[type="radio"][name*="sylius_checkout_select_shipping"]');
+        let nextStepButtons = document.querySelectorAll('form[name="sylius_checkout_select_shipping"] button#next-step');
+        let calendarContainers = document.querySelectorAll('.monsieurbiz_shipping_slot_calendar');
+        let slotStyle = {
+            textColor: '#ffffff',
+            borderColor: '#3788d8',
+            backgroundColor: '#3788d8',
+        };
+        let selectedSlotStyle = {
+            textColor: '#3788d8',
+            borderColor: '#3788d8',
+            backgroundColor: '#ffffff',
+        };
+        let fullCalendarConfig = {
+            slotMinTime: "06:00:00",
+            slotMaxTime: "22:00:00",
+            locale: '{{ sylius.localeCode | slice(0, 2) | escape('js') }}',
+            firstDay: 1,
+            buttonText: {
+                list: '{{ 'monsieurbiz_shipping_slot.ui.list_view' | trans | escape('js') }}'
+            },
+        };
+        let config = new MonsieurBizShippingSlotManager(
+                shippingMethodInputs,
+                nextStepButtons,
+                calendarContainers,
+                fullCalendarConfig,
+                slotStyle,
+                selectedSlotStyle,
+                '{{ url("monsieurbiz_shippingslot_checkout_init", {"code": "__CODE__"})|e('js') }}',
+                '{{ url("monsieurbiz_shippingslot_checkout_listslots", {"code": "__CODE__", "fromDate": "__FROM__", "toDate": "__TO__"})|e('js') }}',
+                '{{ url("monsieurbiz_shippingslot_checkout_saveslot")|e('js') }}',
+                '{{ url("monsieurbiz_shippingslot_checkout_resetslot")|e('js') }}',
+                '{{ 'monsieurbiz_shipping_slot.ui.slot_select_error' | trans | escape('js') }}'
+            );
+    });
+</script>
