@@ -193,6 +193,14 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
         ?DateTimeInterface $endDate = null
     ): array {
         $recurrences = [];
+        $minDate = (new DateTime())
+            ->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay())))
+            ->setTimezone(new DateTimeZone($this->getTimezone() ?? 'UTC'))
+        ;
+
+        if ($startDate < $minDate) {
+            $startDate = $minDate;
+        }
 
         switch (true) {
             case null !== $startDate && null !== $endDate:
@@ -208,7 +216,9 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
                 $constraint = null;
         }
 
-        foreach ($this->getRrules() ?? [] as $rrule) {
+        foreach ($this->getRrules() ?? [] as $rruleString) {
+            $rrule = new Rrule($rruleString);
+            $rrule->setStartDate($startDate);
             $recurrences = array_merge($recurrences, $this->rruleToRecurrences($rrule, $constraint));
         }
 
@@ -216,25 +226,16 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
     }
 
     /**
-     * @param string $rrule
+     * @param Rrule $rrule
      * @param ConstraintInterface|null $constraint
      *
      * @return Recurrence[]
      */
-    private function rruleToRecurrences(string $rrule, ?ConstraintInterface $constraint): array
+    private function rruleToRecurrences(Rrule $rrule, ?ConstraintInterface $constraint): array
     {
-        $minDate = (new DateTime())
-            ->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay())))
-            ->setTimezone(new DateTimeZone($this->getTimezone() ?? 'UTC'))
-        ;
-        $rrule = (new Rrule($rrule))->setStartDate($minDate);
         // Transform Rrule in a list of recurrences
         return (new ArrayTransformer())
             ->transform($rrule, $constraint)
-            ->filter(function(Recurrence $recurrence) use ($minDate) {
-                // Filter on minimum date depending on the slot delay
-                return $recurrence->getStart() >= $minDate;
-            })
             ->map(function(Recurrence $recurrence) {
                 // Update end date with the slot duration on each recurrence
                 $recurrence->setEnd($recurrence->getEnd()->add(new DateInterval(sprintf('PT%dM', $this->getDurationRange()))));
