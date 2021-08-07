@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\MessageHandler;
 
-use MonsieurBiz\SyliusSalesReportsPlugin\Event\ShipmentPaidEvent;
+use MonsieurBiz\SyliusShippingSlotPlugin\Event\ShipmentPaidEvent;
 use MonsieurBiz\SyliusShippingSlotPlugin\Message\ShipmentMessage;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;

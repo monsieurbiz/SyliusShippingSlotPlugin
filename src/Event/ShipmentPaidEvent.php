@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace MonsieurBiz\SyliusSalesReportsPlugin\Event;
+namespace MonsieurBiz\SyliusShippingSlotPlugin\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
 
