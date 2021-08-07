@@ -23,10 +23,6 @@ class SlotRemover implements SlotRemoverInterface
     private OrderRepositoryInterface $orderRepository;
     private EntityManagerInterface $slotManager;
 
-    /**
-     * @param OrderRepositoryInterface $orderRepository
-     * @param EntityManagerInterface $slotManager
-     */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         EntityManagerInterface $slotManager
@@ -49,9 +45,6 @@ class SlotRemover implements SlotRemoverInterface
         $this->slotManager->flush();
     }
 
-    /**
-     * @return void
-     */
     public function removeOrderSlots(OrderInterface $order): void
     {
         foreach ($order->getSlots() as $slot) {

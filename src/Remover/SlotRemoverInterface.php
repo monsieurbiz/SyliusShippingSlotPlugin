@@ -17,13 +17,7 @@ use MonsieurBiz\SyliusShippingSlotPlugin\Entity\OrderInterface;
 
 interface SlotRemoverInterface
 {
-    /**
-     * @return void
-     */
     public function removeIdleSlots(string $delay): void;
 
-    /**
-     * @return void
-     */
     public function removeOrderSlots(OrderInterface $order): void;
 }

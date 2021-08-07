@@ -20,9 +20,6 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class ShipmentMessageHandler implements MessageHandlerInterface
 {
-    /**
-     * @var EventDispatcherInterface
-     */
     protected EventDispatcherInterface $eventDispatcher;
 
     public function __construct(

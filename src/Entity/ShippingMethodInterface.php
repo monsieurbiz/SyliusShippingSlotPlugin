@@ -17,19 +17,7 @@ use Sylius\Component\Core\Model\ShippingMethodInterface as SyliusShippingMethodI
 
 interface ShippingMethodInterface extends SyliusShippingMethodInterface
 {
-    /**
-     * Get the shipping slot config.
-     *
-     * @return ShippingSlotConfigInterface|null
-     */
     public function getShippingSlotConfig(): ?ShippingSlotConfigInterface;
 
-    /**
-     * Set the shipping slot config.
-     *
-     * @param ShippingSlotConfigInterface $shippingSlotConfig
-     *
-     * @return void
-     */
     public function setShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void;
 }

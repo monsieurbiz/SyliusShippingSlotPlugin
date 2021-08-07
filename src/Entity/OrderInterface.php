@@ -17,8 +17,5 @@ use Sylius\Component\Core\Model\OrderInterface as SyliusOrderInterface;
 
 interface OrderInterface extends SyliusOrderInterface
 {
-    /**
-     * @return array
-     */
     public function getSlots(): array;
 }

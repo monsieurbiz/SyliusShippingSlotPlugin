@@ -19,13 +19,7 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface SlotRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @return array
-     */
     public function findByMethodAndStartDate(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from = null): array;
 
-    /**
-     * @return array
-     */
     public function findByMethodAndDate(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $date = null): array;
 }

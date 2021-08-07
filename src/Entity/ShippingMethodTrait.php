@@ -20,22 +20,14 @@ trait ShippingMethodTrait
     /**
      * @ORM\ManyToOne(targetEntity="\MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface")
      * @ORM\JoinColumn(name="shipping_slot_config_id", nullable=true, referencedColumnName="id", onDelete="SET NULL")
-     *
-     * @var ShippingSlotConfigInterface|null
      */
     private ?ShippingSlotConfigInterface $shippingSlotConfig = null;
 
-    /**
-     * @return ShippingSlotConfigInterface|null
-     */
     public function getShippingSlotConfig(): ?ShippingSlotConfigInterface
     {
         return $this->shippingSlotConfig;
     }
 
-    /**
-     * @param ShippingSlotConfigInterface|null $shippingSlotConfig
-     */
     public function setShippingSlotConfig(?ShippingSlotConfigInterface $shippingSlotConfig): void
     {
         $this->shippingSlotConfig = $shippingSlotConfig;

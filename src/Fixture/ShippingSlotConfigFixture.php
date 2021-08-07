@@ -18,17 +18,11 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class ShippingSlotConfigFixture extends AbstractResourceFixture
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getName(): string
     {
         return 'monsieurbiz_shipping_slot_config';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {
         /** @phpstan-ignore-next-line */

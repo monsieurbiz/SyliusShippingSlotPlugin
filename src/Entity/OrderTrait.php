@@ -15,9 +15,6 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
 trait OrderTrait
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getSlots(): array
     {
         if (!$this->hasShipments()) {

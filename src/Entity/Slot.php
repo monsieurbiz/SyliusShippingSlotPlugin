@@ -30,97 +30,61 @@ class Slot implements SlotInterface
     private ?int $durationRange = null;
     private ?ShipmentInterface $shipment = null;
 
-    /**
-     * {@inheritDoc}
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTimestamp(): ?DateTimeInterface
     {
         return $this->timestamp;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setTimestamp(?DateTimeInterface $timetamp): void
     {
         $this->timestamp = $timetamp;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPreparationDelay(): ?int
     {
         return $this->preparationDelay;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setPreparationDelay(?int $preparationDelay): void
     {
         $this->preparationDelay = $preparationDelay;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPickupDelay(): ?int
     {
         return $this->pickupDelay;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setPickupDelay(?int $pickupDelay): void
     {
         $this->pickupDelay = $pickupDelay;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDurationRange(): ?int
     {
         return $this->durationRange;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDurationRange(?int $durationRange): void
     {
         $this->durationRange = $durationRange;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getShipment(): ?ShipmentInterface
     {
         return $this->shipment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setShipment(?ShipmentInterface $shipment): void
     {
         $this->shipment = $shipment;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getSlotDelay(): int
     {
         return
@@ -128,9 +92,6 @@ class Slot implements SlotInterface
             (int) $this->getPreparationDelay() : (int) $this->getPickupDelay();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isValid(): bool
     {
         $minDate = (new DateTime())->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay()))); // Add minutes delay
@@ -144,8 +105,6 @@ class Slot implements SlotInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getTimezone(): string

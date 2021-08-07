@@ -17,19 +17,7 @@ use Sylius\Component\Core\Model\ShipmentInterface as SyliusShipmentInterface;
 
 interface ShipmentInterface extends SyliusShipmentInterface
 {
-    /**
-     * Get the slot.
-     *
-     * @return SlotInterface|null
-     */
     public function getSlot(): ?SlotInterface;
 
-    /**
-     * Set the slot.
-     *
-     * @param SlotInterface|null $slot
-     *
-     * @return void
-     */
     public function setSlot(?SlotInterface $slot): void;
 }

@@ -39,13 +39,6 @@ class SlotGenerator implements SlotGeneratorInterface
     private EntityManagerInterface $slotManager;
     protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @param CartContextInterface $cartContext
-     * @param FactoryInterface $slotFactory
-     * @param ShippingMethodRepositoryInterface $shippingMethodRepository
-     * @param SlotRepositoryInterface $slotRepository
-     * @param EntityManagerInterface $slotManager
-     */
     public function __construct(
         CartContextInterface $cartContext,
         FactoryInterface $slotFactory,
@@ -62,9 +55,6 @@ class SlotGenerator implements SlotGeneratorInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @return SlotInterface
-     */
     public function createFromCheckout(
         string $shippingMethod,
         int $shipmentIndex,
@@ -109,9 +99,6 @@ class SlotGenerator implements SlotGeneratorInterface
         return $slot;
     }
 
-    /**
-     * @return void
-     */
     public function resetSlot(int $shipmentIndex): void
     {
         /** @var OrderInterface $order */
@@ -134,9 +121,6 @@ class SlotGenerator implements SlotGeneratorInterface
         $this->slotManager->flush();
     }
 
-    /**
-     * @return SlotInterface|null
-     */
     public function getSlotByMethod(ShippingMethodInterface $shippingMethod): ?SlotInterface
     {
         /** @var OrderInterface $order */
@@ -153,9 +137,6 @@ class SlotGenerator implements SlotGeneratorInterface
         return null;
     }
 
-    /**
-     * @return array
-     */
     public function getFullSlots(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array
     {
         if (null === ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
@@ -189,9 +170,6 @@ class SlotGenerator implements SlotGeneratorInterface
         return $fullSlots;
     }
 
-    /**
-     * @return bool
-     */
     public function isFull(SlotInterface $slot): bool
     {
         $shipment = $slot->getShipment();
@@ -210,9 +188,6 @@ class SlotGenerator implements SlotGeneratorInterface
         return \count($slots) > (int) $shippingSlotConfig->getAvailableSpots(); // Not >= because we have the current user slot
     }
 
-    /**
-     * @return array
-     */
     public function generateCalendarEvents(
         ShippingMethodInterface $shippingMethod,
         DateTimeInterface $startDate,
@@ -250,12 +225,6 @@ class SlotGenerator implements SlotGeneratorInterface
         return $events;
     }
 
-    /**
-     * @param Recurrence $recurrence
-     * @param DateTimeInterface[] $unavailableTimestamps
-     *
-     * @return bool
-     */
     private function isUnaivalableRecurrence(Recurrence $recurrence, array $unavailableTimestamps): bool
     {
         foreach ($unavailableTimestamps as $unavailableTimestamp) {

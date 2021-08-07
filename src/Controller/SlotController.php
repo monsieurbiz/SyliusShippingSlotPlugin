@@ -28,10 +28,6 @@ class SlotController extends AbstractController
     private ShippingMethodRepositoryInterface $shippingMethodRepository;
     private SlotGeneratorInterface $slotGenerator;
 
-    /**
-     * @param ShippingMethodRepositoryInterface $shippingMethodRepository
-     * @param SlotGeneratorInterface $slotGenerator
-     */
     public function __construct(
         ShippingMethodRepositoryInterface $shippingMethodRepository,
         SlotGeneratorInterface $slotGenerator
@@ -40,11 +36,6 @@ class SlotController extends AbstractController
         $this->slotGenerator = $slotGenerator;
     }
 
-    /**
-     * @param string $code
-     *
-     * @return Response
-     */
     public function initAction(string $code): Response
     {
         // Find shipping method from code
@@ -66,13 +57,6 @@ class SlotController extends AbstractController
         ]);
     }
 
-    /**
-     * @param string $code
-     * @param string $fromDate
-     * @param string $toDate
-     *
-     * @return Response
-     */
     public function listAction(string $code, string $fromDate, string $toDate): Response
     {
         // Find shipping method from code
@@ -94,11 +78,6 @@ class SlotController extends AbstractController
         ));
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function saveAction(Request $request): Response
     {
         if (!($shippingMethod = $request->get('shippingMethod'))) {
@@ -127,11 +106,6 @@ class SlotController extends AbstractController
         return new JsonResponse($slotElement);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function resetAction(Request $request): Response
     {
         if (null === ($shipmentIndex = $request->get('shipmentIndex'))) {

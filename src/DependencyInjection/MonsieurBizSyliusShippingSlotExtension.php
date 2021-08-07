@@ -20,9 +20,6 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 final class MonsieurBizSyliusShippingSlotExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $config, ContainerBuilder $container): void
     {
         $configuration = $this->processConfiguration($this->getConfiguration([], $container), $config);
@@ -31,9 +28,6 @@ final class MonsieurBizSyliusShippingSlotExtension extends Extension
         $loader->load('services.yaml');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAlias()
     {
         return str_replace('monsieur_biz', 'monsieurbiz', parent::getAlias());

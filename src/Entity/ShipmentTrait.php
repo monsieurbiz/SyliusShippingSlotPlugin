@@ -19,22 +19,14 @@ trait ShipmentTrait
 {
     /**
      * @ORM\OneToOne(targetEntity="MonsieurBiz\SyliusShippingSlotPlugin\Entity\Slot", mappedBy="shipment", fetch="EAGER")
-     *
-     * @var SlotInterface|null
      */
     private ?SlotInterface $slot = null;
 
-    /**
-     * {@inheritDoc}
-     */
     public function getSlot(): ?SlotInterface
     {
         return $this->slot;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setSlot(?SlotInterface $slot): void
     {
         $this->slot = $slot;

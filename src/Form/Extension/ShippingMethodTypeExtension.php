@@ -21,16 +21,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ShippingMethodTypeExtension extends AbstractTypeExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getExtendedTypes(): iterable
     {
         return [ShippingMethodType::class];
     }
 
     /**
-     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

@@ -19,9 +19,6 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 class SlotRepository extends EntityRepository implements SlotRepositoryInterface
 {
-    /**
-     * @return array
-     */
     public function findByMethodAndStartDate(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from = null): array
     {
         $queryBuilder = $this->createQueryBuilder('o')
@@ -41,9 +38,6 @@ class SlotRepository extends EntityRepository implements SlotRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /**
-     * @return array
-     */
     public function findByMethodAndDate(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from = null): array
     {
         $queryBuilder = $this->createQueryBuilder('o')

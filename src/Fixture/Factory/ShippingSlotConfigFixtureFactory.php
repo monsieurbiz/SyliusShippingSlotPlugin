@@ -22,7 +22,6 @@ use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
@@ -32,11 +31,6 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
     private OptionsResolver $optionsResolver;
     private Generator $faker;
 
-    /**
-     * ShippingSlotConfigFixtureFactory constructor.
-     *
-     * @param FactoryInterface $shippingSlotConfigFactory
-     */
     public function __construct(
         FactoryInterface $shippingSlotConfigFactory,
         RepositoryInterface $shippingMethodRepository
@@ -48,9 +42,6 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
         $this->configureOptions($this->optionsResolver);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $options = []): ShippingSlotConfigInterface
     {
         $options = $this->optionsResolver->resolve($options);
@@ -74,37 +65,34 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
         return $shippingSlotConfig;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setDefault('name', function(Options $options): string {
+            ->setDefault('name', function(): string {
                 return $this->faker->sentence(2, true);
             })
-            ->setDefault('timezone', function(Options $options): string {
+            ->setDefault('timezone', function(): string {
                 return $this->faker->timezone;
             })
-            ->setDefault('rrules', function(Options $options): array {
+            ->setDefault('rrules', function(): array {
                 return [
                     'RRULE:FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=0;BYSECOND=0',
                     'RRULE:FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=30;BYSECOND=0',
                 ];
             })
-            ->setDefault('preparationDelay', function(Options $options): int {
+            ->setDefault('preparationDelay', function(): int {
                 return $this->faker->numberBetween(3, 12) * 10;
             })
-            ->setDefault('pickupDelay', function(Options $options): int {
+            ->setDefault('pickupDelay', function(): int {
                 return $this->faker->numberBetween(3, 12) * 10;
             })
-            ->setDefault('durationRange', function(Options $options): int {
+            ->setDefault('durationRange', function(): int {
                 return $this->faker->numberBetween(2, 4) * 60;
             })
-            ->setDefault('availableSpots', function(Options $options): int {
+            ->setDefault('availableSpots', function(): int {
                 return $this->faker->numberBetween(5, 10);
             })
-            ->setDefault('color', function(Options $options): string {
+            ->setDefault('color', function(): string {
                 return $this->faker->hexColor;
             })
             ->setDefault('shipping_methods', [])

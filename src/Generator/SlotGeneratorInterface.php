@@ -19,34 +19,16 @@ use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 
 interface SlotGeneratorInterface
 {
-    /**
-     * @return SlotInterface
-     */
     public function createFromCheckout(string $shippingMethod, int $shipmentIndex, DateTimeInterface $startDate): SlotInterface;
 
-    /**
-     * @return void
-     */
     public function resetSlot(int $shipmentIndex): void;
 
-    /**
-     * @return SlotInterface|null
-     */
     public function getSlotByMethod(ShippingMethodInterface $shippingMethod): ?SlotInterface;
 
-    /**
-     * @return array
-     */
     public function getFullSlots(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array;
 
-    /**
-     * @return bool
-     */
     public function isFull(SlotInterface $slot): bool;
 
-    /**
-     * @return array
-     */
     public function generateCalendarEvents(
         ShippingMethodInterface $shippingMethod,
         DateTimeInterface $startDate,
