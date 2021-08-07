@@ -21,12 +21,14 @@ use Exception;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Event\RecurrenceGenerationEvent;
 use MonsieurBiz\SyliusShippingSlotPlugin\Repository\SlotRepositoryInterface;
 use Recurr\Recurrence;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use Sylius\Component\Order\Context\CartContextInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SlotGenerator implements SlotGeneratorInterface
 {
@@ -35,6 +37,7 @@ class SlotGenerator implements SlotGeneratorInterface
     private ShippingMethodRepositoryInterface $shippingMethodRepository;
     private SlotRepositoryInterface $slotRepository;
     private EntityManagerInterface $slotManager;
+    protected EventDispatcherInterface $eventDispatcher;
 
     /**
      * @param CartContextInterface $cartContext
@@ -48,13 +51,15 @@ class SlotGenerator implements SlotGeneratorInterface
         FactoryInterface $slotFactory,
         ShippingMethodRepositoryInterface $shippingMethodRepository,
         SlotRepositoryInterface $slotRepository,
-        EntityManagerInterface $slotManager
+        EntityManagerInterface $slotManager,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->cartContext = $cartContext;
         $this->slotFactory = $slotFactory;
         $this->shippingMethodRepository = $shippingMethodRepository;
         $this->slotRepository = $slotRepository;
         $this->slotManager = $slotManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -218,6 +223,10 @@ class SlotGenerator implements SlotGeneratorInterface
             return [];
         }
         $recurrences = $shippingSlotConfig->getRecurrences($startDate, $endDate);
+        $event = new RecurrenceGenerationEvent($recurrences);
+        $this->eventDispatcher->dispatch($event);
+        $recurrences = $event->getRecurrences();
+
         $currentSlot = $this->getSlotByMethod($shippingMethod);
         $fullSlots = $this->getFullSlots($shippingMethod, $startDate);
         $unavailableTimestamps = array_map(function(SlotInterface $slot) {
