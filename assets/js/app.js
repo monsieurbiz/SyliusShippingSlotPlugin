@@ -10,8 +10,10 @@ global.MonsieurBizShippingSlotManager = class {
     nextStepButtons,
     calendarContainers,
     fullCalendarConfig,
-    slotStyle,
-    selectedSlotStyle,
+    gridSlotStyle,
+    selectedGridSlotStyle,
+    listSlotStyle,
+    selectedListSlotStyle,
     initUrl,
     listSlotsUrl,
     saveSlotUrl,
@@ -22,8 +24,10 @@ global.MonsieurBizShippingSlotManager = class {
     this.nextStepButtons = nextStepButtons;
     this.calendarContainers = calendarContainers;
     this.fullCalendarConfig = fullCalendarConfig;
-    this.slotStyle = slotStyle;
-    this.selectedSlotStyle = selectedSlotStyle;
+    this.gridSlotStyle = gridSlotStyle;
+    this.selectedGridSlotStyle = selectedGridSlotStyle;
+    this.listSlotStyle = listSlotStyle;
+    this.selectedListSlotStyle = selectedListSlotStyle;
     this.initUrl = initUrl;
     this.listSlotsUrl = listSlotsUrl;
     this.saveSlotUrl = saveSlotUrl;
@@ -178,17 +182,35 @@ global.MonsieurBizShippingSlotManager = class {
   }
 
   applySlotStyle(slot) {
-    slot.el.querySelector(".fc-event-main").style.color =
-      this.slotStyle.textColor;
-    slot.el.style.borderColor = this.slotStyle.borderColor;
-    slot.el.style.backgroundColor = this.slotStyle.backgroundColor;
+    if (slot.el.querySelector(".fc-event-main") !== null) {
+      // Timegrid view
+      slot.el.querySelector(".fc-event-main").style.color =
+        this.gridSlotStyle.textColor;
+      slot.el.style.borderColor = this.gridSlotStyle.borderColor;
+      slot.el.style.backgroundColor = this.gridSlotStyle.backgroundColor;
+    } else if (slot.el.querySelector(".fc-list-event-time") !== null) {
+      // List view
+      slot.el.querySelector(".fc-list-event-time").style.color =
+        this.listSlotStyle.textColor;
+      slot.el.style.borderColor = this.listSlotStyle.borderColor;
+      slot.el.style.backgroundColor = this.listSlotStyle.backgroundColor;
+    }
   }
 
   applySelectedSlotStyle(slot) {
-    slot.el.querySelector(".fc-event-main").style.color =
-      this.selectedSlotStyle.textColor;
-    slot.el.style.borderColor = this.selectedSlotStyle.borderColor;
-    slot.el.style.backgroundColor = this.selectedSlotStyle.backgroundColor;
+    if (slot.el.querySelector(".fc-event-main") !== null) {
+      // Timegrid view
+      slot.el.querySelector(".fc-event-main").style.color =
+        this.selectedGridSlotStyle.textColor;
+      slot.el.style.borderColor = this.selectedGridSlotStyle.borderColor;
+      slot.el.style.backgroundColor = this.selectedGridSlotStyle.backgroundColor;
+    } else if (slot.el.querySelector(".fc-list-event-time") !== null) {
+      // List view
+      slot.el.querySelector(".fc-list-event-time").style.color =
+        this.selectedListSlotStyle.textColor;
+      slot.el.style.borderColor = this.selectedListSlotStyle.borderColor;
+      slot.el.style.backgroundColor = this.selectedListSlotStyle.backgroundColor;
+    }
   }
 
   hideSlot(slot) {
@@ -205,7 +227,7 @@ global.MonsieurBizShippingSlotManager = class {
           timeZone: timezone,
           plugins: [timeGridPlugin, listPlugin, momentTimezonePlugin],
           locales: allLocales,
-          initialView: "timeGridWeek",
+          initialView: "listDay",
           contentHeight: "auto",
           allDaySlot: false,
           headerToolbar: {
@@ -214,9 +236,9 @@ global.MonsieurBizShippingSlotManager = class {
             right: "timeGridWeek,timeGridDay",
           },
           events: events,
-          eventTextColor: this.slotStyle.textColor,
-          eventBackgroundColor: this.slotStyle.backgroundColor,
-          eventBorderColor: this.slotStyle.borderColor,
+          eventTextColor: this.gridSlotStyle.textColor,
+          eventBackgroundColor: this.gridSlotStyle.backgroundColor,
+          eventBorderColor: this.gridSlotStyle.borderColor,
           eventClick: function (info) {
             // Apply slot selected display
             shippingSlotManager.applySelectedSlotStyle(info);
@@ -246,6 +268,8 @@ global.MonsieurBizShippingSlotManager = class {
               shippingSlotManager.applySelectedSlotStyle(info);
               shippingSlotManager.previousSlot = info;
               shippingSlotManager.enableButtons();
+            } else {
+              shippingSlotManager.applySlotStyle(info);
             }
           },
           datesSet(dateInfo) {
