@@ -88,8 +88,8 @@ class SlotController extends AbstractController
             throw $this->createNotFoundException('Shipment index not defined');
         }
 
-        $slotElement = json_decode($request->get('slot', '{}'), true);
-        if (!($startDate = $slotElement['event']['start'] ?? false)) {
+        $event = json_decode($request->get('event', '{}'), true);
+        if (!($startDate = $event['start'] ?? false)) {
             throw $this->createNotFoundException('Start date not defined');
         }
 
@@ -103,7 +103,7 @@ class SlotController extends AbstractController
             throw $this->createNotFoundException($e->getMessage());
         }
 
-        return new JsonResponse($slotElement);
+        return new JsonResponse($event);
     }
 
     public function resetAction(Request $request): Response

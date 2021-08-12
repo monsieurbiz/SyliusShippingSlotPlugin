@@ -5,12 +5,22 @@
         let shippingMethodInputs = document.querySelectorAll('input[type="radio"][name*="sylius_checkout_select_shipping"]');
         let nextStepButtons = document.querySelectorAll('form[name="sylius_checkout_select_shipping"] button#next-step');
         let calendarContainers = document.querySelectorAll('.monsieurbiz_shipping_slot_calendar');
-        let slotStyle = {
+        let gridSlotStyle = {
             textColor: '#ffffff',
             borderColor: '#3788d8',
             backgroundColor: '#3788d8',
         };
-        let selectedSlotStyle = {
+        let selectedGridSlotStyle = {
+            textColor: '#3788d8',
+            borderColor: '#3788d8',
+            backgroundColor: '#ffffff',
+        };
+        let listSlotStyle = {
+            textColor: '#ffffff',
+            borderColor: '#3788d8',
+            backgroundColor: '#3788d8',
+        };
+        let selectedListSlotStyle = {
             textColor: '#3788d8',
             borderColor: '#3788d8',
             backgroundColor: '#ffffff',
@@ -29,8 +39,10 @@
                 nextStepButtons,
                 calendarContainers,
                 fullCalendarConfig,
-                slotStyle,
-                selectedSlotStyle,
+                gridSlotStyle,
+                selectedGridSlotStyle,
+                listSlotStyle,
+                selectedListSlotStyle,
                 '{{ url("monsieurbiz_shippingslot_checkout_init", {"code": "__CODE__"})|e('js') }}',
                 '{{ url("monsieurbiz_shippingslot_checkout_listslots", {"code": "__CODE__", "fromDate": "__FROM__", "toDate": "__TO__"})|e('js') }}',
                 '{{ url("monsieurbiz_shippingslot_checkout_saveslot")|e('js') }}',
