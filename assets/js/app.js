@@ -274,6 +274,7 @@ global.MonsieurBizShippingSlotManager = class {
           },
           datesSet(dateInfo) {
             let calendar = this;
+            shippingSlotManager.disableButtons();
             shippingSlotManager.listSlots(shippingMethodCode, dateInfo.startStr, dateInfo.endStr, function () {
               if (this.status !== 200) {
                 console.error('Error during slot list');
