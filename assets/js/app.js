@@ -227,7 +227,7 @@ global.MonsieurBizShippingSlotManager = class {
           timeZone: timezone,
           plugins: [timeGridPlugin, listPlugin, momentTimezonePlugin],
           locales: allLocales,
-          initialView: "listDay",
+          initialView: "timeGridWeek",
           contentHeight: "auto",
           allDaySlot: false,
           headerToolbar: {
