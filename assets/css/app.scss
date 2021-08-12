@@ -1,0 +1,18 @@
+//
+// Main
+// --------------------------------------------------------------------------
+
+@charset "UTF-8";
+
+.fc-list-event-graphic, .fc-list-event-title {
+    display: none !important;
+}
+
+.fc-list-event-time {
+    cursor: pointer !important;
+}
+
+.fc .fc-list-event:hover td  {
+    background: none !important;
+    font-weight: bold;
+}

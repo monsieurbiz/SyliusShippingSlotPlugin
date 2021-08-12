@@ -1,4 +1,5 @@
 {
-  "public/shipping-slot-js.css": "/public/shipping-slot-js.css",
+  "public/shipping-slot-css.css": "/public/css/shipping-slot-css.css",
+  "public/shipping-slot-js.css": "/public/css/shipping-slot-js.css",
   "public/shipping-slot-js.js": "/public/js/shipping-slot-js.js"
 }
