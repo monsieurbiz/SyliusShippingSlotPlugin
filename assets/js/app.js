@@ -143,7 +143,7 @@ global.MonsieurBizShippingSlotManager = class {
     req.open("post", this.saveSlotUrl, true);
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     let data = new FormData();
-    data.append("slot", JSON.stringify(slot));
+    data.append("event", JSON.stringify(slot.event));
     data.append("shippingMethod", shippingMethodInput.value);
     data.append("shipmentIndex", shippingMethodInput.getAttribute("tabIndex"));
     req.send(data);
