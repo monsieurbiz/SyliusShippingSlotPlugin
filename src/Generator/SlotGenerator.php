@@ -37,6 +37,7 @@ class SlotGenerator implements SlotGeneratorInterface
     private ShippingMethodRepositoryInterface $shippingMethodRepository;
     private SlotRepositoryInterface $slotRepository;
     private EntityManagerInterface $slotManager;
+    private EntityManagerInterface $shipmentManager;
     protected EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
@@ -45,6 +46,7 @@ class SlotGenerator implements SlotGeneratorInterface
         ShippingMethodRepositoryInterface $shippingMethodRepository,
         SlotRepositoryInterface $slotRepository,
         EntityManagerInterface $slotManager,
+        EntityManagerInterface $shipmentManager,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->cartContext = $cartContext;
@@ -52,6 +54,7 @@ class SlotGenerator implements SlotGeneratorInterface
         $this->shippingMethodRepository = $shippingMethodRepository;
         $this->slotRepository = $slotRepository;
         $this->slotManager = $slotManager;
+        $this->shipmentManager = $shipmentManager;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -96,6 +99,11 @@ class SlotGenerator implements SlotGeneratorInterface
         $this->slotManager->persist($slot);
         $this->slotManager->flush();
 
+        $shipment->setMethod($shippingMethod);
+
+        $this->shipmentManager->persist($slot);
+        $this->shipmentManager->flush();
+
         return $slot;
     }
 
@@ -129,7 +137,7 @@ class SlotGenerator implements SlotGeneratorInterface
 
         /** @var ShipmentInterface $shipment */
         foreach ($shipments as $shipment) {
-            if ($shipment->getMethod() === $shippingMethod) {
+            if ($shipment !== null && $shipment->getMethod()->getCode() === $shippingMethod->getCode()) {
                 return $shipment->getSlot();
             }
         }
