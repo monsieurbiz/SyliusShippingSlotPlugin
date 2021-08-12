@@ -39,9 +39,7 @@ class ShippingSlotConfigChoiceType extends AbstractResourceType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'choices' => function(): array {
-                return $this->shippingSlotConfigRepository->findAll();
-            },
+            'choices' => $this->shippingSlotConfigRepository->findAll(),
             'choice_value' => 'id',
             'choice_label' => 'name',
             'empty_data' => '',
