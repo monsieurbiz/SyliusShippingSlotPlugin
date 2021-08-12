@@ -137,7 +137,7 @@ class SlotGenerator implements SlotGeneratorInterface
 
         /** @var ShipmentInterface $shipment */
         foreach ($shipments as $shipment) {
-            if ($shipment !== null && $shipment->getMethod()->getCode() === $shippingMethod->getCode()) {
+            if (null !== $shipment && null !== $shipment->getMethod() && $shipment->getMethod()->getCode() === $shippingMethod->getCode()) {
                 return $shipment->getSlot();
             }
         }
