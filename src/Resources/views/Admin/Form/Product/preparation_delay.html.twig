@@ -1,0 +1,8 @@
+ {% if form.vars.value is defined and form.vars.value.simple %}
+    <div class="ui segment">
+        <h4 class="ui dividing header">{{ 'monsieurbiz_shipping_slot.ui.shipping_slot_config'|trans }}</h4>
+        <div id="shipping_slot_config">
+            {{ form_row(form.variant.preparationDelay) }}
+        </div>
+    </div>
+{% endif %}
