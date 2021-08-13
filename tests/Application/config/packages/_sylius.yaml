@@ -35,3 +35,9 @@ sylius_order:
         order:
             classes:
                 model: App\Entity\Order
+
+sylius_product:
+    resources:
+        product_variant:
+            classes:
+                model: App\Entity\ProductVariant
