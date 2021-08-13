@@ -134,11 +134,19 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
      */
     public function getRecurrences(
         ?DateTimeInterface $startDate = null,
-        ?DateTimeInterface $endDate = null
+        ?DateTimeInterface $endDate = null,
+        ?int $customPreparationDelay = null
     ): array {
         $recurrences = [];
+
+        // Use greater preparation delay, for example a product can make some time to be produced
+        $slotDelay = $this->getSlotDelay();
+        if (null !== $customPreparationDelay && $customPreparationDelay > $slotDelay) {
+            $slotDelay = $customPreparationDelay;
+        }
+
         $minDate = (new DateTime())
-            ->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay())))
+            ->add(new DateInterval(sprintf('PT%dM', $slotDelay)))
             ->setTimezone(new DateTimeZone($this->getTimezone() ?? 'UTC'))
         ;
 

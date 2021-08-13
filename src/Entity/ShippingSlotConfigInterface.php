@@ -58,6 +58,7 @@ interface ShippingSlotConfigInterface extends ResourceInterface
      */
     public function getRecurrences(
         ?DateTimeInterface $startDate = null,
-        ?DateTimeInterface $endDate = null
+        ?DateTimeInterface $endDate = null,
+        ?int $customPreparationDelay = null
     ): array;
 }

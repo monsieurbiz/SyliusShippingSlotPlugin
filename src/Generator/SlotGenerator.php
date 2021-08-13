@@ -18,6 +18,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ProductVariantInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
@@ -25,6 +26,7 @@ use MonsieurBiz\SyliusShippingSlotPlugin\Event\RecurrenceGenerationEvent;
 use MonsieurBiz\SyliusShippingSlotPlugin\Repository\SlotRepositoryInterface;
 use Recurr\Recurrence;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use Sylius\Component\Order\Context\CartContextInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
@@ -205,7 +207,7 @@ class SlotGenerator implements SlotGeneratorInterface
         if (null === $shippingSlotConfig) {
             return [];
         }
-        $recurrences = $shippingSlotConfig->getRecurrences($startDate, $endDate);
+        $recurrences = $shippingSlotConfig->getRecurrences($startDate, $endDate, $this->getCartPreparationDelay());
         $event = new RecurrenceGenerationEvent($recurrences);
         $this->eventDispatcher->dispatch($event);
         $recurrences = $event->getRecurrences();
@@ -242,5 +244,28 @@ class SlotGenerator implements SlotGeneratorInterface
         }
 
         return false;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getCartPreparationDelay(): ?int
+    {
+        $maxPreparationDelay = null;
+        $cartItems = $this->cartContext->getCart()->getItems();
+
+        /** @var OrderItemInterface $cartItem */
+        foreach ($cartItems as $cartItem) {
+            if (
+                null !== ($variant = $cartItem->getVariant())
+                && $variant instanceof ProductVariantInterface
+                && null !== ($preparationDelay = $variant->getPreparationDelay())
+                && (null === $maxPreparationDelay || $preparationDelay > $maxPreparationDelay)
+            ) {
+                $maxPreparationDelay = $preparationDelay;
+            }
+        }
+
+        return $maxPreparationDelay;
     }
 }

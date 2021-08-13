@@ -1,16 +1,29 @@
 sylius_ui:
     events:
+        # Admin shipping method form - Add shipping slot configuration fiel
         sylius.admin.shipping_method.update.form:
             blocks:
                 shipping_slot_configuration: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/ShippingMethod/shipping_slot_configuration.html.twig'
         sylius.admin.shipping_method.create.form:
             blocks:
                 shipping_slot_configuration: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/ShippingMethod/shipping_slot_configuration.html.twig'
+
+        # Admin product and product variant forms - Add preparation delay field
+        sylius.admin.product_variant.tab_details:
+            blocks:
+                preparation_delay: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/ProductVariant/preparation_delay.html.twig'
+        sylius.admin.product.tab_details:
+            blocks:
+                preparation_delay: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/Product/preparation_delay.html.twig'
+
+        # Admin order show - Display the selected slots for shipments
         sylius.admin.order.show.sidebar:
             blocks:
                 monsieurbiz_shipping_slot_order_slots:
                     template: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Order/Show/_slots.html.twig'
                     priority: 50
+
+        # Shop assets - Setup the CSS and JS
         sylius.shop.layout.javascripts:
             blocks:
                 monsieurbiz_shipping_slot_init_app:
@@ -19,6 +32,8 @@ sylius_ui:
             blocks:
                 monsieurbiz_shipping_slot_styles:
                     template: '@MonsieurBizSyliusShippingSlotPlugin/Shop/_styles.html.twig'
+
+        # Shop shipping method choice - Add calendar in shipping method choice
         sylius.shop.checkout.select_shipping.after_method:
             blocks:
                 monsieurbiz_shipping_slot_calendar:

@@ -49,4 +49,10 @@ sylius_fixtures:
                                 color: '#22B99A'
                                 shipping_methods:
                                     - 'courier_delivery'
-
+                monsieurbiz_shipping_slot_product_variant:
+                    options:
+                        product_variants:
+                            - code: 'Knitted_wool_blend_green_cap-variant-0'
+                              preparationDelay: 720
+                            - code: 'Cashmere_blend_violet_beanie-variant-0'
+                              preparationDelay: 1440
