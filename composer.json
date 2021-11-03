@@ -7,7 +7,7 @@
     "require": {
         "php": "~7.4|~8.0",
         "sylius/sylius": ">=1.8 <1.11",
-        "gedmo/doctrine-extensions": "^2.4.12",
+        "gedmo/doctrine-extensions": "^2.4.12 || ^3.0",
         "simshaun/recurr": "^4.0"
     },
     "require-dev": {
