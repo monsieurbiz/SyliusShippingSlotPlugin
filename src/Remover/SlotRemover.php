@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -21,6 +21,7 @@ use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 class SlotRemover implements SlotRemoverInterface
 {
     private OrderRepositoryInterface $orderRepository;
+
     private EntityManagerInterface $slotManager;
 
     public function __construct(

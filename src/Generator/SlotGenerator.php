@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -35,11 +35,17 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class SlotGenerator implements SlotGeneratorInterface
 {
     private CartContextInterface $cartContext;
+
     private FactoryInterface $slotFactory;
+
     private ShippingMethodRepositoryInterface $shippingMethodRepository;
+
     private SlotRepositoryInterface $slotRepository;
+
     private EntityManagerInterface $slotManager;
+
     private EntityManagerInterface $shipmentManager;
+
     protected EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
@@ -177,7 +183,7 @@ class SlotGenerator implements SlotGeneratorInterface
             $slotsByTimestamp[$timestamp->format(DateTime::W3C)][] = $slot;
         }
 
-        $fullTimestamps = array_filter($slotsByTimestamp, function($timestampSlots) use ($availableSpots) {
+        $fullTimestamps = array_filter($slotsByTimestamp, function ($timestampSlots) use ($availableSpots) {
             return \count($timestampSlots) >= $availableSpots;
         });
 
@@ -226,7 +232,7 @@ class SlotGenerator implements SlotGeneratorInterface
 
         $currentSlot = $this->getSlotByMethod($shippingMethod);
         $fullSlots = $this->getFullSlots($shippingMethod, $startDate);
-        $unavailableTimestamps = array_map(function(SlotInterface $slot) {
+        $unavailableTimestamps = array_map(function (SlotInterface $slot) {
             return $slot->getTimestamp();
         }, $fullSlots);
 

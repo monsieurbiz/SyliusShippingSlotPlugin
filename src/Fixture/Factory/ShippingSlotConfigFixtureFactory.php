@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -27,8 +27,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
     private FactoryInterface $shippingSlotConfigFactory;
+
     private RepositoryInterface $shippingMethodRepository;
+
     private OptionsResolver $optionsResolver;
+
     private Generator $faker;
 
     public function __construct(
@@ -68,31 +71,31 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setDefault('name', function(): string {
+            ->setDefault('name', function (): string {
                 return $this->faker->sentence(2, true);
             })
-            ->setDefault('timezone', function(): string {
+            ->setDefault('timezone', function (): string {
                 return $this->faker->timezone;
             })
-            ->setDefault('rrules', function(): array {
+            ->setDefault('rrules', function (): array {
                 return [
                     'RRULE:FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=0;BYSECOND=0',
                     'RRULE:FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMONTH=9,10,11;BYHOUR=8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=30;BYSECOND=0',
                 ];
             })
-            ->setDefault('preparationDelay', function(): int {
+            ->setDefault('preparationDelay', function (): int {
                 return $this->faker->numberBetween(3, 12) * 10;
             })
-            ->setDefault('pickupDelay', function(): int {
+            ->setDefault('pickupDelay', function (): int {
                 return $this->faker->numberBetween(3, 12) * 10;
             })
-            ->setDefault('durationRange', function(): int {
+            ->setDefault('durationRange', function (): int {
                 return $this->faker->numberBetween(2, 4) * 60;
             })
-            ->setDefault('availableSpots', function(): int {
+            ->setDefault('availableSpots', function (): int {
                 return $this->faker->numberBetween(5, 10);
             })
-            ->setDefault('color', function(): string {
+            ->setDefault('color', function (): string {
                 return $this->faker->hexColor;
             })
             ->setDefault('shipping_methods', [])

@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -24,10 +24,15 @@ class Slot implements SlotInterface
     use TimestampableTrait;
 
     private ?int $id = null;
+
     private ?DateTimeInterface $timestamp = null;
+
     private ?int $preparationDelay = null;
+
     private ?int $pickupDelay = null;
+
     private ?int $durationRange = null;
+
     private ?ShipmentInterface $shipment = null;
 
     public function getId(): ?int

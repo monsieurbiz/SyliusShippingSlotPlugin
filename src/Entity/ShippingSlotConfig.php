@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -28,13 +28,21 @@ use Recurr\Transformer\ConstraintInterface;
 class ShippingSlotConfig implements ShippingSlotConfigInterface
 {
     private ?int $id = null;
+
     private ?string $name = null;
+
     private ?string $timezone = null;
+
     private ?array $rrules = null;
+
     private ?int $preparationDelay = null;
+
     private ?int $pickupDelay = null;
+
     private ?int $durationRange = null;
+
     private ?int $availableSpots = null;
+
     private ?string $color = null;
 
     public function getId(): ?int
@@ -157,12 +165,15 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
         switch (true) {
             case null !== $startDate && null !== $endDate:
                 $constraint = new BetweenConstraint($startDate, $endDate);
+
                 break;
             case null !== $startDate:
                 $constraint = new AfterConstraint($startDate);
+
                 break;
             case null !== $endDate:
                 $constraint = new BeforeConstraint($endDate);
+
                 break;
             default:
                 $constraint = null;
@@ -185,7 +196,7 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
         // Transform Rrule in a list of recurrences
         return (new ArrayTransformer())
             ->transform($rrule, $constraint)
-            ->map(function(Recurrence $recurrence) {
+            ->map(function (Recurrence $recurrence) {
                 // Update end date with the slot duration on each recurrence
                 $recurrence->setEnd($recurrence->getEnd()->add(new DateInterval(sprintf('PT%dM', $this->getDurationRange()))));
 
