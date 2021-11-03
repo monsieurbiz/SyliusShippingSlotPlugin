@@ -78,6 +78,9 @@ class SlotController extends AbstractController
         ));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function saveAction(Request $request): Response
     {
         if (!($shippingMethod = $request->get('shippingMethod'))) {

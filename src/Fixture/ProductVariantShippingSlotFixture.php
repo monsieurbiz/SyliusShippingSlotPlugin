@@ -39,11 +39,11 @@ final class ProductVariantShippingSlotFixture extends AbstractFixture implements
     public function load(array $options): void
     {
         foreach ($options['product_variants'] ?? [] as $option) {
-            /** @var ProductVariantInterface $productVariant */
             if (null === ($productVariant = $this->productVariantRepository->findOneBy(['code' => $option['code'] ?? '']))) {
                 continue;
             }
 
+            /** @var ProductVariantInterface $productVariant */
             $productVariant->setPreparationDelay($option['preparationDelay'] ?? null);
             $this->productVariantManager->persist($productVariant);
         }

@@ -67,6 +67,9 @@ final class OrderPreCompleteListener
         $event->setResponse(new RedirectResponse($this->router->generate('sylius_shop_cart_summary')));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function checkShipment(ShipmentInterface $shipment): void
     {
         /** @var ShippingMethodInterface|null $shippingMethod */

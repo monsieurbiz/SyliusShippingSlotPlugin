@@ -60,6 +60,9 @@ class SlotGenerator implements SlotGeneratorInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function createFromCheckout(
         string $shippingMethod,
         int $shipmentIndex,
@@ -131,6 +134,9 @@ class SlotGenerator implements SlotGeneratorInterface
         $this->slotManager->flush();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function getSlotByMethod(ShippingMethodInterface $shippingMethod): ?SlotInterface
     {
         /** @var OrderInterface $order */
@@ -147,6 +153,9 @@ class SlotGenerator implements SlotGeneratorInterface
         return null;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function getFullSlots(ShippingMethodInterface $shippingMethod, ?DateTimeInterface $from): array
     {
         if (null === ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
@@ -198,6 +207,9 @@ class SlotGenerator implements SlotGeneratorInterface
         return \count($slots) > (int) $shippingSlotConfig->getAvailableSpots(); // Not >= because we have the current user slot
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function generateCalendarEvents(
         ShippingMethodInterface $shippingMethod,
         DateTimeInterface $startDate,
