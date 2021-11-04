@@ -7,7 +7,6 @@ parameters:
     paths:
         - %rootDir%/src/
 
-    reportUnmatchedIgnoredErrors: false
     checkMissingIterableValueType: false
 
     excludes_analyse:
@@ -16,8 +15,4 @@ parameters:
         - 'src/DependencyInjection/MonsieurBizSyliusShippingSlotExtension.php'
 
         # Test dependencies
-        - 'tests/Application/app/**.php'
-        - 'tests/Application/src/**.php'
-
-    ignoreErrors:
-        - '/Parameter #1 \$configuration of method Symfony\\Component\\DependencyInjection\\Extension\\Extension::processConfiguration\(\) expects Symfony\\Component\\Config\\Definition\\ConfigurationInterface, Symfony\\Component\\Config\\Definition\\ConfigurationInterface\|null given\./'
+        - 'tests/Application/**/*'
