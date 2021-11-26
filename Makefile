@@ -67,6 +67,7 @@ setup_application:
 	rm -f ${APP_DIR}/yarn.lock
 	(cd ${APP_DIR} && ${COMPOSER} config repositories.plugin '{"type": "path", "url": "../../"}')
 	(cd ${APP_DIR} && ${COMPOSER} config extra.symfony.allow-contrib true)
+	(cd ${APP_DIR} && ${COMPOSER} config minimum-stability dev)
 	(cd ${APP_DIR} && ${COMPOSER} require --no-scripts --no-progress --no-install --no-update monsieurbiz/${PLUGIN_NAME}="*@dev")
 	$(MAKE) apply_dist
 	$(MAKE) ${APP_DIR}/.php-version
