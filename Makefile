@@ -40,18 +40,10 @@ php.ini: php.ini.dist
 	ln -s php.ini.dist php.ini
 
 vendor: composer.lock ## Install the PHP dependencies using composer
-ifdef GITHUB_ACTIONS
-	${COMPOSER} install --prefer-dist
-else
-	${COMPOSER} install --prefer-source
-endif
+	${COMPOSER} install
 
 composer.lock: composer.json
-ifdef GITHUB_ACTIONS
-	${COMPOSER} update --prefer-dist
-else
-	${COMPOSER} update --prefer-source
-endif
+	${COMPOSER} update
 
 yarn.install: ${APP_DIR}/yarn.lock
 
