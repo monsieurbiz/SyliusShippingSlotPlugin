@@ -32,10 +32,12 @@ dependencies: vendor node_modules ## Setup the dependencies
 .PHONY: dependencies
 
 .php-version: .php-version.dist
-	cp .php-version.dist .php-version
+	rm -f .php-version
+	ln -s .php-version.dist .php-version
 
 php.ini: php.ini.dist
-	cp php.ini.dist php.ini
+	rm -f php.ini
+	ln -s php.ini.dist php.ini
 
 vendor: composer.lock ## Install the PHP dependencies using composer
 ifdef GITHUB_ACTIONS
@@ -85,7 +87,7 @@ setup_application:
 ${APP_DIR}/docker-compose.yaml:
 	rm -f ${APP_DIR}/docker-compose.yml
 	rm -f ${APP_DIR}/docker-compose.yaml
-	cp docker-compose.yaml.dist ${APP_DIR}/docker-compose.yaml
+	ln -s ../../docker-compose.yaml.dist ${APP_DIR}/docker-compose.yaml
 .PHONY: ${APP_DIR}/docker-compose.yaml
 
 ${APP_DIR}/.php-version: .php-version
@@ -95,7 +97,15 @@ ${APP_DIR}/php.ini: php.ini
 	(cd ${APP_DIR} && ln -sf ../../php.ini)
 
 apply_dist:
-	cp -Rv dist/* ${APP_DIR}
+	for i in `cd dist && find . -type f`; do \
+		FILE_PATH=`echo $$i | sed 's|./||'`; \
+		FOLDER_PATH=`dirname $$FILE_PATH`; \
+		ROOT_DIR=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))); \
+		echo $$FILE_PATH; \
+		(cd ${APP_DIR} && rm -f $$FILE_PATH); \
+		(cd ${APP_DIR} && mkdir -p $$FOLDER_PATH); \
+		(cd ${APP_DIR} && ln -s $$ROOT_DIR/dist/$$FILE_PATH $$FILE_PATH); \
+    done
 
 ###
 ### TESTS
