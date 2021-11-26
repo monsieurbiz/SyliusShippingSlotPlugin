@@ -40,7 +40,7 @@ php.ini: php.ini.dist
 	ln -s php.ini.dist php.ini
 
 composer.lock: composer.json
-	${COMPOSER} install --no-scripts
+	${COMPOSER} install --no-scripts --no-plugins
 
 yarn.install: ${APP_DIR}/yarn.lock
 
