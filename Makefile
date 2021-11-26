@@ -21,7 +21,8 @@ up: docker.up server.start ## Up the project (start docker, start symfony server
 stop: server.stop docker.stop ## Stop the project (stop docker, stop symfony server)
 down: server.stop docker.down ## Down the project (removes docker containers, stop symfony server)
 
-reset: docker.down ## Stop docker and remove dependencies
+reset: ## Stop docker and remove dependencies
+	${MAKE} docker.down || true
 	rm -rf ${APP_DIR}/node_modules ${APP_DIR}/yarn.lock
 	rm -rf ${APP_DIR}
 	rm -rf vendor composer.lock
