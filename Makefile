@@ -86,10 +86,10 @@ ${APP_DIR}/php.ini: php.ini
 	(cd ${APP_DIR} && ln -sf ../../php.ini)
 
 apply_dist:
+	ROOT_DIR=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))); \
 	for i in `cd dist && find . -type f`; do \
 		FILE_PATH=`echo $$i | sed 's|./||'`; \
 		FOLDER_PATH=`dirname $$FILE_PATH`; \
-		ROOT_DIR=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))); \
 		echo $$FILE_PATH; \
 		(cd ${APP_DIR} && rm -f $$FILE_PATH); \
 		(cd ${APP_DIR} && mkdir -p $$FOLDER_PATH); \
