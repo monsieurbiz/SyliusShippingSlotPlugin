@@ -28,7 +28,7 @@ reset: ## Stop docker and remove dependencies
 	rm -rf vendor composer.lock
 .PHONY: reset
 
-dependencies: vendor node_modules ## Setup the dependencies
+dependencies: composer.lock node_modules ## Setup the dependencies
 .PHONY: dependencies
 
 .php-version: .php-version.dist
@@ -39,11 +39,8 @@ php.ini: php.ini.dist
 	rm -f php.ini
 	ln -s php.ini.dist php.ini
 
-vendor: composer.lock ## Install the PHP dependencies using composer
-	${COMPOSER} install
-
 composer.lock: composer.json
-	${COMPOSER} update
+	${COMPOSER} install --no-scripts
 
 yarn.install: ${APP_DIR}/yarn.lock
 
