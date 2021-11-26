@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -13,11 +13,20 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Fixture;
 
+use Doctrine\ORM\EntityManagerInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Fixture\Factory\ShippingSlotConfigFixtureFactory;
 use Sylius\Bundle\CoreBundle\Fixture\AbstractResourceFixture;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class ShippingSlotConfigFixture extends AbstractResourceFixture
 {
+    public function __construct(
+        EntityManagerInterface $shippingSlotConfigManager,
+        ShippingSlotConfigFixtureFactory $exampleFactory
+    ) {
+        parent::__construct($shippingSlotConfigManager, $exampleFactory);
+    }
+
     public function getName(): string
     {
         return 'monsieurbiz_shipping_slot_config';

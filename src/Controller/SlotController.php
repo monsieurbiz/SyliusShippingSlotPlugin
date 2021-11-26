@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SlotController extends AbstractController
 {
     private ShippingMethodRepositoryInterface $shippingMethodRepository;
+
     private SlotGeneratorInterface $slotGenerator;
 
     public function __construct(
@@ -78,6 +79,9 @@ class SlotController extends AbstractController
         ));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function saveAction(Request $request): Response
     {
         if (!($shippingMethod = $request->get('shippingMethod'))) {
