@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -26,9 +26,13 @@ use Webmozart\Assert\Assert;
 final class OrderPreCompleteListener
 {
     private RouterInterface $router;
+
     private EntityManagerInterface $slotManager;
+
     private SlotGeneratorInterface $slotGenerator;
+
     private array $nonValidSlots;
+
     private array $missingSlots;
 
     public function __construct(
@@ -67,6 +71,9 @@ final class OrderPreCompleteListener
         $event->setResponse(new RedirectResponse($this->router->generate('sylius_shop_cart_summary')));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function checkShipment(ShipmentInterface $shipment): void
     {
         /** @var ShippingMethodInterface|null $shippingMethod */
@@ -80,10 +87,12 @@ final class OrderPreCompleteListener
         switch (true) {
             case null === $slot:
                 $this->missingSlots[] = $shippingMethod;
+
                 break;
             case !$slot->isValid() || $this->slotGenerator->isFull($slot):
                 $this->nonValidSlots[] = $slot;
                 $this->slotManager->remove($slot);
+
                 break;
         }
     }

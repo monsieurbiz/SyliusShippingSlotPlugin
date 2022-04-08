@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -24,6 +24,7 @@ class RemoveExpiredSlotsCommand extends Command
     protected static $defaultName = 'monsieurbiz:shipping-slot:remove-expired-slots';
 
     private ParameterBagInterface $parameterBag;
+
     private SlotRemoverInterface $slotRemover;
 
     public function __construct(ParameterBagInterface $parameterBag, SlotRemoverInterface $slotRemover)
