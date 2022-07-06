@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Event;
 
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use Recurr\Recurrence;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -20,9 +21,12 @@ final class RecurrenceGenerationEvent extends Event
 {
     private array $recurrences;
 
-    public function __construct(array $recurrences)
+    private ?ShippingMethodInterface $shippingMethod;
+
+    public function __construct(array $recurrences, ?ShippingMethodInterface $shippingMethod = null)
     {
         $this->recurrences = $recurrences;
+        $this->shippingMethod = $shippingMethod;
     }
 
     /**
@@ -36,5 +40,10 @@ final class RecurrenceGenerationEvent extends Event
     public function setRecurrences(array $recurrences): void
     {
         $this->recurrences = $recurrences;
+    }
+
+    public function getShippingMethod(): ?ShippingMethodInterface
+    {
+        return $this->shippingMethod;
     }
 }

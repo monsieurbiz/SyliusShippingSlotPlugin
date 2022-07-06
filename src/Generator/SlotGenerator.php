@@ -226,7 +226,7 @@ class SlotGenerator implements SlotGeneratorInterface
             return [];
         }
         $recurrences = $shippingSlotConfig->getRecurrences($startDate, $endDate, $this->getCartPreparationDelay());
-        $event = new RecurrenceGenerationEvent($recurrences);
+        $event = new RecurrenceGenerationEvent($recurrences, $shippingMethod);
         $this->eventDispatcher->dispatch($event);
         $recurrences = $event->getRecurrences();
 
