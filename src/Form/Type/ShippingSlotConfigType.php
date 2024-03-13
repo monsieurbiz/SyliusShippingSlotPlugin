@@ -41,6 +41,7 @@ class ShippingSlotConfigType extends AbstractResourceType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'help' => 'monsieurbiz_shipping_slot.ui.form.rrules_help',
+                'help_html' => true,
             ])
             ->add('preparationDelay', IntegerType::class, [
                 'label' => 'monsieurbiz_shipping_slot.ui.form.preparation_delay',

@@ -22,7 +22,7 @@ monsieurbiz_shipping_slot:
             name: 'Nom de la configuration'
             timezone: 'Fuseau horaire'
             rrules: 'Règles de récurrence'
-            rrules_help: 'Vous pouvez définir une nouvelle RRULE avec l''aide de <a href="https://jakubroztocil.github.io/rrule/">la démo en ligne</a>.'
+            rrules_help: 'Vous pouvez définir une nouvelle RRULE avec l''aide de <a href="https://jkbrzt.github.io/rrule/" target="_blank" rel="noreferrer noopener">la démo en ligne</a>.'
             preparation_delay: 'Délai de préparation (en minutes)'
             pickup_delay: 'Délai de retrait (en minutes)'
             duration_range: 'Durée du créneau (en minutes)'
