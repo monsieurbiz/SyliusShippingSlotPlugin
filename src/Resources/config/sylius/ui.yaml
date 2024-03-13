@@ -1,6 +1,6 @@
 sylius_ui:
     events:
-        # Admin shipping method form - Add shipping slot configuration fiel
+        # Admin shipping method form - Add shipping slot configuration field
         sylius.admin.shipping_method.update.form:
             blocks:
                 shipping_slot_configuration: '@MonsieurBizSyliusShippingSlotPlugin/Admin/Form/ShippingMethod/shipping_slot_configuration.html.twig'
