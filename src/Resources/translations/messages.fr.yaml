@@ -28,7 +28,7 @@ monsieurbiz_shipping_slot:
             duration_range: 'Durée du créneau (en minutes)'
             available_spots: 'Nombre de places par créneaux'
             color: 'Couleur'
-            shipping_slot_config: 'Configuration de crénaux pour ce mode de livraison'
+            shipping_slot_config: 'Configurations de crénaux pour ce mode de livraison'
 
 sylius:
     ui:
