@@ -1,0 +1,6 @@
+<div class="column" id="sylius-shipping-address" {{ sylius_test_html_attribute('shipping-address') }}>
+    <div class="ui small dividing header">{{ 'sylius.ui.shipping_address'|trans }}</div>
+    {% for slot in slots %}
+        {% include '@MonsieurBizSyliusShippingSlotPlugin/Shop/Order/Common/_slot.html.twig' %}
+    {% endfor %}
+</div>
