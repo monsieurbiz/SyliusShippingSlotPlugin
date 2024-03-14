@@ -16,6 +16,7 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Controller;
 use DateTime;
 use Exception;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,14 +48,14 @@ class SlotController extends AbstractController
         }
 
         // No need to load calendar if shipping method has no slot configuration
-        if (!($shipingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
+        if (!($shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod))) {
             return new JsonResponse(['code' => $code]);
         }
 
         return new JsonResponse([
             'code' => $code,
             'events' => [], // Events are loaded dynamically when full calendar ask it
-            'timezone' => $shipingSlotConfig->getTimezone() ?? 'UTC',
+            'timezone' => $shippingSlotConfig->getTimezone() ?? 'UTC',
         ]);
     }
 
@@ -68,7 +69,7 @@ class SlotController extends AbstractController
         }
 
         // Shipping method not compatible with shipping slots
-        if (null === $shippingMethod->getShippingSlotConfig()) {
+        if (null === $this->getShippingSlotConfig($shippingMethod)) {
             throw $this->createNotFoundException(sprintf('Shipping method "%s" is not compatible with shipping slots', $code));
         }
 
@@ -123,5 +124,12 @@ class SlotController extends AbstractController
         }
 
         return new JsonResponse([]);
+    }
+
+    private function getShippingSlotConfig(ShippingMethodInterface $shippingMethod): ?ShippingSlotConfigInterface
+    {
+        $shippingSlotConfig = $shippingMethod->getShippingSlotConfigs()->first();
+
+        return $shippingSlotConfig ?: $shippingMethod->getShippingSlotConfig();
     }
 }

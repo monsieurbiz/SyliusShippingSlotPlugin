@@ -1,4 +1,4 @@
-{% if (method.shippingSlotConfig) %}
+{% if method.shippingSlotConfigs|length or method.shippingSlotConfig %}
     <div class="item monsieurbiz_shipping_slot_calendar {{ method.code }}" style="display: none;">
     </div>
 {% endif %}

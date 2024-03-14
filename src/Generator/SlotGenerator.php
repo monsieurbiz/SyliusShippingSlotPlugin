@@ -222,7 +222,7 @@ class SlotGenerator implements SlotGeneratorInterface
         DateTimeInterface $startDate,
         DateTimeInterface $endDate
     ): array {
-        $shippingSlotConfig = $shippingMethod->getShippingSlotConfig();
+        $shippingSlotConfig = $shippingMethod->getShippingSlotConfigs()->first() ?: $shippingMethod->getShippingSlotConfig();
         if (null === $shippingSlotConfig) {
             return [];
         }
