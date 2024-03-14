@@ -1,0 +1,10 @@
+sylius_grid:
+    grids:
+        sylius_shop_account_order:
+            fields:
+                shippingAddress:
+                    type: twig
+                    label: sylius.ui.ship_to
+                    path: .
+                    options:
+                        template: "@MonsieurBizSyliusShippingSlotPlugin/Shop/Account/Order/Grid/Field/shippingInformation.html.twig"
