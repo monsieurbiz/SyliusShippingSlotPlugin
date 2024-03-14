@@ -3,7 +3,7 @@
     {% include '@SyliusShop/Account/Order/Grid/Field/address.html.twig' with {'data': data.shippingAddress} %}
 {% else %}
     {% for slot in slots %}
-        {% set shipping_slot = slot.shipment.method.shippingSlotConfig|default(null) %}
+        {% set shipping_slot = slot.shippingSlotConfig|default(null) %}
         {% if shipping_slot is not null %}
             {{ shipping_slot.name }}
         {% endif %}

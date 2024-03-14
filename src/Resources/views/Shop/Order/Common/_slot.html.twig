@@ -1,5 +1,5 @@
 <div>
-    {% set shipping_slot = slot.shipment.method.shippingSlotConfig|default(null) %}
+    {% set shipping_slot = slot.shippingSlotConfig|default(null) %}
     {% if shipping_slot %}
         <strong>{{ shipping_slot.name }}</strong>
     {% endif %}
