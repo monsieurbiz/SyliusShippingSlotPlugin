@@ -26,7 +26,15 @@ use Sylius\Component\Shipping\Model\ShippingMethodTranslationInterface;
  */
 class ShippingMethod extends SyliusShippingMethod implements ShippingMethodInterface, MonsieurBizShippingMethodInterface
 {
-    use ShippingMethodTrait;
+    use ShippingMethodTrait {
+        ShippingMethodTrait::__construct as private shippingMethodTraitConstruct;
+    }
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->shippingMethodTraitConstruct();
+    }
 
     protected function createTranslation(): ShippingMethodTranslationInterface
     {
