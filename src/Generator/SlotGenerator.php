@@ -106,6 +106,7 @@ class SlotGenerator implements SlotGeneratorInterface
         $slot->setDurationRange($shippingSlotConfig->getDurationRange());
         $slot->setPickupDelay($shippingSlotConfig->getPickupDelay());
         $slot->setPreparationDelay($shippingSlotConfig->getPreparationDelay());
+        $slot->setShippingSlotConfig($shippingSlotConfig);
 
         $this->slotManager->persist($slot);
         $this->slotManager->flush();

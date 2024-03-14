@@ -35,6 +35,8 @@ class Slot implements SlotInterface
 
     private ?ShipmentInterface $shipment = null;
 
+    private ?ShippingSlotConfigInterface $shippingSlotConfig = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -125,5 +127,15 @@ class Slot implements SlotInterface
         }
 
         return 'UTC';
+    }
+
+    public function getShippingSlotConfig(): ?ShippingSlotConfigInterface
+    {
+        return $this->shippingSlotConfig;
+    }
+
+    public function setShippingSlotConfig(?ShippingSlotConfigInterface $shippingSlotConfig): void
+    {
+        $this->shippingSlotConfig = $shippingSlotConfig;
     }
 }

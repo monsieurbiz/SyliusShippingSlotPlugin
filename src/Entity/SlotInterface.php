@@ -47,4 +47,8 @@ interface SlotInterface extends ResourceInterface, TimestampableInterface
     public function isValid(): bool;
 
     public function getTimezone(): string;
+
+    public function getShippingSlotConfig(): ?ShippingSlotConfigInterface;
+
+    public function setShippingSlotConfig(?ShippingSlotConfigInterface $shippingSlotConfig): void;
 }
