@@ -62,7 +62,7 @@ class ShippingSlotConfigFixtureFactory extends AbstractExampleFactory implements
 
         /** @var ShippingMethodInterface $shippingMethod */
         foreach ($options['shipping_methods'] as $shippingMethod) {
-            $shippingMethod->setShippingSlotConfig($shippingSlotConfig);
+            $shippingMethod->addShippingSlotConfig($shippingSlotConfig);
         }
 
         return $shippingSlotConfig;
