@@ -37,3 +37,9 @@ services:
     MonsieurBiz\SyliusShippingSlotPlugin\Listener\OrderPreCompleteListener:
         tags:
             - { name: kernel.event_listener, event: sylius.order.pre_complete, method: checkSlot }
+
+    # Form type for shipping slot configs by shipping method in checkout
+    MonsieurBiz\SyliusShippingSlotPlugin\Form\Type\ShippingSlotConfigsByMethod:
+        arguments:
+            $shippingMethodsResolver: '@sylius.shipping_methods_resolver'
+            $repository: '@sylius.repository.shipping_method'

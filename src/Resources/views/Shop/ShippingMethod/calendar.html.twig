@@ -1,4 +1,8 @@
 {% if method.shippingSlotConfigs|length or method.shippingSlotConfig %}
+    {% set form_shipping_slot_configurations = form.parent.parent.shippingSlotConfigs[method.code] ?? null %}
+    {% if form_shipping_slot_configurations and form_shipping_slot_configurations.vars.choices|length %}
+        {% include '@MonsieurBizSyliusShippingSlotPlugin/Shop/ShippingMethod/ShippingSlot/_slotConfig.html.twig' with {'form': form_shipping_slot_configurations} %}
+    {% endif %}
     <div class="item monsieurbiz_shipping_slot_calendar {{ method.code }}" style="display: none;">
     </div>
 {% endif %}

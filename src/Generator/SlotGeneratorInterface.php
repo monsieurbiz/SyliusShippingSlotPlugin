@@ -15,11 +15,12 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Generator;
 
 use DateTimeInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 
 interface SlotGeneratorInterface
 {
-    public function createFromCheckout(string $shippingMethod, int $shipmentIndex, DateTimeInterface $startDate): SlotInterface;
+    public function createFromCheckout(string $shippingMethod, int $shipmentIndex, DateTimeInterface $startDate, ?int $shippingSlotConfig = null): SlotInterface;
 
     public function resetSlot(int $shipmentIndex): void;
 
@@ -32,6 +33,7 @@ interface SlotGeneratorInterface
     public function generateCalendarEvents(
         ShippingMethodInterface $shippingMethod,
         DateTimeInterface $startDate,
-        DateTimeInterface $endDate
+        DateTimeInterface $endDate,
+        ?ShippingSlotConfigInterface $shippingSlotConfig = null
     ): array;
 }

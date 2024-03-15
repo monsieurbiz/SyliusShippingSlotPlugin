@@ -38,7 +38,7 @@ class SlotController extends AbstractController
         $this->slotGenerator = $slotGenerator;
     }
 
-    public function initAction(string $code): Response
+    public function initAction(string $code, ?int $shippingSlotConfig): Response
     {
         // Find shipping method from code
         /** @var ShippingMethodInterface|null $shippingMethod */
@@ -48,7 +48,7 @@ class SlotController extends AbstractController
         }
 
         // No need to load calendar if shipping method has no slot configuration
-        if (!($shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod))) {
+        if (!($shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod, $shippingSlotConfig))) {
             return new JsonResponse(['code' => $code]);
         }
 
@@ -59,7 +59,7 @@ class SlotController extends AbstractController
         ]);
     }
 
-    public function listAction(string $code, string $fromDate, string $toDate): Response
+    public function listAction(string $code, string $fromDate, string $toDate, ?int $shippingSlotConfig): Response
     {
         // Find shipping method from code
         /** @var ShippingMethodInterface|null $shippingMethod */
@@ -69,14 +69,15 @@ class SlotController extends AbstractController
         }
 
         // Shipping method not compatible with shipping slots
-        if (null === $this->getShippingSlotConfig($shippingMethod)) {
+        if (null === ($shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod, $shippingSlotConfig))) {
             throw $this->createNotFoundException(sprintf('Shipping method "%s" is not compatible with shipping slots', $code));
         }
 
         return new JsonResponse($this->slotGenerator->generateCalendarEvents(
             $shippingMethod,
             new DateTime($fromDate),
-            new DateTime($toDate)
+            new DateTime($toDate),
+            $shippingSlotConfig
         ));
     }
 
@@ -93,6 +94,10 @@ class SlotController extends AbstractController
             throw $this->createNotFoundException('Shipment index not defined');
         }
 
+        if (null === ($shippingSlotConfig = $request->get('shippingSlotConfig'))) {
+            throw $this->createNotFoundException('Shipping slot config not defined');
+        }
+
         $event = json_decode($request->get('event', '{}'), true);
         if (!($startDate = $event['start'] ?? false)) {
             throw $this->createNotFoundException('Start date not defined');
@@ -102,7 +107,8 @@ class SlotController extends AbstractController
             $this->slotGenerator->createFromCheckout(
                 $shippingMethod,
                 (int) $shipmentIndex,
-                new DateTime($startDate)
+                new DateTime($startDate),
+                !empty($shippingSlotConfig) ? (int) $shippingSlotConfig : null
             );
         } catch (Exception $e) {
             throw $this->createNotFoundException($e->getMessage());
@@ -126,9 +132,11 @@ class SlotController extends AbstractController
         return new JsonResponse([]);
     }
 
-    private function getShippingSlotConfig(ShippingMethodInterface $shippingMethod): ?ShippingSlotConfigInterface
+    private function getShippingSlotConfig(ShippingMethodInterface $shippingMethod, ?int $shippingSlotConfig): ?ShippingSlotConfigInterface
     {
-        $shippingSlotConfig = $shippingMethod->getShippingSlotConfigs()->first();
+        $shippingSlotConfig = null !== $shippingSlotConfig ? $shippingMethod->getShippingSlotConfigs()->filter(
+            fn (ShippingSlotConfigInterface $config) => $config->getId() === $shippingSlotConfig
+        )->first() : $shippingMethod->getShippingSlotConfigs()->first();
 
         return $shippingSlotConfig ?: $shippingMethod->getShippingSlotConfig();
     }

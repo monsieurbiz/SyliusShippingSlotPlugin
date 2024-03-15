@@ -1,14 +1,16 @@
 monsieurbiz_shippingslot_checkout_init:
-    path: /monsieurbiz_shippingslots/init/{code}
+    path: /monsieurbiz_shippingslots/init/{code}/{shippingSlotConfig}
     methods: [GET]
     defaults:
         _controller: MonsieurBiz\SyliusShippingSlotPlugin\Controller\SlotController::initAction
+        shippingSlotConfig: null
 
 monsieurbiz_shippingslot_checkout_listslots:
-    path: /monsieurbiz_shippingslots/list/{code}/{fromDate}/{toDate}
+    path: /monsieurbiz_shippingslots/list/{code}/{fromDate}/{toDate}/{shippingSlotConfig}
     methods: [GET]
     defaults:
         _controller: MonsieurBiz\SyliusShippingSlotPlugin\Controller\SlotController::listAction
+        shippingSlotConfig: null
 
 monsieurbiz_shippingslot_checkout_saveslot:
     path: /monsieurbiz_shippingslots/save/
