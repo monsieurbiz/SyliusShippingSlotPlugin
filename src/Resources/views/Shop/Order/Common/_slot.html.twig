@@ -1,0 +1,16 @@
+<div>
+    {% set shipping_slot = slot.shipment.method.shippingSlotConfig|default(null) %}
+    {% if shipping_slot %}
+        <strong>{{ shipping_slot.name }}</strong>
+    {% endif %}
+    <div class="content">
+        <div class="ui label">
+            {{ slot.timestamp|format_date('short') }}
+            <div class="detail">
+                {{ slot.timestamp|date('H:i', slot.timezone) }}
+                -
+                {{ slot.timestamp|date_modify("+ " ~ slot.durationRange ~ " minutes")|date('H:i', slot.timezone) }}
+            </div>
+        </div>
+    </div>
+</div>

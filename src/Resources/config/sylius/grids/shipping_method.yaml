@@ -1,0 +1,11 @@
+sylius_grid:
+    grids:
+        sylius_admin_shipping_method:
+            actions:
+                main:
+                    shipping_slot_config:
+                        type: shipping_slot_config
+                        label: monsieurbiz_shipping_slot.ui.shipping_slot_configs
+                        options:
+                            link:
+                                route: monsieurbiz_shipping_slot_admin_shipping_slot_config_index
