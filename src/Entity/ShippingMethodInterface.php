@@ -37,4 +37,10 @@ interface ShippingMethodInterface extends SyliusShippingMethodInterface
      * @param Collection<array-key, ShippingSlotConfigInterface> $shippingSlotConfigs
      */
     public function setShippingSlotConfigs(Collection $shippingSlotConfigs): void;
+
+    public function addShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void;
+
+    public function removeShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void;
+
+    public function hasShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): bool;
 }

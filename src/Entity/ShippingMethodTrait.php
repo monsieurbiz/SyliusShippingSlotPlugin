@@ -68,4 +68,23 @@ trait ShippingMethodTrait
     {
         $this->shippingSlotConfigs = $shippingSlotConfigs;
     }
+
+    public function addShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void
+    {
+        if (!$this->hasShippingSlotConfig($shippingSlotConfig)) {
+            $this->shippingSlotConfigs->add($shippingSlotConfig);
+        }
+    }
+
+    public function removeShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void
+    {
+        if ($this->hasShippingSlotConfig($shippingSlotConfig)) {
+            $this->shippingSlotConfigs->removeElement($shippingSlotConfig);
+        }
+    }
+
+    public function hasShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): bool
+    {
+        return $this->shippingSlotConfigs->contains($shippingSlotConfig);
+    }
 }

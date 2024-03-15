@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Form\Extension;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Form\Type\ShippingSlotConfigChoiceType;
 use Sylius\Bundle\ShippingBundle\Form\Type\ShippingMethodType;
@@ -58,7 +57,7 @@ class ShippingMethodTypeExtension extends AbstractTypeExtension
                     return;
                 }
 
-                $shippingMethod->setShippingSlotConfigs(new ArrayCollection([$oldShippingSlotConfig]));
+                $shippingMethod->addShippingSlotConfig($oldShippingSlotConfig);
             })
         ;
     }
