@@ -13,11 +13,34 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Core\Model\ShippingMethodInterface as SyliusShippingMethodInterface;
 
 interface ShippingMethodInterface extends SyliusShippingMethodInterface
 {
+    /**
+     * @deprecated Use getShippingSlotConfigs instead
+     */
     public function getShippingSlotConfig(): ?ShippingSlotConfigInterface;
 
+    /**
+     * @deprecated Use setShippingSlotConfigs instead
+     */
     public function setShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void;
+
+    /**
+     * @return Collection<array-key, ShippingSlotConfigInterface>
+     */
+    public function getShippingSlotConfigs(): Collection;
+
+    /**
+     * @param Collection<array-key, ShippingSlotConfigInterface> $shippingSlotConfigs
+     */
+    public function setShippingSlotConfigs(Collection $shippingSlotConfigs): void;
+
+    public function addShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void;
+
+    public function removeShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): void;
+
+    public function hasShippingSlotConfig(ShippingSlotConfigInterface $shippingSlotConfig): bool;
 }

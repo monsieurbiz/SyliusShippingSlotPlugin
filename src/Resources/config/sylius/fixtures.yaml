@@ -24,9 +24,9 @@ sylius_fixtures:
                     options:
                         custom:
                             fashion_store:
-                                name: 'Fashion Store hours'
+                                name: 'Fashion Store'
                                 timezone: 'Europe/Paris'
-                                rrules: 
+                                rrules:
                                     - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=18;BYMINUTE=0;BYSECOND=0'
                                     - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=8,9,10,11,12,13,14,15,16,17;BYMINUTE=0,10,20,30,40,50;BYSECOND=0'
                                 preparationDelay: 60
@@ -36,10 +36,23 @@ sylius_fixtures:
                                 color: '#5D44DC'
                                 shipping_methods:
                                     - 'slot_delivery'
-                            courier:
-                                name: 'Courier hours'
+                            ultra_fashion_store:
+                                name: 'Ultra Fashion Store'
                                 timezone: 'Europe/Paris'
-                                rrules: 
+                                rrules:
+                                    - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,TH,FR;BYHOUR=19;BYMINUTE=0;BYSECOND=0'
+                                    - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,TH,FR;BYHOUR=7,8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=0,15,30;BYSECOND=0'
+                                preparationDelay: 60
+                                pickupDelay: 30
+                                durationRange: 60
+                                availableSpots: 10
+                                color: '#FF6F61'
+                                shipping_methods:
+                                    - 'slot_delivery'
+                            courier:
+                                name: 'Courier'
+                                timezone: 'Europe/Paris'
+                                rrules:
                                     - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=19;BYMINUTE=0;BYSECOND=0'
                                     - 'RRULE:FREQ=HOURLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=7,8,9,10,11,12,13,14,15,16,17,18;BYMINUTE=0,30;BYSECOND=0'
                                 preparationDelay: 60

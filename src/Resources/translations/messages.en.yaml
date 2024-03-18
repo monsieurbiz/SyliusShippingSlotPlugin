@@ -28,7 +28,7 @@ monsieurbiz_shipping_slot:
             duration_range: 'Duration range of the slot (in minutes)'
             available_spots: 'Available spots in a slot'
             color: 'Color'
-            shipping_slot_config: 'Slot configuration for shipping method'
+            shipping_slot_config: 'Slot configurations for shipping method'
 sylius:
     ui:
        partially_refunded: 'Partially refunded'

@@ -18,7 +18,8 @@ global.MonsieurBizShippingSlotManager = class {
     listSlotsUrl,
     saveSlotUrl,
     resetSlotUrl,
-    slotSelectError
+    slotSelectError,
+    shippingSlotConfigSelects,
   ) {
     this.shippingMethodInputs = shippingMethodInputs;
     this.nextStepButtons = nextStepButtons;
@@ -33,6 +34,7 @@ global.MonsieurBizShippingSlotManager = class {
     this.saveSlotUrl = saveSlotUrl;
     this.resetSlotUrl = resetSlotUrl;
     this.slotSelectError = slotSelectError;
+    this.shippingSlotConfigSelects = shippingSlotConfigSelects;
     this.previousSlot = null;
     this.initShippingMethodInputs();
   }
@@ -41,10 +43,25 @@ global.MonsieurBizShippingSlotManager = class {
     for (let shippingMethodInput of this.shippingMethodInputs) {
       // On the page load, display load slots for selected method
       if (shippingMethodInput.checked) {
-        this.displayInputSlots(shippingMethodInput, true);
+        let shippingSlotConfigSelect = this.getShippingSlotConfigSelect(shippingMethodInput.value);
+        this.displayInputSlots(shippingMethodInput, true, shippingSlotConfigSelect);
       }
       this.initShippingMethodInput(shippingMethodInput);
     }
+
+    this.shippingSlotConfigSelects.forEach(shippingSlotConfigSelect => {
+      shippingSlotConfigSelect.addEventListener("change", function () {
+        let checkedShippingMethodInput = Array.from(this.shippingMethodInputs).find(shippingMethodInput => shippingMethodInput.checked);
+        if (checkedShippingMethodInput !== null) {
+          this.displayInputSlots(checkedShippingMethodInput, false, shippingSlotConfigSelect);
+        }
+        const event = new CustomEvent('mbiz:shipping-slot:slot-config-selected', {
+          element: shippingSlotConfigSelect,
+          shippingMethodInput: checkedShippingMethodInput
+        });
+        document.dispatchEvent(event);
+      }.bind(this));
+    }, this);
   }
 
   initShippingMethodInput(shippingMethodInput) {
@@ -56,17 +73,20 @@ global.MonsieurBizShippingSlotManager = class {
 
   changeShippingMethod(shippingMethodInput) {
     let shippingSlotManager = this;
+    // Find selected shipping slot config select
+    let shippingSlotConfigSelect = this.getShippingSlotConfigSelect(shippingMethodInput.value);
+
     // Reset existing slot if needed
     this.resetSlot(shippingMethodInput, function () {
       // Display load slots for selected method
-      shippingSlotManager.displayInputSlots(shippingMethodInput, false);
+      shippingSlotManager.displayInputSlots(shippingMethodInput, false, shippingSlotConfigSelect);
     });
   }
 
-  displayInputSlots(shippingMethodInput, resetSlot) {
+  displayInputSlots(shippingMethodInput, resetSlot, shippingSlotConfigSelect = null) {
     this.disableButtons();
     let shippingSlotManager = this;
-    this.initCalendarForAMethod(shippingMethodInput.value, function () {
+    this.initCalendarForAMethod(shippingMethodInput.value, shippingSlotConfigSelect, function () {
       if (this.status !== 200) {
         shippingSlotManager.enableButtons();
         return;
@@ -74,8 +94,9 @@ global.MonsieurBizShippingSlotManager = class {
 
       let data = JSON.parse(this.responseText);
 
-      // Hide calendars
+      // Hide calendars and shipping slot config selects
       shippingSlotManager.hideCalendars();
+      shippingSlotManager.hideShippingSlotConfigSelects();
 
       // Authorize user to go to next step if no slot needed
       if (typeof data.events === "undefined") {
@@ -96,7 +117,8 @@ global.MonsieurBizShippingSlotManager = class {
             calendarContainer,
             data.events,
             data.timezone,
-            shippingMethodInput.value
+            shippingMethodInput.value,
+            shippingSlotConfigSelect
           );
         }
       }
@@ -119,22 +141,26 @@ global.MonsieurBizShippingSlotManager = class {
     }
   }
 
-  initCalendarForAMethod(shippingMethodCode, callback) {
+  initCalendarForAMethod(shippingMethodCode, shippingSlotConfigSelect, callback) {
     let req = new XMLHttpRequest();
     req.onload = callback;
-    let url = this.initUrl;
-    req.open("get", url.replace("__CODE__", shippingMethodCode), true);
+    let url = this.initUrl
+      .replace("__CODE__", shippingMethodCode)
+      .replace("__CONFIG__", shippingSlotConfigSelect !== null ? shippingSlotConfigSelect.value : "")
+    ;
+    req.open("get", url, true);
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     req.send();
   }
 
-  listSlots(shippingMethodCode, from, to, callback) {
+  listSlots(shippingMethodCode, from, to, shippingSlotConfigSelect, callback) {
     let req = new XMLHttpRequest();
     req.onload = callback;
     let url = this.listSlotsUrl
       .replace("__CODE__", shippingMethodCode)
       .replace("__FROM__", from)
       .replace("__TO__", to)
+      .replace("__CONFIG__", shippingSlotConfigSelect !== null ? shippingSlotConfigSelect.value : "")
     ;
     req.open("get", url, true);
     req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -142,6 +168,7 @@ global.MonsieurBizShippingSlotManager = class {
   }
 
   saveSlot(slot, shippingMethodInput, callback) {
+    let shippingSlotConfigSelect = this.getShippingSlotConfigSelect(shippingMethodInput.value);
     let req = new XMLHttpRequest();
     req.onload = callback;
     req.open("post", this.saveSlotUrl, true);
@@ -150,6 +177,7 @@ global.MonsieurBizShippingSlotManager = class {
     data.append("event", JSON.stringify(slot.event));
     data.append("shippingMethod", shippingMethodInput.value);
     data.append("shipmentIndex", shippingMethodInput.getAttribute("tabIndex"));
+    data.append("shippingSlotConfig", shippingSlotConfigSelect !== null ? shippingSlotConfigSelect.value : '');
     req.send(data);
   }
 
@@ -166,18 +194,26 @@ global.MonsieurBizShippingSlotManager = class {
   disableButtons() {
     for (let button of this.nextStepButtons) {
       button.disabled = true;
+      button.form.classList.add('loading');
     }
   }
 
   enableButtons() {
     for (let button of this.nextStepButtons) {
       button.disabled = false;
+      button.form.classList.remove('loading');
     }
   }
 
   hideCalendars() {
     for (let calendarContariner of this.calendarContainers) {
       calendarContariner.style.display = "none";
+    }
+  }
+
+  hideShippingSlotConfigSelects() {
+    for (let shippingSlotConfigSelect of this.shippingSlotConfigSelects) {
+      shippingSlotConfigSelect.style.display = "none";
     }
   }
 
@@ -217,8 +253,11 @@ global.MonsieurBizShippingSlotManager = class {
     slot.el.style.display = 'none';
   }
 
-  initCalendar(calendarContainer, events, timezone, shippingMethodCode) {
+  initCalendar(calendarContainer, events, timezone, shippingMethodCode, shippingSlotConfigSelect) {
     calendarContainer.style.display = "block";
+    if (shippingSlotConfigSelect) {
+      shippingSlotConfigSelect.style.display = "block";
+    }
     let shippingSlotManager = this;
     let calendar = new Calendar(
       calendarContainer,
@@ -275,10 +314,15 @@ global.MonsieurBizShippingSlotManager = class {
           datesSet(dateInfo) {
             let calendar = this;
             shippingSlotManager.disableButtons();
-            shippingSlotManager.listSlots(shippingMethodCode, dateInfo.startStr, dateInfo.endStr, function () {
+            shippingSlotManager.listSlots(shippingMethodCode, dateInfo.startStr, dateInfo.endStr, shippingSlotConfigSelect, function () {
               if (this.status !== 200) {
                 console.error('Error during slot list');
                 return;
+              }
+
+              // Remove loading class on the form
+              for (let button of shippingSlotManager.nextStepButtons) {
+                button.form.classList.remove('loading');
               }
 
               let events = JSON.parse(this.responseText);
@@ -298,5 +342,11 @@ global.MonsieurBizShippingSlotManager = class {
       )
     );
     calendar.render();
+  }
+
+  getShippingSlotConfigSelect(shippingMethodCode) {
+    return Array.from(this.shippingSlotConfigSelects).find(
+      shippingSlotConfigSelect => shippingSlotConfigSelect.name.includes(shippingMethodCode)
+    ) ?? null;
   }
 };

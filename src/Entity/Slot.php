@@ -35,6 +35,8 @@ class Slot implements SlotInterface
 
     private ?ShipmentInterface $shipment = null;
 
+    private ?ShippingSlotConfigInterface $shippingSlotConfig = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -114,16 +116,38 @@ class Slot implements SlotInterface
      */
     public function getTimezone(): string
     {
+        $shippingSlotConfig = $this->getShippingSlotConfig();
         if (
-            null !== ($shipment = $this->getShipment())
-            && null !== ($shippingMethod = $shipment->getMethod())
-            && $shippingMethod instanceof ShippingMethodInterface
-            && null !== ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())
+            null !== $shippingSlotConfig
             && null !== ($timezone = $shippingSlotConfig->getTimezone())
         ) {
             return $timezone;
         }
 
         return 'UTC';
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getShippingSlotConfig(): ?ShippingSlotConfigInterface
+    {
+        if (null === $this->shippingSlotConfig) {
+            if (
+                null !== ($shipment = $this->getShipment())
+                && null !== ($shippingMethod = $shipment->getMethod())
+                && $shippingMethod instanceof ShippingMethodInterface
+                && null !== ($shippingSlotConfig = $shippingMethod->getShippingSlotConfig())
+            ) {
+                $this->shippingSlotConfig = $shippingSlotConfig;
+            }
+        }
+
+        return $this->shippingSlotConfig;
+    }
+
+    public function setShippingSlotConfig(?ShippingSlotConfigInterface $shippingSlotConfig): void
+    {
+        $this->shippingSlotConfig = $shippingSlotConfig;
     }
 }

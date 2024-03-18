@@ -148,7 +148,15 @@ use Sylius\Component\Shipping\Model\ShippingMethodTranslationInterface;
 -class ShippingMethod extends BaseShippingMethod
 +class ShippingMethod extends BaseShippingMethod implements MonsieurBizShippingMethodInterface
 {
-+    use ShippingMethodTrait;
++    use ShippingMethodTrait {
++        ShippingMethodTrait::__construct as private shippingMethodTraitConstruct;
++    }
++
++    public function __construct()
++    {
++        parent::__construct();
++        $this->shippingMethodTraitConstruct();
++    }
 +
     protected function createTranslation(): ShippingMethodTranslationInterface
     {
@@ -160,6 +168,13 @@ use Sylius\Component\Shipping\Model\ShippingMethodTranslationInterface;
 5. Update your database schema with the following command:
 
 ```bash
+bin/console doctrine:migrations:migrate
+```
+
+6. Generate the migration and update your database schema:
+
+```bash
+bin/console doctrine:migrations:diff
 bin/console doctrine:migrations:migrate
 ```
 

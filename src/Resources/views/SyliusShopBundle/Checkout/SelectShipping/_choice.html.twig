@@ -1,6 +1,6 @@
 {% import '@SyliusShop/Common/Macro/money.html.twig' as money %}
 
-{{ sylius_template_event('sylius.shop.checkout.select_shipping.before_method', {'method': method}) }}
+{{ sylius_template_event('sylius.shop.checkout.select_shipping.before_method', {'method': method, 'form': form}) }}
 <div class="item" {{ sylius_test_html_attribute('shipping-item') }}>
     <div class="field">
         <div class="ui radio checkbox" {{ sylius_test_html_attribute('shipping-method-checkbox') }}>
@@ -21,4 +21,4 @@
         </div>
     </div>
 </div>
-{{ sylius_template_event('sylius.shop.checkout.select_shipping.after_method', {'method': method}) }}
+{{ sylius_template_event('sylius.shop.checkout.select_shipping.after_method', {'method': method, 'form': form}) }}

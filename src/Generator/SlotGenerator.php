@@ -21,6 +21,7 @@ use Exception;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ProductVariantInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Event\RecurrenceGenerationEvent;
 use MonsieurBiz\SyliusShippingSlotPlugin\Repository\SlotRepositoryInterface;
@@ -72,7 +73,8 @@ class SlotGenerator implements SlotGeneratorInterface
     public function createFromCheckout(
         string $shippingMethod,
         int $shipmentIndex,
-        DateTimeInterface $startDate
+        DateTimeInterface $startDate,
+        ?int $shippingSlotConfig = null
     ): SlotInterface {
         /** @var OrderInterface $order */
         $order = $this->cartContext->getCart();
@@ -90,7 +92,7 @@ class SlotGenerator implements SlotGeneratorInterface
             throw new Exception(sprintf('Cannot find shipping method "%s"', $shippingMethod));
         }
 
-        $shippingSlotConfig = $shippingMethod->getShippingSlotConfig();
+        $shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod, $shippingSlotConfig);
         if (null === $shippingSlotConfig) {
             throw new Exception(sprintf('Cannot find slot configuration for shipping method "%s"', $shippingMethod->getName()));
         }
@@ -106,6 +108,7 @@ class SlotGenerator implements SlotGeneratorInterface
         $slot->setDurationRange($shippingSlotConfig->getDurationRange());
         $slot->setPickupDelay($shippingSlotConfig->getPickupDelay());
         $slot->setPreparationDelay($shippingSlotConfig->getPreparationDelay());
+        $slot->setShippingSlotConfig($shippingSlotConfig);
 
         $this->slotManager->persist($slot);
         $this->slotManager->flush();
@@ -219,9 +222,10 @@ class SlotGenerator implements SlotGeneratorInterface
     public function generateCalendarEvents(
         ShippingMethodInterface $shippingMethod,
         DateTimeInterface $startDate,
-        DateTimeInterface $endDate
+        DateTimeInterface $endDate,
+        ?ShippingSlotConfigInterface $shippingSlotConfig = null
     ): array {
-        $shippingSlotConfig = $shippingMethod->getShippingSlotConfig();
+        $shippingSlotConfig = $shippingSlotConfig ?: ($shippingMethod->getShippingSlotConfigs()->first() ?: $shippingMethod->getShippingSlotConfig());
         if (null === $shippingSlotConfig) {
             return [];
         }
@@ -285,5 +289,14 @@ class SlotGenerator implements SlotGeneratorInterface
         }
 
         return $maxPreparationDelay;
+    }
+
+    private function getShippingSlotConfig(ShippingMethodInterface $shippingMethod, ?int $shippingSlotConfig): ?ShippingSlotConfigInterface
+    {
+        $shippingSlotConfig = null !== $shippingSlotConfig ? $shippingMethod->getShippingSlotConfigs()->filter(
+            fn (ShippingSlotConfigInterface $config) => $config->getId() === $shippingSlotConfig
+        )->first() : $shippingMethod->getShippingSlotConfigs()->first();
+
+        return $shippingSlotConfig ?: $shippingMethod->getShippingSlotConfig();
     }
 }

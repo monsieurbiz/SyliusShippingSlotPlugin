@@ -16,6 +16,7 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Controller;
 use DateTime;
 use Exception;
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Generator\SlotGeneratorInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,7 +38,7 @@ class SlotController extends AbstractController
         $this->slotGenerator = $slotGenerator;
     }
 
-    public function initAction(string $code): Response
+    public function initAction(string $code, ?int $shippingSlotConfig): Response
     {
         // Find shipping method from code
         /** @var ShippingMethodInterface|null $shippingMethod */
@@ -47,18 +48,18 @@ class SlotController extends AbstractController
         }
 
         // No need to load calendar if shipping method has no slot configuration
-        if (!($shipingSlotConfig = $shippingMethod->getShippingSlotConfig())) {
+        if (!($shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod, $shippingSlotConfig))) {
             return new JsonResponse(['code' => $code]);
         }
 
         return new JsonResponse([
             'code' => $code,
             'events' => [], // Events are loaded dynamically when full calendar ask it
-            'timezone' => $shipingSlotConfig->getTimezone() ?? 'UTC',
+            'timezone' => $shippingSlotConfig->getTimezone() ?? 'UTC',
         ]);
     }
 
-    public function listAction(string $code, string $fromDate, string $toDate): Response
+    public function listAction(string $code, string $fromDate, string $toDate, ?int $shippingSlotConfig): Response
     {
         // Find shipping method from code
         /** @var ShippingMethodInterface|null $shippingMethod */
@@ -68,14 +69,15 @@ class SlotController extends AbstractController
         }
 
         // Shipping method not compatible with shipping slots
-        if (null === $shippingMethod->getShippingSlotConfig()) {
+        if (null === ($shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod, $shippingSlotConfig))) {
             throw $this->createNotFoundException(sprintf('Shipping method "%s" is not compatible with shipping slots', $code));
         }
 
         return new JsonResponse($this->slotGenerator->generateCalendarEvents(
             $shippingMethod,
             new DateTime($fromDate),
-            new DateTime($toDate)
+            new DateTime($toDate),
+            $shippingSlotConfig
         ));
     }
 
@@ -92,6 +94,10 @@ class SlotController extends AbstractController
             throw $this->createNotFoundException('Shipment index not defined');
         }
 
+        if (null === ($shippingSlotConfig = $request->get('shippingSlotConfig'))) {
+            throw $this->createNotFoundException('Shipping slot config not defined');
+        }
+
         $event = json_decode($request->get('event', '{}'), true);
         if (!($startDate = $event['start'] ?? false)) {
             throw $this->createNotFoundException('Start date not defined');
@@ -101,7 +107,8 @@ class SlotController extends AbstractController
             $this->slotGenerator->createFromCheckout(
                 $shippingMethod,
                 (int) $shipmentIndex,
-                new DateTime($startDate)
+                new DateTime($startDate),
+                !empty($shippingSlotConfig) ? (int) $shippingSlotConfig : null
             );
         } catch (Exception $e) {
             throw $this->createNotFoundException($e->getMessage());
@@ -123,5 +130,14 @@ class SlotController extends AbstractController
         }
 
         return new JsonResponse([]);
+    }
+
+    private function getShippingSlotConfig(ShippingMethodInterface $shippingMethod, ?int $shippingSlotConfig): ?ShippingSlotConfigInterface
+    {
+        $shippingSlotConfig = null !== $shippingSlotConfig ? $shippingMethod->getShippingSlotConfigs()->filter(
+            fn (ShippingSlotConfigInterface $config) => $config->getId() === $shippingSlotConfig
+        )->first() : $shippingMethod->getShippingSlotConfigs()->first();
+
+        return $shippingSlotConfig ?: $shippingMethod->getShippingSlotConfig();
     }
 }
