@@ -27,23 +27,23 @@ use Recurr\Transformer\ConstraintInterface;
 
 class ShippingSlotConfig implements ShippingSlotConfigInterface
 {
-    private ?int $id = null;
+    protected ?int $id = null;
 
-    private ?string $name = null;
+    protected ?string $name = null;
 
-    private ?string $timezone = null;
+    protected ?string $timezone = null;
 
-    private ?array $rrules = null;
+    protected ?array $rrules = null;
 
-    private ?int $preparationDelay = null;
+    protected ?int $preparationDelay = null;
 
-    private ?int $pickupDelay = null;
+    protected ?int $pickupDelay = null;
 
-    private ?int $durationRange = null;
+    protected ?int $durationRange = null;
 
-    private ?int $availableSpots = null;
+    protected ?int $availableSpots = null;
 
-    private ?string $color = null;
+    protected ?string $color = null;
 
     public function getId(): ?int
     {

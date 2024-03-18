@@ -23,19 +23,19 @@ class Slot implements SlotInterface
 {
     use TimestampableTrait;
 
-    private ?int $id = null;
+    protected ?int $id = null;
 
-    private ?DateTimeInterface $timestamp = null;
+    protected ?DateTimeInterface $timestamp = null;
 
-    private ?int $preparationDelay = null;
+    protected ?int $preparationDelay = null;
 
-    private ?int $pickupDelay = null;
+    protected ?int $pickupDelay = null;
 
-    private ?int $durationRange = null;
+    protected ?int $durationRange = null;
 
-    private ?ShipmentInterface $shipment = null;
+    protected ?ShipmentInterface $shipment = null;
 
-    private ?ShippingSlotConfigInterface $shippingSlotConfig = null;
+    protected ?ShippingSlotConfigInterface $shippingSlotConfig = null;
 
     public function getId(): ?int
     {
