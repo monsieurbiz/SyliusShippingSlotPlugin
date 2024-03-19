@@ -15,8 +15,9 @@ namespace MonsieurBiz\SyliusShippingSlotPlugin\Resolver;
 
 use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
+use Sylius\Component\Core\Model\ShippingMethodInterface;
 
 interface ShippingSlotConfigResolverInterface
 {
-    public function getShippingSlotConfig(?ShipmentInterface $shipment): ?ShippingSlotConfigInterface;
+    public function getShippingSlotConfig(?ShipmentInterface $shipment, ShippingMethodInterface $shippingMethod): ?ShippingSlotConfigInterface;
 }
