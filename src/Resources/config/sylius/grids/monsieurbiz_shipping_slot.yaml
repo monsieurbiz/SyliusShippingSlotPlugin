@@ -22,7 +22,7 @@ sylius_grid:
                 slotType:
                     type: twig
                     label: monsieurbiz_shipping_slot.ui.slot_type
-                    path: shipment.method.shippingSlotConfig
+                    path: shippingSlotConfig
                     options:
                         template: "@MonsieurBizSyliusShippingSlotPlugin/Admin/Grid/Field/slot_type.html.twig"
                 channel:
@@ -91,7 +91,7 @@ sylius_grid:
                     type: entity
                     label: monsieurbiz_shipping_slot.ui.slot_type
                     options:
-                        fields: [shipment.method.shippingSlotConfig]
+                        fields: [shippingSlotConfig]
                     form_options:
                         class: "%monsieurbiz_shipping_slot.model.shipping_slot_config.class%"
                 channel:
