@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\Form\Type;
 
-use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShipmentInterface;
+use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingMethodInterface as MonsieurBizShippingMethodInterface;
 use MonsieurBiz\SyliusShippingSlotPlugin\Resolver\ShippingSlotConfigResolverInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Shipping\Model\ShippingMethodInterface;
@@ -48,15 +48,17 @@ final class ShippingSlotConfigsByMethod extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $subject = $options['subject'] ?? null;
-        $currentShippingSlotConfig = $this->shippingSlotConfigResolver->getShippingSlotConfig($subject);
-        $currentShippingMethod = $this->getCurrentShippingMethod($subject);
         foreach ($this->getShippingMethods($subject) as $shippingMethod) {
+            if (!$this->isShippingSlotMethod($shippingMethod)) {
+                continue;
+            }
+
             $builder->add($shippingMethod->getCode(), ChoiceType::class, [
                 'choices' => $shippingMethod->getShippingSlotConfigs(),
                 'choice_label' => 'name',
                 'choice_value' => 'id',
                 'label' => false,
-                'data' => $currentShippingMethod === $shippingMethod ? $currentShippingSlotConfig : null,
+                'data' => $this->shippingSlotConfigResolver->getShippingSlotConfig($subject, $shippingMethod),
             ]);
         }
     }
@@ -81,12 +83,11 @@ final class ShippingSlotConfigsByMethod extends AbstractType
         return $this->repository->findAll();
     }
 
-    private function getCurrentShippingMethod(?ShippingSubjectInterface $subject): ?ShippingMethodInterface
+    private function isShippingSlotMethod(ShippingMethodInterface $shippingMethod): bool
     {
-        if (!$subject instanceof ShipmentInterface) {
-            return null;
-        }
-
-        return $subject->getMethod();
+        return null !== $shippingMethod->getCode()
+            && $shippingMethod instanceof MonsieurBizShippingMethodInterface
+            && !$shippingMethod->getShippingSlotConfigs()->isEmpty()
+        ;
     }
 }

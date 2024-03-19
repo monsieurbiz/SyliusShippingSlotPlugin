@@ -19,7 +19,8 @@ global.MonsieurBizShippingSlotManager = class {
     saveSlotUrl,
     resetSlotUrl,
     slotSelectError,
-    shippingSlotConfigSelects,
+    shippingSlotConfigContainers,
+    shippingSlotConfigSelectSelector,
   ) {
     this.shippingMethodInputs = shippingMethodInputs;
     this.nextStepButtons = nextStepButtons;
@@ -34,7 +35,8 @@ global.MonsieurBizShippingSlotManager = class {
     this.saveSlotUrl = saveSlotUrl;
     this.resetSlotUrl = resetSlotUrl;
     this.slotSelectError = slotSelectError;
-    this.shippingSlotConfigSelects = shippingSlotConfigSelects;
+    this.shippingSlotConfigContainers = shippingSlotConfigContainers;
+    this.shippingSlotConfigSelectSelector = shippingSlotConfigSelectSelector;
     this.previousSlot = null;
     this.initShippingMethodInputs();
   }
@@ -49,7 +51,12 @@ global.MonsieurBizShippingSlotManager = class {
       this.initShippingMethodInput(shippingMethodInput);
     }
 
-    this.shippingSlotConfigSelects.forEach(shippingSlotConfigSelect => {
+    this.shippingSlotConfigContainers.forEach(shippingSlotConfigContainer => {
+      let shippingSlotConfigSelect = shippingSlotConfigContainer.querySelector(this.shippingSlotConfigSelectSelector);
+      if (shippingSlotConfigSelect === null) {
+        return;
+      }
+
       shippingSlotConfigSelect.addEventListener("change", function () {
         let checkedShippingMethodInput = Array.from(this.shippingMethodInputs).find(shippingMethodInput => shippingMethodInput.checked);
         if (checkedShippingMethodInput !== null) {
@@ -94,9 +101,9 @@ global.MonsieurBizShippingSlotManager = class {
 
       let data = JSON.parse(this.responseText);
 
-      // Hide calendars and shipping slot config selects
+      // Hide calendars and shipping slot config containers
       shippingSlotManager.hideCalendars();
-      shippingSlotManager.hideShippingSlotConfigSelects();
+      shippingSlotManager.hideShippingSlotConfigContainers();
 
       // Authorize user to go to next step if no slot needed
       if (typeof data.events === "undefined") {
@@ -211,9 +218,9 @@ global.MonsieurBizShippingSlotManager = class {
     }
   }
 
-  hideShippingSlotConfigSelects() {
-    for (let shippingSlotConfigSelect of this.shippingSlotConfigSelects) {
-      shippingSlotConfigSelect.style.display = "none";
+  hideShippingSlotConfigContainers() {
+    for (let shippingSlotConfigContainer of this.shippingSlotConfigContainers) {
+      shippingSlotConfigContainer.style.display = "none";
     }
   }
 
@@ -256,7 +263,12 @@ global.MonsieurBizShippingSlotManager = class {
   initCalendar(calendarContainer, events, timezone, shippingMethodCode, shippingSlotConfigSelect) {
     calendarContainer.style.display = "block";
     if (shippingSlotConfigSelect) {
-      shippingSlotConfigSelect.style.display = "block";
+      let currentShippingSlotConfigContainer = Array.from(this.shippingSlotConfigContainers).find(
+        shippingSlotConfigContainer => shippingSlotConfigContainer.classList.contains(shippingMethodCode)
+      );
+      if (currentShippingSlotConfigContainer) {
+        currentShippingSlotConfigContainer.style.display = "block";
+      }
     }
     let shippingSlotManager = this;
     let calendar = new Calendar(
@@ -345,8 +357,13 @@ global.MonsieurBizShippingSlotManager = class {
   }
 
   getShippingSlotConfigSelect(shippingMethodCode) {
-    return Array.from(this.shippingSlotConfigSelects).find(
-      shippingSlotConfigSelect => shippingSlotConfigSelect.name.includes(shippingMethodCode)
-    ) ?? null;
+    for (let shippingSlotConfigContainer of this.shippingSlotConfigContainers) {
+      let shippingSlotConfigSelect = shippingSlotConfigContainer.querySelector(this.shippingSlotConfigSelectSelector);
+      if (shippingSlotConfigSelect !== null && shippingSlotConfigSelect.name.includes(shippingMethodCode)) {
+        return shippingSlotConfigSelect;
+      }
+    }
+
+    return null;
   }
 };
