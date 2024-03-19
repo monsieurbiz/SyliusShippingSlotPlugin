@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait ShipmentTrait
 {
     /**
-     * @ORM\OneToOne(targetEntity="MonsieurBiz\SyliusShippingSlotPlugin\Entity\Slot", mappedBy="shipment", fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface", mappedBy="shipment", fetch="EAGER")
      */
     private ?SlotInterface $slot = null;
 

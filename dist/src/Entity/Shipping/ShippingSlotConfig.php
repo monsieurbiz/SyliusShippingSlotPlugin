@@ -1,11 +1,11 @@
 <?php
 
 /*
- * This file is part of SyliusShippingSlotPlugin website.
+ * This file is part of Monsieur Biz' Shipping Slot plugin for Sylius.
  *
- * (c) SyliusShippingSlotPlugin <sylius+syliusshippingslotplugin@monsieurbiz.com>
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -20,7 +20,6 @@ use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig as BaseShippi
  * @ORM\Entity
  * @ORM\Table(name="monsieurbiz_shipping_slot_config")
  */
-final class ShippingSlotConfig extends BaseShippingSlotConfig
+class ShippingSlotConfig extends BaseShippingSlotConfig
 {
-
 }
