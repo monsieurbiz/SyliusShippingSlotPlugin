@@ -2,6 +2,7 @@ monsieurbiz_shipping_slot_admin_config:
     resource: |
         alias: monsieurbiz_shipping_slot.shipping_slot_config
         section: admin
+        permission: true
         templates: "@SyliusAdmin\\Crud"
         except: ['show']
         redirect: update
@@ -17,6 +18,7 @@ monsieurbiz_shipping_slot_admin_slot:
     resource: |
         alias: monsieurbiz_shipping_slot.slot
         section: admin
+        permission: true
         templates: "@SyliusAdmin\\Crud"
         except: ['show']
         redirect: update
