@@ -9,8 +9,8 @@ monsieurbiz_shipping_slot:
         prepared_slots: 'Préparés'
         reserved_slots: 'Réservés'
         awaiting_slots: 'En attente'
-        shipping_slot_configs: 'Configuration des crénaux de livraison'
-        shipping_slot_config: 'Configuration des crénaux de livraison'
+        shipping_slot_configs: 'Configuration des créneaux de livraison'
+        shipping_slot_config: 'Configuration des créneaux de livraison'
         manage_shipping_slot_config: 'Configurez la gestion de vos créneaux de livraison'
         new_shipping_slot_config: 'Nouvelle configuration de créneaux'
         edit_shipping_slot_config: 'Éditer une configuration de créneaux'
@@ -28,8 +28,13 @@ monsieurbiz_shipping_slot:
             duration_range: 'Durée du créneau (en minutes)'
             available_spots: 'Nombre de places par créneaux'
             color: 'Couleur'
-            shipping_slot_config: 'Configurations de crénaux pour ce mode de livraison'
+            shipping_slot_config: 'Configurations de créneaux pour ce mode de livraison'
 
 sylius:
     ui:
        partially_refunded: 'Partiellement remboursé'
+sylius_plus:
+    rbac:
+        parent:
+            shipping_slot_configs: 'Configuration des créneaux de livraison'
+            slots: 'Créneaux de livraison'

@@ -32,3 +32,8 @@ monsieurbiz_shipping_slot:
 sylius:
     ui:
        partially_refunded: 'Partially refunded'
+sylius_plus:
+    rbac:
+        parent:
+            shipping_slot_configs: 'Shipping slot configs'
+            slots: 'Shipping slots'
