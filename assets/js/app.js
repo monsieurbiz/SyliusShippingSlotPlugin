@@ -139,6 +139,7 @@ global.MonsieurBizShippingSlotManager = class {
       if (shippingMethodInput.checked) {
         this.saveSlot(slot, shippingMethodInput, function () {
           if (this.status !== 200) {
+            shippingSlotManager.removeLoading();
             alert(shippingSlotManager.slotSelectError);
             return;
           }
@@ -208,6 +209,12 @@ global.MonsieurBizShippingSlotManager = class {
   enableButtons() {
     for (let button of this.nextStepButtons) {
       button.disabled = false;
+      button.form.classList.remove('loading');
+    }
+  }
+
+  removeLoading() {
+    for (let button of this.nextStepButtons) {
       button.form.classList.remove('loading');
     }
   }
