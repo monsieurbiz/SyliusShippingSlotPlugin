@@ -20,18 +20,31 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
+/**
+ * @SuppressWarnings(PHPMD.LongClassName)
+ */
 final class MonsieurBizSyliusShippingSlotExtension extends Extension implements PrependExtensionInterface
 {
     use PrependDoctrineMigrationsTrait;
 
+    /**
+     * @inheritdoc
+     */
     public function load(array $config, ContainerBuilder $container): void
     {
-        $configuration = $this->processConfiguration($this->getConfiguration([], $container), $config);
-        $container->setParameter('monsieurbiz_sylius_shipping_slot.slot_expiration_period', $configuration['expiration']['slot']);
+        $configuration = $this->getConfiguration([], $container);
+        if (null !== $configuration) {
+            $config = $this->processConfiguration($configuration, $config);
+            $container->setParameter('monsieurbiz_sylius_shipping_slot.slot_expiration_period', $config['expiration']['slot']);
+        }
+
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getAlias(): string
     {
         return str_replace('monsieur_biz', 'monsieurbiz', parent::getAlias());
