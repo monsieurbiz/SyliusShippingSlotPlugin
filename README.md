@@ -9,6 +9,14 @@
 
 This plugin allows you to choose a delivery date and time.
 
+## Compatibility
+
+| Sylius Version | PHP Version     |
+|----------------|-----------------|
+| 1.12           | 8.1 - 8.2 - 8.3 |
+| 1.13           | 8.1 - 8.2 - 8.3 |
+| 1.14           | 8.1 - 8.2 - 8.3 |
+
 ## Installation
 
 Install the plugin with `composer`:
@@ -177,12 +185,6 @@ bin/console doctrine:migrations:migrate
 bin/console doctrine:migrations:diff
 bin/console doctrine:migrations:migrate
 ```
-
-## Sponsors
-
-
-- Glacier1891
-- WahsWash
 
 ## Contributing
 

@@ -154,7 +154,7 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
         }
 
         $minDate = (new DateTime())
-            ->add(new DateInterval(sprintf('PT%dM', $slotDelay)))
+            ->add(new DateInterval(\sprintf('PT%dM', $slotDelay)))
             ->setTimezone(new DateTimeZone($this->getTimezone() ?? 'UTC'))
         ;
 
@@ -198,7 +198,7 @@ class ShippingSlotConfig implements ShippingSlotConfigInterface
             ->transform($rrule, $constraint)
             ->map(function (Recurrence $recurrence) {
                 // Update end date with the slot duration on each recurrence
-                $recurrence->setEnd($recurrence->getEnd()->add(new DateInterval(sprintf('PT%dM', $this->getDurationRange()))));
+                $recurrence->setEnd($recurrence->getEnd()->add(new DateInterval(\sprintf('PT%dM', $this->getDurationRange()))));
 
                 return $recurrence;
             })

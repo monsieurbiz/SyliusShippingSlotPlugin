@@ -23,6 +23,8 @@ use Sylius\Component\Core\Model\ShipmentInterface;
  * @ORM\Entity
  * @ORM\Table(name="sylius_shipment")
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_shipment')]
 class Shipment extends SyliusShipment implements ShipmentInterface, MonsieurBizShipmentInterface
 {
     use ShipmentTrait;

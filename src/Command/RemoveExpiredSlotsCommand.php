@@ -48,7 +48,7 @@ class RemoveExpiredSlotsCommand extends Command
     {
         /** @var string $expirationPeriod */
         $expirationPeriod = $this->parameterBag->get('monsieurbiz_sylius_shipping_slot.slot_expiration_period');
-        $output->writeln(sprintf(
+        $output->writeln(\sprintf(
             'Command will remove slots from cart that have been idle for <info>%s</info>.',
             $expirationPeriod
         ));

@@ -101,7 +101,7 @@ class Slot implements SlotInterface
 
     public function isValid(): bool
     {
-        $minDate = (new DateTime())->add(new DateInterval(sprintf('PT%dM', $this->getSlotDelay()))); // Add minutes delay
+        $minDate = (new DateTime())->add(new DateInterval(\sprintf('PT%dM', $this->getSlotDelay()))); // Add minutes delay
 
         // Too late the slot is not valid anymore
         if ($this->getTimestamp() < $minDate) {

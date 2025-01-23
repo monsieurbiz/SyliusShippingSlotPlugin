@@ -83,18 +83,18 @@ class SlotGenerator implements SlotGeneratorInterface
         /** @var ShipmentInterface|null $shipment */
         $shipment = $shipments->get($shipmentIndex) ?? null;
         if (null === $shipment) {
-            throw new Exception(sprintf('Cannot find shipment index "%d"', $shipmentIndex));
+            throw new Exception(\sprintf('Cannot find shipment index "%d"', $shipmentIndex));
         }
 
         /** @var ShippingMethodInterface|null $shippingMethod */
         $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $shippingMethod]);
         if (null === $shippingMethod) {
-            throw new Exception(sprintf('Cannot find shipping method "%s"', $shippingMethod));
+            throw new Exception(\sprintf('Cannot find shipping method "%s"', $shippingMethod));
         }
 
         $shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod, $shippingSlotConfig);
         if (null === $shippingSlotConfig) {
-            throw new Exception(sprintf('Cannot find slot configuration for shipping method "%s"', $shippingMethod->getName()));
+            throw new Exception(\sprintf('Cannot find slot configuration for shipping method "%s"', $shippingMethod->getName()));
         }
 
         $slot = $shipment->getSlot();
@@ -130,7 +130,7 @@ class SlotGenerator implements SlotGeneratorInterface
         /** @var ShipmentInterface|null $shipment */
         $shipment = $shipments->get($shipmentIndex) ?? null;
         if (null === $shipment) {
-            throw new Exception(sprintf('Cannot find shipment index "%d"', $shipmentIndex));
+            throw new Exception(\sprintf('Cannot find shipment index "%d"', $shipmentIndex));
         }
 
         /** @var SlotInterface|null $slot */

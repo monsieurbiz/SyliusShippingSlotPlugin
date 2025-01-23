@@ -25,6 +25,8 @@ trait ShippingMethodTrait
      * @ORM\ManyToOne(targetEntity="\MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfigInterface")
      * @ORM\JoinColumn(name="shipping_slot_config_id", nullable=true, referencedColumnName="id", onDelete="SET NULL")
      */
+    #[ORM\ManyToOne(targetEntity: ShippingSlotConfigInterface::class)]
+    #[ORM\JoinColumn(name: 'shipping_slot_config_id', nullable: true, referencedColumnName: 'id', onDelete: 'SET NULL')]
     private ?ShippingSlotConfigInterface $shippingSlotConfig = null;
 
     /**

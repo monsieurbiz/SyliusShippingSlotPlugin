@@ -20,6 +20,8 @@ use MonsieurBiz\SyliusShippingSlotPlugin\Entity\ShippingSlotConfig as BaseShippi
  * @ORM\Entity
  * @ORM\Table(name="monsieurbiz_shipping_slot_config")
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'monsieurbiz_shipping_slot_config')]
 class ShippingSlotConfig extends BaseShippingSlotConfig
 {
 }

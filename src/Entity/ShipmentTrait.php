@@ -20,6 +20,7 @@ trait ShipmentTrait
     /**
      * @ORM\OneToOne(targetEntity="MonsieurBiz\SyliusShippingSlotPlugin\Entity\SlotInterface", mappedBy="shipment", fetch="EAGER")
      */
+    #[ORM\OneToOne(targetEntity: SlotInterface::class, mappedBy: 'shipment', fetch: 'EAGER')]
     private ?SlotInterface $slot = null;
 
     public function getSlot(): ?SlotInterface

@@ -23,6 +23,8 @@ use Sylius\Component\Core\Model\OrderInterface;
  * @ORM\Entity
  * @ORM\Table(name="sylius_order")
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_order')]
 class Order extends SyliusOrder implements OrderInterface, MonsieurBizOrderInterface
 {
     use OrderTrait;

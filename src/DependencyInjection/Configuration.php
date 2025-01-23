@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusShippingSlotPlugin\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -21,10 +22,17 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('monsieurbiz_sylius_shipping_slot');
-        $rootNode = method_exists($treeBuilder, 'getRootNode') ?
-            $rootNode = $treeBuilder->getRootNode()
-            : $treeBuilder->root('monsieurbiz_sylius_shipping_slot'); // BC layer for symfony/config 4.1 and older
+        /** @var ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
 
+        $this->addSlotConfig($rootNode);
+
+        return $treeBuilder;
+    }
+
+    private function addSlotConfig(ArrayNodeDefinition $rootNode): void
+    {
+        /** @phpstan-ignore-next-line */
         $rootNode
             ->children()
             ->arrayNode('expiration')
@@ -33,7 +41,5 @@ final class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
-
-        return $treeBuilder;
     }
 }

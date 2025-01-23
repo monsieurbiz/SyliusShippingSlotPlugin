@@ -20,6 +20,7 @@ trait ProductVariantTrait
     /**
      * @ORM\Column(name="preparation_delay", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'preparation_delay', type: 'integer', nullable: true)]
     private ?int $preparationDelay = null;
 
     public function getPreparationDelay(): ?int

@@ -20,6 +20,8 @@ use MonsieurBiz\SyliusShippingSlotPlugin\Entity\Slot as BaseSlot;
  * @ORM\Entity
  * @ORM\Table(name="monsieurbiz_shipping_slot_slot")
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'monsieurbiz_shipping_slot_slot')]
 class Slot extends BaseSlot
 {
 }
