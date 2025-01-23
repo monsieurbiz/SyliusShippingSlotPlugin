@@ -44,7 +44,7 @@ class SlotController extends AbstractController
         /** @var ShippingMethodInterface|null $shippingMethod */
         $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $code]);
         if (null === $shippingMethod) {
-            throw $this->createNotFoundException(sprintf('Shipping method "%s" not found', $code));
+            throw $this->createNotFoundException(\sprintf('Shipping method "%s" not found', $code));
         }
 
         // No need to load calendar if shipping method has no slot configuration
@@ -65,12 +65,12 @@ class SlotController extends AbstractController
         /** @var ShippingMethodInterface|null $shippingMethod */
         $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $code]);
         if (null === $shippingMethod) {
-            throw $this->createNotFoundException(sprintf('Shipping method "%s" not found', $code));
+            throw $this->createNotFoundException(\sprintf('Shipping method "%s" not found', $code));
         }
 
         // Shipping method not compatible with shipping slots
         if (null === ($shippingSlotConfig = $this->getShippingSlotConfig($shippingMethod, $shippingSlotConfig))) {
-            throw $this->createNotFoundException(sprintf('Shipping method "%s" is not compatible with shipping slots', $code));
+            throw $this->createNotFoundException(\sprintf('Shipping method "%s" is not compatible with shipping slots', $code));
         }
 
         return new JsonResponse($this->slotGenerator->generateCalendarEvents(

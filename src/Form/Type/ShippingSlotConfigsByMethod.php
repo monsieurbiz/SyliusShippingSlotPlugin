@@ -87,7 +87,6 @@ final class ShippingSlotConfigsByMethod extends AbstractType
     {
         return null !== $shippingMethod->getCode()
             && $shippingMethod instanceof MonsieurBizShippingMethodInterface
-            && !$shippingMethod->getShippingSlotConfigs()->isEmpty()
-        ;
+            && !$shippingMethod->getShippingSlotConfigs()->isEmpty();
     }
 }
