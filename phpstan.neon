@@ -4,9 +4,6 @@ parameters:
         - %rootDir%/src/
 
     excludePaths:
-        # Makes PHPStan crash
-        - 'src/DependencyInjection/MonsieurBizSyliusAlertMessageExtension.php'
-
         # Test dependencies
         - 'tests/Application/**/*'
 
